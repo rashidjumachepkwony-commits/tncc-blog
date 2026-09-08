@@ -1,2 +1,2 @@
 # tncc-blog
-Teso North Cross Country NGO Blog
+Teso North Cross Country CBO Blog

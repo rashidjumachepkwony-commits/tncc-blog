@@ -5,25 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- ===== PRIMARY META TAGS ===== -->
-    <meta name="title" content="Teso North Cross Country | Run. Unite. Transform.">
+    <meta name="title" content="Teso North Cross Country CBO | Run. Unite. Transform.">
     <meta name="description" content="Community sports and social impact organization using cross-country running to promote health, equality, and resilience. Join us to end gender-based violence through sport.">
     <meta name="keywords" content="cross country, community sports, gender-based violence, youth empowerment, social impact, Kenya, TNCC, running, unity, transformation">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <meta name="theme-color" content="#073b2b">
-    <meta name="author" content="Teso North Cross Country">
+    <meta name="author" content="Teso North Cross Country CBO">
+    <meta name="application-name" content="TNCC Stories">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.json">
     
     <!-- ===== OPEN GRAPH / FACEBOOK ===== -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourwebsite.com/">
-    <meta property="og:title" content="Teso North Cross Country | Run. Unite. Transform.">
+    <meta property="og:title" content="Teso North Cross Country CBO | Run. Unite. Transform.">
     <meta property="og:description" content="Community sports and social impact organization using cross-country running to promote health, equality, and resilience.">
     <meta property="og:image" content="hero-event.jpg.jpeg">
     
     <!-- ===== TWITTER ===== -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://yourwebsite.com/">
-    <meta property="twitter:title" content="Teso North Cross Country | Run. Unite. Transform.">
+    <meta property="twitter:title" content="Teso North Cross Country CBO | Run. Unite. Transform.">
     <meta property="twitter:description" content="Community sports and social impact organization using cross-country running to promote health, equality, and resilience.">
     <meta property="twitter:image" content="hero-event.jpg.jpeg">
     
@@ -42,7 +46,22 @@
         gtag('config', 'G-YOUR_ID');
     </script>
     
-    <title>Teso North Cross Country | Run. Unite. Transform.</title>
+    <title>Teso North Cross Country CBO | Run. Unite. Transform.</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Teso North Cross Country CBO",
+            "url": "https://yourwebsite.com/",
+            "logo": "https://yourwebsite.com/logo.jpeg",
+            "description": "A community sports and social impact organization using cross-country running to promote health, equality and resilience.",
+            "sameAs": []
+        }
+        </script>
+        <script type="application/ld+json" id="articleSchema"></script>
 
     <style>
         /* ===== RESET & BASE ===== */
@@ -1072,6 +1091,122 @@
         }
         .toast.success { background: #28a745; }
         .toast.error { background: #dc3545; }
+
+        /* ===== MODERN FEATURES ===== */
+        .story-tools { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 28px; }
+        .story-tools input, .story-tools select {
+            min-height: 44px; border: 1px solid var(--border); border-radius: 10px;
+            padding: 10px 14px; background: var(--white); color: var(--text); font: inherit;
+        }
+        .story-tools input { flex: 1; min-width: 220px; }
+        .story-tools input:focus, .story-tools select:focus { outline: 3px solid rgba(155,207,32,.3); border-color: var(--accent); }
+        .story-count { color: var(--text-muted); font-size: .82rem; align-self: center; }
+        .load-more-wrap { display: flex; justify-content: center; margin-top: 28px; }
+        .hidden { display: none !important; }
+        .about-details { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+        .about-detail { padding: 18px; border-left: 3px solid var(--accent); background: #f7faef; border-radius: 0 12px 12px 0; }
+        .about-detail h3 { color: var(--primary); font-size: 1rem; margin-bottom: 4px; }
+        .about-detail p { margin: 0; font-size: .86rem; }
+        .founder { display: flex; align-items: center; gap: 14px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .founder img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; }
+        .founder strong { color: var(--primary); display: block; }
+        .founder span { color: var(--text-muted); font-size: .82rem; }
+        .contact-panel { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; margin-top: 28px; }
+        .contact-copy { padding: 26px 0; }
+        .contact-copy h3 { color: var(--primary); margin-bottom: 8px; }
+        .contact-copy p { color: var(--text-muted); }
+        .contact-form { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+        .contact-form input, .contact-form textarea { width: 100%; margin: 6px 0 12px; padding: 11px 13px; border: 1px solid var(--border); border-radius: 9px; font: inherit; }
+        .contact-form label { color: var(--primary); font-size: .82rem; font-weight: 700; }
+        .contact-form input:focus, .contact-form textarea:focus { outline: 3px solid rgba(155,207,32,.3); border-color: var(--accent); }
+        .related-posts { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 20px; }
+        .related-posts h3 { color: var(--primary); font-size: 1.1rem; margin-bottom: 12px; }
+        .related-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .related-list button { text-align: left; border: 1px solid var(--border); background: #f8faf8; border-radius: 10px; padding: 12px; color: var(--primary); font-weight: 700; cursor: pointer; }
+        .related-list button:hover { border-color: var(--accent); }
+        .comments-box { margin-top: 22px; padding: 18px; background: #f5f8f4; border-radius: 12px; }
+        .comments-box h3 { color: var(--primary); font-size: 1rem; }
+        .comments-box p { font-size: .82rem; margin-top: 4px; }
+        .comments-box textarea { width: 100%; margin: 10px 0; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font: inherit; }
+        .theme-toggle { border: 1px solid var(--border); background: var(--white); border-radius: 8px; padding: 8px 10px; cursor: pointer; color: var(--primary); }
+        body.dark { --white: #15241e; --text: #e6f0ea; --text-muted: #abc0b5; --border: #31483d; background: #0e1915; }
+        body.dark header, body.dark .menu, body.dark .card, body.dark .register-form, body.dark .register-info, body.dark .donation-card, body.dark .donation-methods, body.dark .volunteer-card, body.dark .contact-form, body.dark .modal-box, body.dark .admin-content { background: #15241e; }
+        body.dark .register-section, body.dark .volunteer-section { background: #122019; }
+        body.dark .about-detail, body.dark .comments-box, body.dark .related-list button { background: #1b3027; }
+        body.dark .menu a { color: var(--text); }
+        .cookie-banner { position: fixed; bottom: 18px; left: 18px; right: 18px; z-index: 9998; background: var(--primary-dark); color: #e7f3ed; padding: 16px 20px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 18px; box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+        .cookie-banner p { font-size: .82rem; max-width: 760px; }
+        .cookie-banner a { color: var(--accent); text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+        .reveal.visible { opacity: 1; transform: none; }
+        @media (max-width: 768px) { .about-details, .contact-panel { grid-template-columns: 1fr; } .related-list { grid-template-columns: 1fr; } .cookie-banner { flex-direction: column; align-items: flex-start; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } .reveal { opacity: 1; transform: none; } }
+
+        /* ===== RESPONSIVE BALANCE ===== */
+        html, body { max-width: 100%; overflow-x: hidden; }
+        .container { width: min(100% - 32px, 1240px); padding: 0; }
+        .nav { min-height: 72px; gap: 12px; }
+        .brand { min-width: 0; gap: 9px; }
+        .brand-text { min-width: 0; }
+        .brand-text strong, .brand-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .menu { flex: 1; justify-content: flex-end; flex-wrap: wrap; min-width: 0; gap: 3px; }
+        .menu li { flex-shrink: 0; }
+        .menu a { padding: 7px 9px; font-size: .78rem; }
+        .menu .theme-toggle { min-height: 34px; padding: 6px 9px; font-size: .78rem; }
+        .admin-badge { display: inline-flex; align-items: center; min-height: 30px; padding: 4px 9px; white-space: nowrap; }
+        .stories-grid, .impact-grid, .volunteer-grid, .footer-grid { min-width: 0; }
+        .card, .impact-card, .volunteer-card, .register-form, .register-info, .donation-methods, .contact-form { min-width: 0; }
+        .card-body, .impact-card, .volunteer-card { overflow-wrap: anywhere; }
+        .story-tools input { min-width: 0; }
+
+        @media (max-width: 1180px) and (min-width: 769px) {
+            .menu { gap: 1px; }
+            .menu a { padding-left: 6px; padding-right: 6px; font-size: .72rem; }
+            .brand img { width: 48px; height: 48px; }
+            .brand-text strong { font-size: .88rem; }
+            .brand-text small { font-size: .52rem; }
+        }
+
+        @media (max-width: 768px) {
+            .container { width: min(100% - 28px, 680px); }
+            .nav { min-height: 64px; }
+            .brand img { width: 45px; height: 45px; }
+            .brand-text strong { font-size: .82rem; }
+            .brand-text small { font-size: .5rem; letter-spacing: .06em; }
+            .menu-btn { width: 44px; height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+            .menu { flex: none; gap: 6px; padding: 14px; max-height: calc(100vh - 64px); overflow-y: auto; }
+            .menu li { width: 100%; }
+            .menu a, .menu .theme-toggle, .menu .admin-badge { width: 100%; min-height: 42px; display: flex; align-items: center; justify-content: flex-start; padding: 10px 12px; font-size: .88rem; }
+            .menu .theme-toggle { border-radius: 8px; }
+            .menu .admin-badge { border-radius: 8px; }
+            .story-tools { display: grid; grid-template-columns: 1fr; }
+            .story-tools input, .story-tools select { width: 100%; min-height: 46px; }
+            .section-header h2 { overflow-wrap: anywhere; }
+            .hero-actions .btn { flex: 1 1 200px; justify-content: center; }
+            .contact-panel, .register-grid, .donation-grid { gap: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            .container { width: min(100% - 24px, 440px); }
+            .topbar { font-size: .66rem; }
+            .topbar .container { justify-content: center; }
+            .brand { max-width: calc(100% - 54px); }
+            .brand img { width: 40px; height: 40px; }
+            .brand-text strong { font-size: .75rem; }
+            .brand-text small { display: none; }
+            section { padding: 42px 0; }
+            .hero { min-height: 520px; }
+            .hero-content { padding: 42px 0 36px; }
+            .hero-actions { flex-direction: column; }
+            .hero-actions .btn { width: 100%; }
+            .hero-stats { display: grid; grid-template-columns: 1fr 1fr; }
+            .stat-item:last-child { grid-column: span 2; }
+            .stat-item { text-align: center; }
+            .donation-cards { gap: 10px; }
+            .donation-card { padding: 18px 12px; }
+            .donation-card .amount { font-size: 1.35rem; }
+            .cookie-banner { left: 10px; right: 10px; bottom: 10px; padding: 14px; }
+        }
     </style>
 </head>
 
@@ -1080,7 +1215,7 @@
     <!-- ===== TOP BAR ===== -->
     <div class="topbar">
         <div class="container">
-            <span>TESO NORTH CROSS COUNTRY</span>
+            <span>TESO NORTH CROSS COUNTRY CBO</span>
             <span>RUN. UNITE. TRANSFORM. · Community through sport</span>
         </div>
     </div>
@@ -1089,7 +1224,7 @@
     <header>
         <nav class="container nav">
             <a class="brand" href="#home">
-                <img src="logo.jpeg" alt="Teso North Cross Country logo">
+                <img src="logo.jpeg" alt="Teso North Cross Country CBO logo">
                 <div class="brand-text">
                     <strong>Teso North<br>Cross Country</strong>
                     <small>Run. Unite. Transform.</small>
@@ -1108,7 +1243,9 @@
                 <li><a href="#donate" onclick="closeMenu()">Donate</a></li>
                 <li><a href="#volunteer" onclick="closeMenu()">Volunteer</a></li>
                 <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
-                <li><span class="admin-badge" onclick="openAdmin()">⚙️ Admin</span></li>
+                <li><button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">◐</button></li>
+                <li><button class="theme-toggle" type="button" onclick="openAuth()">Sign in</button></li>
+                <li><span class="admin-badge" onclick="return false">⚙️ Admin</span></li>
             </ul>
         </nav>
     </header>
@@ -1144,9 +1281,15 @@
                 </div>
                 <p id="storiesDesc">Real moments from a community brought together by sport, participation and a shared commitment to positive change.</p>
             </div>
+            <div class="story-tools" role="search">
+                <input id="storySearch" type="search" placeholder="Search stories by title or topic..." aria-label="Search stories">
+                <select id="storyCategory" aria-label="Filter stories by category"><option value="all">All categories</option></select>
+                <span class="story-count" id="storyCount" aria-live="polite"></span>
+            </div>
             <div class="stories-grid" id="storiesGrid">
                 <!-- Stories loaded by JavaScript -->
             </div>
+            <div class="load-more-wrap"><button class="btn btn-primary" id="loadMoreBtn" type="button" onclick="loadMoreStories()">Load more stories</button></div>
         </div>
     </section>
 
@@ -1215,6 +1358,13 @@
                 <h2 id="aboutTitle">Teso North Cross Country</h2>
                 <p id="aboutText1">Teso North Cross Country is presented as a community sports platform where running creates opportunities for people to connect, participate and promote positive social change.</p>
                 <p id="aboutText2">The movement's message is simple: <strong>RUN. UNITE. TRANSFORM.</strong> Sport can open conversations, strengthen relationships and encourage people to take collective action for healthier and more resilient communities.</p>
+                <div class="about-details">
+                    <div class="about-detail"><h3>Mission</h3><p>To use inclusive sport and community dialogue to build healthier, safer and more connected communities.</p></div>
+                    <div class="about-detail"><h3>Vision</h3><p>A resilient society where every person has a place to participate, be heard and thrive.</p></div>
+                    <div class="about-detail"><h3>Our history</h3><p>TNCC began as a local running initiative in Teso North and grew through shared action by runners, families and community partners.</p></div>
+                    <div class="about-detail"><h3>Our promise</h3><p>We make participation welcoming, transparent and centered on dignity, equality and collective responsibility.</p></div>
+                </div>
+                <div class="founder"><img src="logo.jpeg" alt="TNCC founding team placeholder" loading="lazy"><div><strong>TNCC founding team</strong><span>Community organizers, runners and partners building the movement together.</span></div></div>
                 <div class="about-grid" id="aboutGrid">
                     <div class="about-box"><strong>Our message</strong><span>Run. Unite. Transform.</span></div>
                     <div class="about-box"><strong>Our approach</strong><span>Sport + community + action</span></div>
@@ -1245,7 +1395,7 @@
                         <label for="email">Email Address *</label>
                         <input type="email" id="email" placeholder="you@example.com" required>
                         <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="e.g. 0728 682 749">
+                        <input type="tel" id="phone" placeholder="e.g. 0182 095 270">
                         <label for="interest">I'm interested in *</label>
                         <select id="interest" required>
                             <option value="">Select an option</option>
@@ -1272,7 +1422,7 @@
                         <strong>Run. Unite. Transform.</strong><br>
                         Every registration brings us closer to stronger, healthier communities.
                     </div>
-                    <p style="font-size:0.85rem; color:var(--text-muted);">Questions? Call us at <strong>0728 682 749</strong> or email <strong>info@tesonorthcrosscountry.org</strong></p>
+                    <p style="font-size:0.85rem; color:var(--text-muted);">Questions? Call us at <strong>0182 095 270</strong> or email <strong>info@tesonorthcrosscountry.org</strong></p>
                 </div>
             </div>
         </div>
@@ -1316,10 +1466,11 @@
                 <div class="donation-methods">
                     <h3>Donate via M-Pesa / Call Us</h3>
                     <ul>
-                        <li><span class="icon">📱</span> M-Pesa Paybill: <strong>0728 682 749</strong></li>
+                        <li><span class="icon">📱</span> M-Pesa Paybill: <strong>522522</strong></li>
+                        <li><span class="icon">🧾</span> Till Number: <strong>8130580</strong></li>
                         <li><span class="icon">🏦</span> Bank Transfer: Contact us for details</li>
                         <li><span class="icon">🤝</span> In-Kind Support: Equipment, supplies, services</li>
-                        <li><span class="icon">📞</span> Call: <strong>0728 682 749</strong> / <strong>0182 095 270</strong></li>
+                        <li><span class="icon">📞</span> Call: <strong>0182 095 270</strong></li>
                     </ul>
                     <p style="margin-top:16px;font-size:0.85rem;color:var(--text-muted);">Contact us for donation details and receipt information</p>
                 </div>
@@ -1373,12 +1524,20 @@
                         <button type="submit" class="btn btn-primary">Subscribe →</button>
                     </form>
                     <div class="contact-info">
-                        <a href="tel:0728682749">📞 0728 682 749</a>
                         <a href="tel:0182095270">📞 0182 095 270</a>
                         <a href="mailto:info@tesonorthcrosscountry.org">✉️ Email Us</a>
                     </div>
                 </div>
                 <a class="btn btn-primary" href="#donate" style="flex-shrink:0;">Support TNCC →</a>
+            </div>
+            <div class="contact-panel">
+                <div class="contact-copy"><div class="kicker">General enquiries</div><h3>We would love to hear from you.</h3><p>Ask about events, partnerships, media, safeguarding or how to support the work. This form is separate from event registration.</p></div>
+                <form class="contact-form" onsubmit="handleContact(event)">
+                    <label for="contactName">Name *</label><input id="contactName" required placeholder="Your name">
+                    <label for="contactEmail">Email *</label><input id="contactEmail" type="email" required placeholder="you@example.com">
+                    <label for="contactMessage">Message *</label><textarea id="contactMessage" rows="4" required placeholder="How can we help?"></textarea>
+                    <button class="btn btn-primary" type="submit">Send enquiry →</button>
+                </form>
             </div>
         </div>
     </section>
@@ -1391,7 +1550,7 @@
                     <div class="footer-brand">
                         <img src="logo.jpeg" alt="TNCC logo">
                         <div>
-                            <strong>Teso North Cross Country</strong>
+                            <strong>Teso North Cross Country CBO</strong>
                             <small>RUN. UNITE. TRANSFORM.</small>
                         </div>
                     </div>
@@ -1413,12 +1572,13 @@
                         <li><a href="#register">Get Involved</a></li>
                         <li><a href="#donate">Donate</a></li>
                         <li><a href="#volunteer">Volunteer</a></li>
+                        <li><a href="#privacy" onclick="openLegal('privacy')">Privacy policy</a></li>
+                        <li><a href="#terms" onclick="openLegal('terms')">Terms of service</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3>Contact</h3>
                     <ul>
-                        <li>📞 0728 682 749</li>
                         <li>📞 0182 095 270</li>
                         <li>📍 Community sports platform</li>
                         <li>🇰🇪 Kenya</li>
@@ -1426,7 +1586,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <span>© <span id="year"></span> Teso North Cross Country. All rights reserved.</span>
+                <span>© <span id="year"></span> Teso North Cross Country CBO. All rights reserved.</span>
                 <span>Built with ❤️ for community impact</span>
             </div>
         </div>
@@ -1449,6 +1609,8 @@
                     <a href="#" class="share-btn facebook" onclick="shareModal('Facebook')">📘 Facebook</a>
                     <a href="#" class="share-btn whatsapp" onclick="shareModal('WhatsApp')">💬 WhatsApp</a>
                 </div>
+                <div class="related-posts"><h3>Related stories</h3><div class="related-list" id="relatedPosts"></div></div>
+                <div class="comments-box"><h3>Join the conversation</h3><p id="commentsHelp">Comments can use Utterances, Supabase, or local preview storage depending on your configuration.</p><div id="utterancesThread"></div><textarea id="commentText" rows="2" placeholder="Share a thought..." aria-label="Comment"></textarea><button class="btn btn-primary" type="button" onclick="submitComment()">Post comment</button><div id="commentsList"></div></div>
             </div>
         </div>
     </div>
@@ -1467,7 +1629,7 @@
                     <label>Email Address *</label>
                     <input type="email" id="volEmail" placeholder="you@example.com" required>
                     <label>Phone Number</label>
-                    <input type="tel" id="volPhone" placeholder="e.g. 0728 682 749">
+                    <input type="tel" id="volPhone" placeholder="e.g. 0182 095 270">
                     <label>Why do you want to volunteer?</label>
                     <textarea id="volMessage" rows="3" placeholder="Tell us about your skills, availability, and motivation..."></textarea>
                     <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px;">Submit Application →</button>
@@ -1570,6 +1732,9 @@
 
     <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
+    <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie consent"><p>We use essential local storage for preferences, registrations and newsletter signups. Optional analytics helps us understand engagement. Read our <a href="#privacy" onclick="openLegal('privacy')">privacy policy</a>.</p><button class="btn btn-primary" type="button" onclick="acceptCookies()">Accept</button></div>
+    <div class="modal" id="legalModal" onclick="closeLegal(event)"><div class="modal-box" onclick="event.stopPropagation()"><div class="modal-body"><button class="modal-close" onclick="closeLegal()">×</button><span class="tag" id="legalTag">TNCC</span><h2 id="legalTitle"></h2><p id="legalText"></p></div></div></div>
+    <div class="modal" id="authModal" onclick="closeAuth(event)"><div class="modal-box" onclick="event.stopPropagation()"><div class="modal-body"><button class="modal-close" onclick="closeAuth()">×</button><span class="tag">TNCC account</span><h2 id="authTitle">Sign in</h2><form onsubmit="handleAuth(event)"><label for="authEmail">Email</label><input class="auth-input" id="authEmail" type="email" required placeholder="you@example.com"><label for="authPassword">Password</label><input class="auth-input" id="authPassword" type="password" required minlength="6"><button class="btn btn-primary" type="submit">Continue</button></form><button class="btn" type="button" onclick="signInWithGoogle()">Continue with Google</button><p style="margin-top:12px;font-size:.82rem;"><button class="card-link" type="button" onclick="toggleAuthMode()" id="authModeToggle">Create an account</button></p></div></div></div>
 
     <!-- ============================================
        JAVASCRIPT
@@ -1601,6 +1766,20 @@
                         title: 'Every step counts',
                         image: 'runners.jpg.jpeg',
                         text: 'From the first step to the finish line, participation matters. Cross-country creates an environment where people can challenge themselves while sharing a common community experience.'
+                    },
+                    {
+                        id: 4,
+                        tag: 'Youth',
+                        title: 'Making room for the next generation',
+                        image: 'community.jpg.jpeg',
+                        text: 'Young people bring energy, ideas and possibility to every TNCC gathering. Mentorship and participation help turn that energy into confidence and opportunity.'
+                    },
+                    {
+                        id: 5,
+                        tag: 'Partnerships',
+                        title: 'When local partners move together',
+                        image: 'partners2.jpg.jpeg',
+                        text: 'Strong community events are built through shared responsibility. Partners contribute time, resources and local knowledge to make participation possible.'
                     }
                 ],
                 impact: [
@@ -1620,6 +1799,8 @@
                 submissions: [],
                 donations: [],
                 volunteers: [],
+                contacts: [],
+                comments: {},
                 content: {
                     heroTitle: 'Run. Unite. Transform.',
                     heroSubtitle: 'A community movement using cross-country running, participation and collective action to promote healthy communities, equality, resilience and positive social change.',
@@ -1662,29 +1843,73 @@
         }
 
         let appData = loadData();
+        let visibleStoryCount = 3;
+        let currentArticleId = null;
+        let authMode = 'signin';
+        function hasSupabase() { return Boolean(window.tnccSupabase); }
+        async function insertRemote(table, payload) {
+            if (!hasSupabase()) return false;
+            const { error } = await window.tnccSupabase.from(table).insert(payload);
+            if (error) throw error;
+            return true;
+        }
+        async function notifyRemote(type, payload) {
+            const endpoint = window.TNCC_CONFIG?.notificationEndpoint;
+            if (!endpoint) return;
+            await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, payload }) });
+        }
+
+        function escapeHtml(value) {
+            return String(value || '').replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
+        }
+
+        function getFilteredStories() {
+            const query = (document.getElementById('storySearch')?.value || '').toLowerCase().trim();
+            const category = document.getElementById('storyCategory')?.value || 'all';
+            return appData.stories.filter(story => {
+                const matchesQuery = !query || `${story.title} ${story.text} ${story.tag}`.toLowerCase().includes(query);
+                const matchesCategory = category === 'all' || story.tag === category;
+                return matchesQuery && matchesCategory;
+            });
+        }
+
+        function populateCategories() {
+            const select = document.getElementById('storyCategory');
+            const categories = [...new Set(appData.stories.map(story => story.tag))].sort();
+            const current = select.value;
+            select.innerHTML = '<option value="all">All categories</option>' + categories.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join('');
+            select.value = categories.includes(current) ? current : 'all';
+        }
 
         // ===== RENDER FUNCTIONS =====
         function renderStories() {
             const grid = document.getElementById('storiesGrid');
-            grid.innerHTML = appData.stories.map(story => `
-                <article class="card">
+            const stories = getFilteredStories();
+            const visibleStories = stories.slice(0, visibleStoryCount);
+            grid.innerHTML = visibleStories.length ? visibleStories.map(story => `
+                <article class="card reveal">
                     <div class="card-image">
-                        <img src="${story.image}" alt="${story.title}">
+                        <img src="${escapeHtml(story.image)}" alt="${escapeHtml(story.title)}" loading="lazy">
                     </div>
                     <div class="card-body">
-                        <span class="card-tag">${story.tag}</span>
-                        <h3>${story.title}</h3>
-                        <p>${story.text.substring(0, 100)}${story.text.length > 100 ? '...' : ''}</p>
-                        <a class="card-link" href="#" onclick="openArticle(event, '${story.title.replace(/'/g, "\\'")}', '${story.image}', '${story.text.replace(/'/g, "\\'")}')">Read story →</a>
+                        <span class="card-tag">${escapeHtml(story.tag)}</span>
+                        <h3>${escapeHtml(story.title)}</h3>
+                        <p>${escapeHtml(story.text.substring(0, 100))}${story.text.length > 100 ? '...' : ''}</p>
+                        <a class="card-link" href="#" onclick="openArticle(event, ${story.id})">Read story →</a>
                         <div class="share-buttons">
-                            <a href="#" class="share-btn twitter" onclick="shareStory('Twitter', '${story.title.replace(/'/g, "\\'")}')">🐦 Tweet</a>
-                            <a href="#" class="share-btn facebook" onclick="shareStory('Facebook', '${story.title.replace(/'/g, "\\'")}')">📘 Share</a>
-                            <a href="#" class="share-btn whatsapp" onclick="shareStory('WhatsApp', '${story.title.replace(/'/g, "\\'")}')">💬 WhatsApp</a>
+                            <a href="#" class="share-btn twitter" onclick="shareStoryById('Twitter', ${story.id}); return false">🐦 Tweet</a>
+                            <a href="#" class="share-btn facebook" onclick="shareStoryById('Facebook', ${story.id}); return false">📘 Share</a>
+                            <a href="#" class="share-btn whatsapp" onclick="shareStoryById('WhatsApp', ${story.id}); return false">💬 WhatsApp</a>
                         </div>
                     </div>
                 </article>
-            `).join('');
+            `).join('') : '<p style="color:var(--text-muted);">No stories match that search.</p>';
+            document.getElementById('storyCount').textContent = `${stories.length} stor${stories.length === 1 ? 'y' : 'ies'}`;
+            document.getElementById('loadMoreBtn').classList.toggle('hidden', visibleStoryCount >= stories.length || stories.length === 0);
+            observeReveals();
         }
+
+        function loadMoreStories() { visibleStoryCount += 3; renderStories(); }
 
         function renderImpact() {
             const grid = document.getElementById('impactGrid');
@@ -1762,6 +1987,7 @@
         }
 
         function renderAll() {
+            populateCategories();
             renderStories();
             renderImpact();
             renderGallery();
@@ -1806,15 +2032,40 @@
 
         // ===== ARTICLE MODAL =====
         let currentArticleTitle = '';
-        function openArticle(e, title, image, text) {
+        function openArticle(e, storyId) {
             e.preventDefault();
+            const story = appData.stories.find(item => item.id === Number(storyId));
+            if (!story) return;
+            currentArticleId = story.id;
+            const title = story.title;
             currentArticleTitle = title;
             document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalImage').src = image;
+            document.getElementById('modalImage').src = story.image;
             document.getElementById('modalImage').alt = title;
-            document.getElementById('modalText').textContent = text;
+            document.getElementById('modalText').textContent = story.text;
+            document.getElementById('relatedPosts').innerHTML = appData.stories.filter(item => item.id !== story.id).slice(0, 3).map(item => `<button type="button" onclick="openRelatedArticle(${item.id})">${escapeHtml(item.title)}</button>`).join('');
+            renderComments();
+            loadUtterances(story.id);
+            document.getElementById('articleSchema').textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Article', headline: story.title, image: story.image, articleBody: story.text, author: { '@type': 'Organization', name: 'Teso North Cross Country CBO' } });
             document.getElementById('articleModal').classList.add('show');
             document.body.style.overflow = 'hidden';
+        }
+        function openRelatedArticle(storyId) { openArticle({ preventDefault: () => {} }, storyId); }
+        function loadUtterances(storyId) {
+            const container = document.getElementById('utterancesThread');
+            container.innerHTML = '';
+            const repo = window.TNCC_CONFIG?.utterancesRepo;
+            if (!repo) return;
+            const script = document.createElement('script');
+            script.src = 'https://utteranc.es/client.js';
+            script.async = true;
+            script.crossOrigin = 'anonymous';
+            script.setAttribute('repo', repo);
+            script.setAttribute('issue-term', `tncc-article-${storyId}`);
+            script.setAttribute('label', 'blog-comment');
+            script.setAttribute('theme', document.body.classList.contains('dark') ? 'github-dark' : 'github-light');
+            container.appendChild(script);
+            document.getElementById('commentsHelp').textContent = 'Hosted comments are powered by Utterances and GitHub Issues.';
         }
         function closeArticle(e) {
             if (e && e.target !== e.currentTarget) return;
@@ -1828,7 +2079,7 @@
         // ===== SHARING =====
         function shareStory(platform, title) {
             const url = window.location.href;
-            const text = `Check out this story from Teso North Cross Country: "${title}" - Run. Unite. Transform.`;
+            const text = `Check out this story from Teso North Cross Country CBO: "${title}" - Run. Unite. Transform.`;
             let shareUrl = '';
             switch (platform) {
                 case 'Twitter': shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`; break;
@@ -1839,8 +2090,12 @@
             window.open(shareUrl, '_blank', 'width=600,height=500');
             return false;
         }
+        function shareStoryById(platform, storyId) {
+            const story = appData.stories.find(item => item.id === Number(storyId));
+            if (story) shareStory(platform, story.title);
+        }
         function shareModal(platform) {
-            const title = currentArticleTitle || 'Teso North Cross Country';
+            const title = currentArticleTitle || 'Teso North Cross Country CBO';
             shareStory(platform, title);
             return false;
         }
@@ -1856,8 +2111,65 @@
             return false;
         }
 
+        async function handleContact(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            try {
+                const remote = await insertRemote('contact_messages', { name, email, message });
+                if (!remote) { appData.contacts = appData.contacts || []; appData.contacts.push({ name, email, message, date: new Date().toLocaleDateString() }); saveData(appData); }
+                await notifyRemote('contact', { name, email, message });
+                e.target.reset(); showToast('Thanks. Your enquiry has been received.', 'success');
+            } catch (error) { console.error(error); showToast('We could not send that enquiry. Please try again.', 'error'); }
+            if (typeof gtag !== 'undefined') gtag('event', 'contact_form_submit', { event_category: 'engagement' });
+        }
+
+        async function submitComment() {
+            const text = document.getElementById('commentText').value.trim();
+            if (!text || !currentArticleId) return;
+            if (hasSupabase()) {
+                const { data: { user } } = await window.tnccSupabase.auth.getUser();
+                if (!user) { openAuth(); showToast('Sign in to post a hosted comment.', 'error'); return; }
+                try { await insertRemote('comments', { article_id: currentArticleId, user_id: user.id, author_name: user.email, body: text }); document.getElementById('commentText').value = ''; showToast('Comment submitted for review.', 'success'); return; } catch (error) { console.error(error); showToast('Comment could not be submitted.', 'error'); return; }
+            }
+            appData.comments = appData.comments || {};
+            appData.comments[currentArticleId] = appData.comments[currentArticleId] || [];
+            appData.comments[currentArticleId].push({ text, date: new Date().toLocaleDateString() });
+            saveData(appData);
+            document.getElementById('commentText').value = '';
+            renderComments();
+            showToast('Your comment was posted on this device.', 'success');
+        }
+        function renderComments() {
+            const comments = (appData.comments || {})[currentArticleId] || [];
+            document.getElementById('commentsList').innerHTML = comments.map(comment => `<p style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);"><strong>Reader</strong> <small>${escapeHtml(comment.date)}</small><br>${escapeHtml(comment.text)}</p>`).join('');
+        }
+
+        function openAuth() { document.getElementById('authModal').classList.add('show'); }
+        function closeAuth(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('authModal').classList.remove('show'); }
+        function toggleAuthMode() { authMode = authMode === 'signin' ? 'signup' : 'signin'; document.getElementById('authTitle').textContent = authMode === 'signin' ? 'Sign in' : 'Create an account'; document.getElementById('authModeToggle').textContent = authMode === 'signin' ? 'Create an account' : 'Already have an account? Sign in'; }
+        async function handleAuth(e) { e.preventDefault(); if (!hasSupabase()) { showToast('Add Supabase keys to enable accounts.', 'error'); return; } const email = document.getElementById('authEmail').value; const password = document.getElementById('authPassword').value; const result = authMode === 'signin' ? await window.tnccSupabase.auth.signInWithPassword({ email, password }) : await window.tnccSupabase.auth.signUp({ email, password }); if (result.error) { showToast(result.error.message, 'error'); return; } closeAuth(); showToast(authMode === 'signin' ? 'Signed in successfully.' : 'Check your email to confirm your account.', 'success'); }
+        async function signInWithGoogle() { if (!hasSupabase()) { showToast('Add Supabase keys to enable social login.', 'error'); return; } const { error } = await window.tnccSupabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } }); if (error) showToast(error.message, 'error'); }
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('tncc_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+        function acceptCookies() { localStorage.setItem('tncc_cookies', 'accepted'); document.getElementById('cookieBanner').remove(); }
+        function openLegal(type) {
+            document.getElementById('legalTitle').textContent = type === 'privacy' ? 'Privacy policy' : 'Terms of service';
+            document.getElementById('legalText').textContent = type === 'privacy' ? 'TNCC stores form submissions, comments and preferences in your browser in this static demo. A production deployment should connect these forms to a secure backend, publish a retention schedule and request consent for optional analytics.' : 'This website shares community stories and information for general purposes. Donations, registrations and volunteer applications are recorded locally in this demo and are not payment or account services.';
+            document.getElementById('legalModal').classList.add('show');
+        }
+        function closeLegal(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('legalModal').classList.remove('show'); }
+        function observeReveals() {
+            if (!('IntersectionObserver' in window)) { document.querySelectorAll('.reveal').forEach(item => item.classList.add('visible')); return; }
+            const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
+            document.querySelectorAll('.reveal:not(.visible)').forEach(item => observer.observe(item));
+        }
+
         // ===== REGISTRATION =====
-        function handleRegistration(e) {
+        async function handleRegistration(e) {
             e.preventDefault();
             const name = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
@@ -1869,17 +2181,12 @@
                 return false;
             }
 
-            appData.submissions.push({
-                name: name,
-                email: email,
-                interest: interest,
-                message: message,
-                date: new Date().toLocaleDateString()
-            });
-            saveData(appData);
-            renderSubmissions();
-            showToast(`✅ Thank you, ${name}! Your registration has been received.`, 'success');
-            e.target.reset();
+            try {
+                const remote = await insertRemote('submissions', { name, email, phone: document.getElementById('phone').value.trim(), interest, message });
+                if (!remote) { appData.submissions.push({ name, email, interest, message, date: new Date().toLocaleDateString() }); saveData(appData); renderSubmissions(); }
+                await notifyRemote('registration', { name, email, interest, message });
+                showToast(`Thank you, ${name}! Your registration has been received.`, 'success'); e.target.reset();
+            } catch (error) { console.error(error); showToast('Registration could not be submitted. Please try again.', 'error'); }
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'registration', { 'event_category': 'engagement', 'event_label': interest });
             }
@@ -1898,12 +2205,16 @@
             document.querySelectorAll('.donation-card').forEach(c => c.classList.remove('selected'));
             selectedDonation = parseInt(document.getElementById('customDonation').value) || 0;
         }
-        function handleDonation() {
+        async function handleDonation() {
             const custom = parseInt(document.getElementById('customDonation').value);
             const amount = custom > 0 ? custom : selectedDonation;
             if (!amount || amount <= 0) {
                 showToast('Please select or enter a valid donation amount.', 'error');
                 return;
+            }
+            const checkoutEndpoint = window.TNCC_CONFIG?.stripeCheckoutEndpoint;
+            if (checkoutEndpoint) {
+                try { const response = await fetch(checkoutEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amountKes: amount }) }); const result = await response.json(); if (!response.ok || !result.url) throw new Error(result.error || 'Checkout unavailable'); window.location.href = result.url; return; } catch (error) { console.error(error); showToast('Secure checkout is unavailable right now.', 'error'); return; }
             }
             const name = prompt('Your name (optional):') || 'Anonymous';
             appData.donations.push({
@@ -1927,7 +2238,7 @@
             document.getElementById('volunteerModal').classList.remove('show');
             document.body.style.overflow = '';
         }
-        function handleVolunteerApplication(e) {
+        async function handleVolunteerApplication(e) {
             e.preventDefault();
             const name = document.getElementById('volName').value.trim();
             const email = document.getElementById('volEmail').value.trim();
@@ -1940,19 +2251,12 @@
                 return false;
             }
 
-            appData.volunteers.push({
-                name: name,
-                email: email,
-                phone: phone,
-                role: role,
-                message: message,
-                date: new Date().toLocaleDateString()
-            });
-            saveData(appData);
-            renderVolunteers();
-            showToast(`✅ Thank you, ${name}! Your volunteer application has been received.`, 'success');
-            e.target.reset();
-            closeVolunteerModal();
+            try {
+                const remote = await insertRemote('volunteers', { name, email, phone, role, message });
+                if (!remote) { appData.volunteers.push({ name, email, phone, role, message, date: new Date().toLocaleDateString() }); saveData(appData); renderVolunteers(); }
+                await notifyRemote('volunteer', { name, email, role, message });
+                showToast(`Thank you, ${name}! Your volunteer application has been received.`, 'success'); e.target.reset(); closeVolunteerModal();
+            } catch (error) { console.error(error); showToast('Application could not be submitted. Please try again.', 'error'); }
             return false;
         }
 
@@ -2044,9 +2348,16 @@
         // ===== YEAR =====
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        document.getElementById('storySearch').addEventListener('input', () => { visibleStoryCount = 3; renderStories(); });
+        document.getElementById('storyCategory').addEventListener('change', () => { visibleStoryCount = 3; renderStories(); });
+        if (localStorage.getItem('tncc_theme') === 'dark') document.body.classList.add('dark');
+        if (localStorage.getItem('tncc_cookies') === 'accepted') document.getElementById('cookieBanner').remove();
+        document.querySelectorAll('img').forEach(image => image.loading = 'lazy');
+        if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+
         // ===== INIT =====
         renderAll();
-        console.log('🏃 Teso North Cross Country website loaded successfully!');
+        console.log('🏃 Teso North Cross Country CBO website loaded successfully!');
         console.log('📊 Admin dashboard ready - click ⚙️ Admin in navigation');
         console.log('📝 All submissions stored locally');
 
