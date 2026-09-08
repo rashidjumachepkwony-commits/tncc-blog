@@ -9,6 +9,7 @@
     <meta name="description" content="Community sports and social impact organization using cross-country running to promote health, equality, and resilience. Join us to end gender-based violence through sport.">
     <meta name="keywords" content="cross country, community sports, gender-based violence, youth empowerment, social impact, Kenya, TNCC, running, unity, transformation">
     <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
     <meta name="theme-color" content="#073b2b">
     <meta name="author" content="Teso North Cross Country">
     
@@ -44,19 +45,9 @@
     <title>Teso North Cross Country | Run. Unite. Transform.</title>
 
     <style>
-        /* ============================================
-           RESET & BASE STYLES
-           ============================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, Helvetica, sans-serif;
             background: #f5f7f5;
@@ -65,32 +56,12 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+        img { max-width: 100%; height: auto; display: block; }
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
+        .container { width: 92%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        .container {
-            width: 92%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* ============================================
-           COLOR VARIABLES
-           ============================================ */
+        /* ===== VARIABLES ===== */
         :root {
             --primary: #073b2b;
             --primary-light: #0b563d;
@@ -106,9 +77,7 @@
             --transition: all 0.3s ease;
         }
 
-        /* ============================================
-           TOP BAR
-           ============================================ */
+        /* ===== TOP BAR ===== */
         .topbar {
             background: var(--primary-dark);
             color: #bcd0c7;
@@ -116,7 +85,6 @@
             padding: 6px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-
         .topbar .container {
             display: flex;
             justify-content: space-between;
@@ -124,25 +92,18 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+        .topbar span:last-child { font-weight: 500; color: #d4e8df; }
 
-        .topbar span:last-child {
-            font-weight: 500;
-            color: #d4e8df;
-        }
-
-        /* ============================================
-           HEADER / NAVIGATION
-           ============================================ */
+        /* ===== HEADER ===== */
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.97);
+            background: rgba(255,255,255,0.97);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
         }
-
         .nav {
             display: flex;
             align-items: center;
@@ -150,14 +111,12 @@
             min-height: 75px;
             gap: 20px;
         }
-
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
             flex-shrink: 0;
         }
-
         .brand img {
             width: 54px;
             height: 54px;
@@ -167,28 +126,13 @@
             padding: 2px;
             border: 2px solid var(--primary);
         }
-
-        .brand-text strong {
-            display: block;
-            font-size: 1rem;
-            color: var(--primary);
-            line-height: 1.2;
-        }
-
-        .brand-text small {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
+        .brand-text strong { display: block; font-size: 1rem; color: var(--primary); line-height: 1.2; }
+        .brand-text small { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.1em; font-weight: 600; text-transform: uppercase; }
         .menu {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
         .menu a {
             padding: 8px 14px;
             font-weight: 600;
@@ -197,12 +141,7 @@
             border-radius: 8px;
             transition: var(--transition);
         }
-
-        .menu a:hover {
-            background: #eef3ef;
-            color: var(--primary);
-        }
-
+        .menu a:hover { background: #eef3ef; color: var(--primary); }
         .menu .cta {
             background: var(--primary);
             color: var(--white);
@@ -210,12 +149,7 @@
             border-radius: 50px;
             font-weight: 700;
         }
-
-        .menu .cta:hover {
-            background: var(--primary-light);
-            transform: translateY(-1px);
-        }
-
+        .menu .cta:hover { background: var(--primary-light); transform: translateY(-1px); }
         .menu-btn {
             display: none;
             background: var(--primary);
@@ -227,411 +161,20 @@
             cursor: pointer;
             transition: var(--transition);
         }
-
-        .menu-btn:hover {
-            background: var(--primary-light);
-        }
-
-        /* ============================================
-           ADMIN PANEL BUTTON (Floating)
-           ============================================ */
-        .admin-toggle-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--primary);
+        .menu-btn:hover { background: var(--primary-light); }
+        .admin-badge {
+            background: #ff6b35;
             color: white;
-            border: none;
+            padding: 4px 12px;
             border-radius: 50px;
-            padding: 14px 22px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            z-index: 9999;
-            box-shadow: 0 4px 20px rgba(7, 59, 43, 0.3);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .admin-toggle-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(7, 59, 43, 0.4);
-        }
-
-        .admin-toggle-btn .lock-icon {
-            font-size: 1.1rem;
-        }
-
-        /* ============================================
-           ADMIN PANEL (Overlay)
-           ============================================ */
-        .admin-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .admin-overlay.active {
-            display: flex;
-        }
-
-        .admin-panel {
-            background: white;
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            border-radius: 24px;
-            padding: 35px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-        }
-
-        .admin-close {
-            position: sticky;
-            top: 0;
-            float: right;
-            background: #f1f5f9;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-
-        .admin-close:hover {
-            background: #e2e8f0;
-            transform: rotate(90deg);
-        }
-
-        .admin-panel h1 {
-            color: var(--primary);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .admin-panel .subtitle {
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-
-        .admin-login {
-            display: block;
-        }
-
-        .admin-login.hidden {
-            display: none;
-        }
-
-        .admin-dashboard {
-            display: none;
-        }
-
-        .admin-dashboard.active {
-            display: block;
-        }
-
-        .admin-login input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            transition: var(--transition);
-        }
-
-        .admin-login input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(155, 207, 32, 0.2);
-        }
-
-        .admin-login .error-msg {
-            color: #dc2626;
-            background: #fee2e2;
-            padding: 10px 14px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .admin-login .btn {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #1a3d0a;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-
-        .btn-success {
-            background: #16a34a;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #15803d;
-        }
-
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #1a2e26;
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
-        }
-
-        .admin-status {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .admin-status .badge {
-            background: #eef6d8;
-            color: #4d7010;
-            padding: 4px 14px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .admin-form {
-            background: #f8faf8;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .admin-form h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .admin-form .form-group {
-            margin-bottom: 15px;
-        }
-
-        .admin-form .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--text);
-        }
-
-        .admin-form input,
-        .admin-form textarea,
-        .admin-form select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: var(--transition);
-        }
-
-        .admin-form input:focus,
-        .admin-form textarea:focus,
-        .admin-form select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(155, 207, 32, 0.15);
-        }
-
-        .admin-form textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .admin-form .inline-flex {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .admin-form .btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 50px;
+            font-size: 0.7rem;
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
         }
+        .admin-badge:hover { background: #e55a2b; }
 
-        .admin-form .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .posts-list {
-            margin-top: 15px;
-        }
-
-        .post-item {
-            background: #f8faf8;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px 18px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            transition: var(--transition);
-        }
-
-        .post-item:hover {
-            border-color: var(--accent);
-        }
-
-        .post-item .post-info h4 {
-            color: var(--primary);
-            font-size: 1rem;
-        }
-
-        .post-item .post-info .post-tag {
-            background: #eef6d8;
-            color: #4d7010;
-            padding: 2px 10px;
-            border-radius: 50px;
-            font-size: 0.65rem;
-            font-weight: 700;
-        }
-
-        .post-item .post-info p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 4px;
-        }
-
-        .post-item .post-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .post-item .post-actions button {
-            padding: 6px 14px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-
-        .post-item .post-actions .edit-btn {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .post-item .post-actions .edit-btn:hover {
-            background: #bfdbfe;
-        }
-
-        .post-item .post-actions .delete-btn {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .post-item .post-actions .delete-btn:hover {
-            background: #fecaca;
-        }
-
-        .admin-message {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .admin-message.success {
-            display: block;
-            background: #dcfce7;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-        }
-
-        .admin-message.error {
-            display: block;
-            background: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-
-        .admin-help {
-            background: #f0f7ff;
-            border-radius: 12px;
-            padding: 18px 20px;
-            margin-top: 20px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .admin-help h4 {
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .admin-help ul {
-            list-style: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .admin-help ul li {
-            padding: 3px 0;
-        }
-
-        /* ============================================
-           HERO SECTION
-           ============================================ */
+        /* ===== HERO ===== */
         .hero {
             position: relative;
             min-height: 580px;
@@ -640,16 +183,13 @@
             overflow: hidden;
             background: var(--primary-dark);
         }
-
         .hero-bg {
             position: absolute;
             inset: 0;
-            background: 
-                linear-gradient(135deg, rgba(7, 59, 43, 0.92) 0%, rgba(7, 59, 43, 0.55) 50%, rgba(7, 59, 43, 0.20) 100%),
-                url("hero-event.jpg.jpeg") center/cover no-repeat;
+            background: linear-gradient(135deg, rgba(7,59,43,0.92) 0%, rgba(7,59,43,0.55) 50%, rgba(7,59,43,0.20) 100%),
+                        url("hero-event.jpg.jpeg") center/cover no-repeat;
             z-index: 0;
         }
-
         .hero-bg::after {
             content: '';
             position: absolute;
@@ -659,7 +199,6 @@
             height: 120px;
             background: linear-gradient(transparent, rgba(0,0,0,0.30));
         }
-
         .hero-content {
             position: relative;
             z-index: 1;
@@ -667,12 +206,11 @@
             max-width: 720px;
             color: var(--white);
         }
-
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(155, 207, 32, 0.95);
+            background: rgba(155,207,32,0.95);
             color: #1a3d0a;
             padding: 6px 16px;
             border-radius: 50px;
@@ -682,31 +220,20 @@
             letter-spacing: 0.08em;
             margin-bottom: 18px;
         }
-
         .hero h1 {
             font-size: clamp(2.8rem, 7vw, 5rem);
             line-height: 0.98;
             letter-spacing: -0.04em;
             margin-bottom: 16px;
         }
-
-        .hero h1 span {
-            color: var(--accent);
-        }
-
+        .hero h1 span { color: var(--accent); }
         .hero p {
             font-size: 1.05rem;
             max-width: 580px;
             color: #dcebe4;
             margin-bottom: 28px;
         }
-
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
         .btn {
             display: inline-flex;
             align-items: center;
@@ -720,62 +247,42 @@
             transition: var(--transition);
             text-decoration: none;
         }
-
         .btn-primary {
             background: var(--accent);
             color: #1a3d0a;
         }
-
         .btn-primary:hover {
             background: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(155, 207, 32, 0.35);
+            box-shadow: 0 8px 24px rgba(155,207,32,0.35);
         }
-
         .btn-outline {
             background: rgba(255,255,255,0.12);
             color: var(--white);
             border: 1px solid rgba(255,255,255,0.25);
         }
-
         .btn-outline:hover {
             background: var(--white);
             color: var(--primary);
             transform: translateY(-2px);
         }
-
         .hero-stats {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
             margin-top: 40px;
         }
-
         .stat-item {
             background: rgba(255,255,255,0.10);
             border: 1px solid rgba(255,255,255,0.12);
             padding: 10px 18px;
             border-radius: 14px;
         }
+        .stat-item strong { display: block; font-size: 0.95rem; }
+        .stat-item span { font-size: 0.7rem; color: #c5dbd2; font-weight: 500; }
 
-        .stat-item strong {
-            display: block;
-            font-size: 0.95rem;
-        }
-
-        .stat-item span {
-            font-size: 0.7rem;
-            color: #c5dbd2;
-            font-weight: 500;
-        }
-
-        /* ============================================
-           SECTION COMMON
-           ============================================ */
-        section {
-            padding: 70px 0;
-        }
-
+        /* ===== SECTIONS ===== */
+        section { padding: 70px 0; }
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -783,7 +290,6 @@
             gap: 30px;
             margin-bottom: 35px;
         }
-
         .section-header .kicker {
             color: #6a8f3a;
             text-transform: uppercase;
@@ -792,28 +298,23 @@
             font-weight: 800;
             margin-bottom: 5px;
         }
-
         .section-header h2 {
             font-size: clamp(1.8rem, 3.2vw, 2.6rem);
             line-height: 1.15;
             color: var(--primary);
         }
-
         .section-header p {
             color: var(--text-muted);
             max-width: 520px;
             font-size: 0.95rem;
         }
 
-        /* ============================================
-           STORIES GRID
-           ============================================ */
+        /* ===== STORIES ===== */
         .stories-grid {
             display: grid;
             grid-template-columns: 1.4fr 1fr 1fr;
             gap: 24px;
         }
-
         .card {
             background: var(--white);
             border: 1px solid var(--border);
@@ -822,32 +323,16 @@
             transition: var(--transition);
             box-shadow: 0 4px 16px rgba(0,0,0,0.03);
         }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
-        }
-
-        .card-image {
-            height: 210px;
-            overflow: hidden;
-        }
-
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+        .card-image { height: 210px; overflow: hidden; }
         .card-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
-
-        .card:hover .card-image img {
-            transform: scale(1.04);
-        }
-
-        .card-body {
-            padding: 22px 24px 24px;
-        }
-
+        .card:hover .card-image img { transform: scale(1.04); }
+        .card-body { padding: 22px 24px 24px; }
         .card-tag {
             display: inline-block;
             background: #eef6d8;
@@ -859,19 +344,8 @@
             text-transform: uppercase;
             letter-spacing: 0.06em;
         }
-
-        .card h3 {
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin: 10px 0 6px;
-            line-height: 1.3;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
+        .card h3 { font-size: 1.2rem; color: var(--primary); margin: 10px 0 6px; line-height: 1.3; }
+        .card p { color: var(--text-muted); font-size: 0.9rem; }
         .card-link {
             display: inline-block;
             margin-top: 14px;
@@ -879,20 +353,16 @@
             font-weight: 700;
             font-size: 0.85rem;
             transition: var(--transition);
-            cursor: pointer;
         }
+        .card-link:hover { color: var(--accent); }
 
-        .card-link:hover {
-            color: var(--accent);
-        }
-
+        /* ===== SHARE BUTTONS ===== */
         .share-buttons {
             display: flex;
             gap: 8px;
             margin-top: 12px;
             flex-wrap: wrap;
         }
-
         .share-btn {
             display: inline-flex;
             align-items: center;
@@ -906,38 +376,19 @@
             cursor: pointer;
             text-decoration: none;
         }
+        .share-btn.twitter { background: #1DA1F2; color: white; }
+        .share-btn.facebook { background: #1877F2; color: white; }
+        .share-btn.whatsapp { background: #25D366; color: white; }
+        .share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        .share-btn.twitter {
-            background: #1DA1F2;
-            color: white;
-        }
-        .share-btn.facebook {
-            background: #1877F2;
-            color: white;
-        }
-        .share-btn.whatsapp {
-            background: #25D366;
-            color: white;
-        }
-        .share-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-
-        /* ============================================
-           FEATURE SECTION
-           ============================================ */
+        /* ===== FEATURE ===== */
         .feature {
             display: grid;
             grid-template-columns: 1.1fr 1fr;
             gap: 40px;
             align-items: center;
         }
-
-        .feature-image {
-            position: relative;
-        }
-
+        .feature-image { position: relative; }
         .feature-image img {
             width: 100%;
             height: 440px;
@@ -945,7 +396,6 @@
             border-radius: 24px;
             box-shadow: var(--shadow);
         }
-
         .feature-label {
             position: absolute;
             bottom: 18px;
@@ -958,30 +408,22 @@
             color: var(--primary);
             box-shadow: 0 4px 16px rgba(0,0,0,0.10);
         }
-
         .feature-content h2 {
             font-size: clamp(1.6rem, 2.8vw, 2.4rem);
             color: var(--primary);
             margin-bottom: 14px;
         }
-
-        .feature-content > p {
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-
+        .feature-content > p { color: var(--text-muted); margin-bottom: 20px; }
         .feature-list {
             display: grid;
             gap: 12px;
             margin: 20px 0 28px;
         }
-
         .feature-list li {
             display: flex;
             gap: 12px;
             align-items: flex-start;
         }
-
         .feature-list .check {
             width: 24px;
             height: 24px;
@@ -996,39 +438,18 @@
             flex-shrink: 0;
             margin-top: 2px;
         }
+        .feature-list li strong { color: var(--primary); display: block; }
+        .feature-list li span { color: var(--text-muted); font-size: 0.9rem; }
 
-        .feature-list li strong {
-            color: var(--primary);
-            display: block;
-        }
-
-        .feature-list li span {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* ============================================
-           IMPACT SECTION
-           ============================================ */
-        .impact {
-            background: var(--primary);
-            color: var(--white);
-        }
-
-        .impact .section-header h2 {
-            color: var(--white);
-        }
-
-        .impact .section-header p {
-            color: #b8d4c9;
-        }
-
+        /* ===== IMPACT ===== */
+        .impact { background: var(--primary); color: var(--white); }
+        .impact .section-header h2 { color: var(--white); }
+        .impact .section-header p { color: #b8d4c9; }
         .impact-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
-
         .impact-card {
             padding: 28px 24px;
             border: 1px solid rgba(255,255,255,0.10);
@@ -1036,58 +457,35 @@
             background: rgba(255,255,255,0.04);
             transition: var(--transition);
         }
-
         .impact-card:hover {
             background: rgba(255,255,255,0.08);
             transform: translateY(-3px);
         }
+        .impact-icon { font-size: 2rem; margin-bottom: 10px; }
+        .impact-card h3 { margin-bottom: 4px; }
+        .impact-card p { color: #bed6cc; font-size: 0.9rem; }
 
-        .impact-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .impact-card h3 {
-            margin-bottom: 4px;
-        }
-
-        .impact-card p {
-            color: #bed6cc;
-            font-size: 0.9rem;
-        }
-
-        /* ============================================
-           GALLERY
-           ============================================ */
+        /* ===== GALLERY ===== */
         .gallery-grid {
             display: grid;
             grid-template-columns: 1.3fr 0.7fr 0.7fr;
             grid-auto-rows: 240px;
             gap: 18px;
         }
-
         .gallery-item {
             border-radius: 16px;
             overflow: hidden;
             position: relative;
             background: #dce3de;
         }
-
-        .gallery-item:first-child {
-            grid-row: span 2;
-        }
-
+        .gallery-item:first-child { grid-row: span 2; }
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
-
-        .gallery-item:hover img {
-            transform: scale(1.04);
-        }
-
+        .gallery-item:hover img { transform: scale(1.04); }
         .gallery-caption {
             position: absolute;
             bottom: 12px;
@@ -1103,16 +501,13 @@
             -webkit-backdrop-filter: blur(4px);
         }
 
-        /* ============================================
-           ABOUT
-           ============================================ */
+        /* ===== ABOUT ===== */
         .about {
             display: grid;
             grid-template-columns: 0.8fr 1.2fr;
             gap: 50px;
             align-items: center;
         }
-
         .about-logo {
             background: linear-gradient(145deg, #edf5dc, var(--white));
             padding: 30px;
@@ -1121,258 +516,289 @@
             justify-content: center;
             border: 1px solid var(--border);
         }
-
-        .about-logo img {
-            width: min(320px, 80%);
-        }
-
-        .about-content p {
-            color: var(--text-muted);
-            margin: 10px 0;
-        }
-
+        .about-logo img { width: min(320px, 80%); }
+        .about-content p { color: var(--text-muted); margin: 10px 0; }
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin-top: 20px;
         }
-
         .about-box {
             background: var(--white);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 14px 18px;
         }
+        .about-box strong { color: var(--primary); display: block; font-size: 0.85rem; }
+        .about-box span { font-size: 0.82rem; color: var(--text-muted); }
 
-        .about-box strong {
-            color: var(--primary);
-            display: block;
-            font-size: 0.85rem;
-        }
-
-        .about-box span {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        /* ============================================
-           PROGRAMS SECTION (NEW)
-           ============================================ */
-        .programs-grid {
+        /* ===== REGISTER / GET INVOLVED ===== */
+        .register-section { background: #f0f5ee; }
+        .register-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
         }
-
-        .program-card {
+        .register-form {
             background: var(--white);
-            border: 1px solid var(--border);
+            padding: 32px 28px;
             border-radius: var(--radius);
-            padding: 28px 24px;
-            transition: var(--transition);
-        }
-
-        .program-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
-        }
-
-        .program-card .program-icon {
-            font-size: 2.4rem;
-            margin-bottom: 12px;
-        }
-
-        .program-card h3 {
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .program-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* ============================================
-           PARTNERS SECTION (NEW)
-           ============================================ */
-        .partners-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            justify-content: center;
-            padding: 20px 0;
-        }
-
-        .partner-card {
-            background: var(--white);
-            padding: 20px 30px;
-            border-radius: 12px;
             border: 1px solid var(--border);
-            min-width: 150px;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .partner-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
-
-        .partner-card strong {
+        .register-form h3 { color: var(--primary); margin-bottom: 6px; font-size: 1.5rem; }
+        .register-form .sub { color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem; }
+        .register-form label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
             color: var(--primary);
+            margin: 12px 0 4px;
         }
-
-        /* ============================================
-           DONATE SECTION (NEW)
-           ============================================ */
-        .donate-section {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
+        .register-form input, .register-form select, .register-form textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: #fafcfa;
+            transition: var(--transition);
+            font-family: inherit;
         }
-
-        .donate-section .section-header h2 {
-            color: var(--white);
+        .register-form input:focus, .register-form select:focus, .register-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(155,207,32,0.25);
         }
-
-        .donate-section .section-header p {
-            color: #b8d4c9;
+        .register-form .btn-primary {
+            margin-top: 18px;
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
         }
+        .register-info {
+            background: var(--white);
+            padding: 32px 28px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .register-info h3 { color: var(--primary); margin-bottom: 14px; }
+        .register-info ul { list-style: disc; padding-left: 20px; color: var(--text-muted); }
+        .register-info ul li { margin-bottom: 10px; }
+        .register-info .highlight {
+            background: #eef6d8;
+            padding: 16px 20px;
+            border-radius: 14px;
+            margin: 18px 0 10px;
+            border-left: 4px solid var(--accent);
+        }
+        .register-info .highlight strong { color: var(--primary); }
 
-        .donate-options {
+        /* ===== DONATIONS ===== */
+        .donation-section { background: #e8f0e5; }
+        .donation-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
         }
-
-        .donate-option {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            padding: 24px;
+        .donation-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .donation-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px 20px;
             text-align: center;
+            border: 2px solid var(--border);
             transition: var(--transition);
             cursor: pointer;
         }
-
-        .donate-option:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-3px);
-        }
-
-        .donate-option .amount {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .donate-option p {
-            color: #bed6cc;
-            font-size: 0.85rem;
-            margin-top: 6px;
-        }
-
-        .donate-methods {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .donate-methods span {
-            background: rgba(255,255,255,0.1);
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* ============================================
-           TRANSPARENCY SECTION (NEW)
-           ============================================ */
-        .transparency-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .transparency-item {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .transparency-item:hover {
+        .donation-card:hover {
             border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .transparency-item .doc-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .transparency-item h4 {
-            color: var(--primary);
-            font-size: 0.9rem;
-        }
-
-        .transparency-item p {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        /* ============================================
-           VOLUNTEER SECTION (NEW)
-           ============================================ */
-        .volunteer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .volunteer-item {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .volunteer-item:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
             box-shadow: var(--shadow);
         }
-
-        .volunteer-item .vol-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .volunteer-item h4 {
+        .donation-card.selected { border-color: var(--accent); background: #f4fce8; }
+        .donation-card .amount {
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--primary);
         }
-
-        .volunteer-item p {
+        .donation-card .label {
+            font-size: 0.75rem;
             color: var(--text-muted);
-            font-size: 0.85rem;
             margin-top: 4px;
         }
-
-        /* ============================================
-           CTA / CONTACT SECTION
-           ============================================ */
-        .cta-section {
-            padding-top: 20px;
+        .donation-custom {
+            grid-column: span 2;
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
+        .donation-custom input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        .donation-custom input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .donation-methods {
+            background: var(--white);
+            padding: 28px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .donation-methods h3 { color: var(--primary); margin-bottom: 16px; }
+        .donation-methods ul { list-style: none; padding: 0; }
+        .donation-methods ul li {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+        .donation-methods ul li:last-child { border-bottom: none; }
+        .donation-methods ul li .icon { font-size: 1.3rem; }
 
+        /* ===== VOLUNTEERS ===== */
+        .volunteer-section { background: #f5f7f5; }
+        .volunteer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+        }
+        .volunteer-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: var(--transition);
+        }
+        .volunteer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        .volunteer-card .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .volunteer-card h3 { color: var(--primary); margin-bottom: 6px; }
+        .volunteer-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ===== ADMIN PANEL ===== */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(6px);
+        }
+        .admin-panel.active { display: flex; align-items: center; justify-content: center; }
+        .admin-content {
+            background: var(--white);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+        }
+        .admin-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #ff4444;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .admin-close:hover { background: #cc0000; }
+        .admin-content h2 { color: var(--primary); margin-bottom: 20px; }
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .admin-tabs button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 50px;
+            background: var(--border);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .admin-tabs button.active {
+            background: var(--primary);
+            color: white;
+        }
+        .admin-tabs button:hover { background: var(--primary-light); color: white; }
+        .admin-tab-content { display: none; }
+        .admin-tab-content.active { display: block; }
+        .admin-tab-content .form-group { margin-bottom: 16px; }
+        .admin-tab-content label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .admin-tab-content input, .admin-tab-content textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .admin-tab-content input:focus, .admin-tab-content textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .admin-tab-content textarea { min-height: 80px; }
+        .admin-submissions {
+            display: grid;
+            gap: 12px;
+        }
+        .admin-submission {
+            background: #f8faf8;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .admin-submission strong { color: var(--primary); }
+        .admin-submission .date { color: var(--text-muted); font-size: 0.75rem; }
+        .admin-submission .status {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d4edda; color: #155724; }
+
+        /* ===== CTA / CONTACT ===== */
+        .cta-section { padding-top: 20px; }
         .cta-box {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             border-radius: 24px;
@@ -1384,33 +810,11 @@
             gap: 30px;
             flex-wrap: wrap;
         }
-
-        .cta-box .kicker {
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.7rem;
-            font-weight: 800;
-        }
-
-        .cta-box h2 {
-            color: var(--white);
-            font-size: clamp(1.4rem, 2.5vw, 2rem);
-        }
-
-        .cta-box p {
-            color: #c7ddd3;
-            max-width: 600px;
-        }
-
-        .cta-box .btn-primary {
-            flex-shrink: 0;
-        }
-
-        .cta-box .btn-primary:hover {
-            background: var(--accent-hover);
-        }
-
+        .cta-box .kicker { color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; font-weight: 800; }
+        .cta-box h2 { color: var(--white); font-size: clamp(1.4rem, 2.5vw, 2rem); }
+        .cta-box p { color: #c7ddd3; max-width: 600px; }
+        .cta-box .btn-primary { flex-shrink: 0; }
+        .cta-box .btn-primary:hover { background: var(--accent-hover); }
         .newsletter-form {
             display: flex;
             gap: 10px;
@@ -1419,7 +823,6 @@
             width: 100%;
             max-width: 500px;
         }
-
         .newsletter-form input {
             flex: 1;
             padding: 12px 20px;
@@ -1429,23 +832,14 @@
             min-width: 200px;
             outline: none;
         }
-
-        .newsletter-form input:focus {
-            box-shadow: 0 0 0 3px var(--accent);
-        }
-
-        .newsletter-form .btn {
-            border-radius: 50px;
-            padding: 12px 30px;
-        }
-
+        .newsletter-form input:focus { box-shadow: 0 0 0 3px var(--accent); }
+        .newsletter-form .btn { border-radius: 50px; padding: 12px 30px; }
         .contact-info {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             margin-top: 10px;
         }
-
         .contact-info a {
             color: var(--accent);
             font-weight: 600;
@@ -1453,33 +847,25 @@
             align-items: center;
             gap: 6px;
         }
+        .contact-info a:hover { color: var(--accent-hover); }
 
-        .contact-info a:hover {
-            color: var(--accent-hover);
-        }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
+        /* ===== FOOTER ===== */
         footer {
             background: var(--primary-dark);
             color: #bcd0c7;
             padding: 50px 0 25px;
         }
-
         .footer-grid {
             display: grid;
-            grid-template-columns: 1.3fr 0.7fr 0.7fr 0.7fr;
+            grid-template-columns: 1.3fr 0.7fr 0.7fr;
             gap: 40px;
         }
-
         .footer-brand {
             display: flex;
             gap: 12px;
             align-items: center;
             margin-bottom: 12px;
         }
-
         .footer-brand img {
             width: 50px;
             height: 50px;
@@ -1487,24 +873,13 @@
             background: var(--white);
             border-radius: 50%;
         }
-
-        .footer-brand strong {
-            color: var(--white);
-            font-size: 0.95rem;
-        }
-
-        .footer-brand small {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 400;
-        }
-
+        .footer-brand strong { color: var(--white); font-size: 0.95rem; }
+        .footer-brand small { display: block; font-size: 0.65rem; font-weight: 400; }
         .footer-social {
             display: flex;
             gap: 12px;
             margin-top: 12px;
         }
-
         .footer-social a {
             display: inline-flex;
             align-items: center;
@@ -1517,33 +892,15 @@
             transition: var(--transition);
             font-size: 0.9rem;
         }
-
         .footer-social a:hover {
             background: var(--accent);
             color: var(--primary-dark);
             transform: translateY(-2px);
         }
-
-        footer h3 {
-            color: var(--white);
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-        }
-
-        footer p, footer li {
-            font-size: 0.82rem;
-            color: #a8bfb5;
-        }
-
-        footer ul {
-            display: grid;
-            gap: 6px;
-        }
-
-        footer a:hover {
-            color: var(--white);
-        }
-
+        footer h3 { color: var(--white); font-size: 0.95rem; margin-bottom: 12px; }
+        footer p, footer li { font-size: 0.82rem; color: #a8bfb5; }
+        footer ul { display: grid; gap: 6px; }
+        footer a:hover { color: var(--white); }
         .footer-bottom {
             border-top: 1px solid rgba(255,255,255,0.08);
             margin-top: 30px;
@@ -1555,14 +912,12 @@
             font-size: 0.72rem;
         }
 
-        /* ============================================
-           MODAL
-           ============================================ */
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(1, 18, 12, 0.80);
+            background: rgba(1,18,12,0.80);
             z-index: 2000;
             padding: 20px;
             align-items: center;
@@ -1570,11 +925,7 @@
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
         }
-
-        .modal.show {
-            display: flex;
-        }
-
+        .modal.show { display: flex; }
         .modal-box {
             background: var(--white);
             max-width: 800px;
@@ -1584,17 +935,12 @@
             border-radius: 24px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.40);
         }
-
-        .modal-image {
-            position: relative;
-        }
-
+        .modal-image { position: relative; }
         .modal-image img {
             width: 100%;
             height: 280px;
             object-fit: cover;
         }
-
         .modal-close {
             position: absolute;
             top: 14px;
@@ -1610,15 +956,8 @@
             transition: var(--transition);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-
-        .modal-close:hover {
-            transform: scale(1.08);
-        }
-
-        .modal-body {
-            padding: 28px 32px 32px;
-        }
-
+        .modal-close:hover { transform: scale(1.08); }
+        .modal-body { padding: 28px 32px 32px; }
         .modal-body .tag {
             background: #eef6d8;
             color: #4d7010;
@@ -1629,16 +968,8 @@
             text-transform: uppercase;
             letter-spacing: 0.06em;
         }
-
-        .modal-body h2 {
-            margin: 10px 0 12px;
-            color: var(--primary);
-        }
-
-        .modal-body p {
-            color: var(--text-muted);
-        }
-
+        .modal-body h2 { margin: 10px 0 12px; color: var(--primary); }
+        .modal-body p { color: var(--text-muted); }
         .modal-share {
             display: flex;
             gap: 10px;
@@ -1646,62 +977,26 @@
             flex-wrap: wrap;
         }
 
-        /* ============================================
-           RESPONSIVE DESIGN
-           ============================================ */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
-            .stories-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .stories-grid .card:first-child {
-                grid-column: span 2;
-            }
-            .feature {
-                grid-template-columns: 1fr;
-            }
-            .impact-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .gallery-grid {
-                grid-template-columns: 1fr 1fr;
-                grid-auto-rows: 200px;
-            }
-            .gallery-item:first-child {
-                grid-row: auto;
-                grid-column: span 2;
-            }
-            .about {
-                grid-template-columns: 1fr;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .cta-box {
-                flex-direction: column;
-                text-align: center;
-                padding: 35px 30px;
-            }
-            .newsletter-form {
-                max-width: 100%;
-            }
-            .contact-info {
-                justify-content: center;
-            }
-            .admin-panel {
-                padding: 25px 20px;
-                margin: 10px;
-            }
+            .stories-grid { grid-template-columns: 1fr 1fr; }
+            .stories-grid .card:first-child { grid-column: span 2; }
+            .feature { grid-template-columns: 1fr; }
+            .impact-grid { grid-template-columns: 1fr 1fr; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 200px; }
+            .gallery-item:first-child { grid-row: auto; grid-column: span 2; }
+            .about { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .cta-box { flex-direction: column; text-align: center; padding: 35px 30px; }
+            .newsletter-form { max-width: 100%; }
+            .contact-info { justify-content: center; }
+            .register-grid { grid-template-columns: 1fr; }
+            .donation-grid { grid-template-columns: 1fr; }
+            .volunteer-grid { grid-template-columns: 1fr 1fr; }
         }
-
         @media (max-width: 768px) {
-            .topbar span:last-child {
-                display: none;
-            }
-
-            .menu-btn {
-                display: block;
-            }
-
+            .topbar span:last-child { display: none; }
+            .menu-btn { display: block; }
             .menu {
                 display: none;
                 position: absolute;
@@ -1716,168 +1011,67 @@
                 align-items: stretch;
                 box-shadow: var(--shadow);
             }
-
-            .menu.open {
-                display: flex;
-            }
-
-            .menu a {
-                padding: 10px 14px;
-            }
-
-            .menu .cta {
-                text-align: center;
-                margin-top: 4px;
-            }
-
-            .hero {
-                min-height: 480px;
-            }
-
-            .hero-content {
-                padding: 50px 0 45px;
-            }
-
-            .hero h1 {
-                font-size: 2.4rem;
-            }
-
-            .hero p {
-                font-size: 0.95rem;
-            }
-
-            section {
-                padding: 50px 0;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .stories-grid {
-                grid-template-columns: 1fr;
-            }
-            .stories-grid .card:first-child {
-                grid-column: auto;
-            }
-
-            .impact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                grid-auto-rows: 220px;
-            }
-            .gallery-item:first-child {
-                grid-column: auto;
-            }
-
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 28px;
-            }
-
-            .cta-box {
-                padding: 28px 20px;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .modal-image img {
-                height: 200px;
-            }
-            .modal-body {
-                padding: 20px;
-            }
-            
-            .newsletter-form {
-                flex-direction: column;
-            }
-            
-            .newsletter-form input {
-                width: 100%;
-            }
-
-            .admin-panel {
-                padding: 20px 15px;
-                max-height: 95vh;
-            }
-
-            .post-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .post-item .post-actions {
-                width: 100%;
-            }
-
-            .admin-toggle-btn {
-                padding: 10px 16px;
-                font-size: 0.75rem;
-                bottom: 15px;
-                right: 15px;
-            }
-
-            .admin-toggle-btn span {
-                display: none;
-            }
-
-            .programs-grid {
-                grid-template-columns: 1fr;
-            }
+            .menu.open { display: flex; }
+            .menu a { padding: 10px 14px; }
+            .menu .cta { text-align: center; margin-top: 4px; }
+            .hero { min-height: 480px; }
+            .hero-content { padding: 50px 0 45px; }
+            .hero h1 { font-size: 2.4rem; }
+            .hero p { font-size: 0.95rem; }
+            section { padding: 50px 0; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .stories-grid { grid-template-columns: 1fr; }
+            .stories-grid .card:first-child { grid-column: auto; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+            .gallery-item:first-child { grid-column: auto; }
+            .about-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+            .cta-box { padding: 28px 20px; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .modal-image img { height: 200px; }
+            .modal-body { padding: 20px; }
+            .newsletter-form { flex-direction: column; }
+            .newsletter-form input { width: 100%; }
+            .donation-cards { grid-template-columns: 1fr 1fr; }
+            .donation-custom { grid-column: span 2; flex-direction: column; }
+            .volunteer-grid { grid-template-columns: 1fr; }
+            .admin-content { padding: 16px; }
         }
-
         @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero-stats {
-                gap: 8px;
-            }
-
-            .stat-item {
-                padding: 6px 14px;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.8rem;
-            }
-
-            .brand img {
-                width: 44px;
-                height: 44px;
-            }
-
-            .brand-text strong {
-                font-size: 0.85rem;
-            }
-
-            .feature-image img {
-                height: 280px;
-            }
-
-            .cta-box .btn-primary {
-                align-self: center;
-            }
-
-            .admin-panel h1 {
-                font-size: 1.3rem;
-            }
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { gap: 8px; }
+            .stat-item { padding: 6px 14px; }
+            .btn { padding: 10px 20px; font-size: 0.8rem; }
+            .brand img { width: 44px; height: 44px; }
+            .brand-text strong { font-size: 0.85rem; }
+            .feature-image img { height: 280px; }
+            .cta-box .btn-primary { align-self: center; }
+            .donation-cards { grid-template-columns: 1fr; }
+            .donation-custom { grid-column: span 1; }
         }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 99999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast.success { background: #28a745; }
+        .toast.error { background: #dc3545; }
     </style>
 </head>
 
@@ -1907,13 +1101,14 @@
             <ul class="menu" id="mainMenu">
                 <li><a href="#home" onclick="closeMenu()">Home</a></li>
                 <li><a href="#stories" onclick="closeMenu()">Stories</a></li>
-                <li><a href="#programs" onclick="closeMenu()">Programs</a></li>
                 <li><a href="#impact" onclick="closeMenu()">Impact</a></li>
                 <li><a href="#gallery" onclick="closeMenu()">Gallery</a></li>
                 <li><a href="#about" onclick="closeMenu()">About</a></li>
-                <li><a href="#partners" onclick="closeMenu()">Partners</a></li>
-                <li><a href="#donate" onclick="closeMenu()" style="color:var(--accent);font-weight:800;">Donate</a></li>
-                <li><a href="#contact" class="cta" onclick="closeMenu()">Contact</a></li>
+                <li><a href="#register" onclick="closeMenu()">Get Involved</a></li>
+                <li><a href="#donate" onclick="closeMenu()">Donate</a></li>
+                <li><a href="#volunteer" onclick="closeMenu()">Volunteer</a></li>
+                <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+                <li><span class="admin-badge" onclick="openAdmin()">⚙️ Admin</span></li>
             </ul>
         </nav>
     </header>
@@ -1928,14 +1123,12 @@
                 <p>A community movement using cross-country running, participation and collective action to promote healthy communities, equality, resilience and positive social change.</p>
                 <div class="hero-actions">
                     <a class="btn btn-primary" href="#stories">Explore our stories →</a>
-                    <a class="btn btn-outline" href="#programs">Our Programs</a>
-                    <a class="btn btn-outline" href="#donate">Support Us</a>
+                    <a class="btn btn-outline" href="#donate">Support our work</a>
                 </div>
                 <div class="hero-stats">
-                    <div class="stat-item"><strong>500+</strong><span>Participants</span></div>
-                    <div class="stat-item"><strong>12</strong><span>Communities</span></div>
-                    <div class="stat-item"><strong>6</strong><span>Programs</span></div>
-                    <div class="stat-item"><strong>4+</strong><span>Years of Impact</span></div>
+                    <div class="stat-item"><strong>Sport</strong><span>Health &amp; talent</span></div>
+                    <div class="stat-item"><strong>Community</strong><span>Unity &amp; inclusion</span></div>
+                    <div class="stat-item"><strong>Impact</strong><span>Resilience &amp; action</span></div>
                 </div>
             </div>
         </div>
@@ -1947,13 +1140,12 @@
             <div class="section-header">
                 <div>
                     <div class="kicker">From the field</div>
-                    <h2>Latest stories &amp; highlights</h2>
+                    <h2 id="storiesTitle">Latest stories &amp; highlights</h2>
                 </div>
-                <p>Real moments from a community brought together by sport, participation and a shared commitment to positive change.</p>
+                <p id="storiesDesc">Real moments from a community brought together by sport, participation and a shared commitment to positive change.</p>
             </div>
-
             <div class="stories-grid" id="storiesGrid">
-                <!-- Stories will be dynamically loaded here -->
+                <!-- Stories loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -1967,9 +1159,9 @@
             </div>
             <div class="feature-content">
                 <div class="kicker" style="color:#6a8f3a;text-transform:uppercase;letter-spacing:0.12em;font-size:0.7rem;font-weight:800;">More than a race</div>
-                <h2>Sport becomes powerful when everyone has a place.</h2>
-                <p>The Teso North Cross Country platform brings together runners, families, supporters, volunteers and community leaders. The experience is built around participation, encouragement and collective responsibility.</p>
-                <ul class="feature-list">
+                <h2 id="featureTitle">Sport becomes powerful when everyone has a place.</h2>
+                <p id="featureDesc">The Teso North Cross Country platform brings together runners, families, supporters, volunteers and community leaders. The experience is built around participation, encouragement and collective responsibility.</p>
+                <ul class="feature-list" id="featureList">
                     <li><span class="check">✓</span><span><strong>Healthy communities</strong> Encouraging active lifestyles and positive participation.</span></li>
                     <li><span class="check">✓</span><span><strong>Youth &amp; talent</strong> Creating opportunities for young people through sport.</span></li>
                     <li><span class="check">✓</span><span><strong>Equality &amp; protection</strong> Supporting awareness and safer, more inclusive communities.</span></li>
@@ -1980,68 +1172,18 @@
         </div>
     </section>
 
-    <!-- ===== PROGRAMS SECTION (NEW) ===== -->
-    <section id="programs" style="background:#f8faf8;">
-        <div class="container">
-            <div class="section-header">
-                <div>
-                    <div class="kicker">Our Work</div>
-                    <h2>Our Programs</h2>
-                </div>
-                <p>Discover the initiatives that drive change and build stronger communities through sport and collective action.</p>
-            </div>
-            <div class="programs-grid">
-                <div class="program-card">
-                    <div class="program-icon">🏃</div>
-                    <h3>Cross-Country Events</h3>
-                    <p>Organizing running events that bring communities together, promote health and showcase talent. Open to all ages and abilities.</p>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon">🗣️</div>
-                    <h3>Community Dialogues</h3>
-                    <p>Facilitating conversations on gender equality, peace, and community development. Creating safe spaces for important discussions.</p>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon">👩‍🎓</div>
-                    <h3>Youth Mentorship</h3>
-                    <p>Empowering young people through sports, skills training, and leadership development. Building the next generation of community leaders.</p>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon">🌍</div>
-                    <h3>Community Outreach</h3>
-                    <p>Engaging with communities to identify needs, share resources, and build resilience. Working hand-in-hand with local partners.</p>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon">🤝</div>
-                    <h3>Gender Equality</h3>
-                    <p>Promoting respectful and inclusive communities through sport and education. Supporting awareness and action against gender-based violence.</p>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon">🕊️</div>
-                    <h3>Peace & Cohesion</h3>
-                    <p>Building tolerance, responsible citizenship and peaceful coexistence through community sports and shared experiences.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- ===== IMPACT ===== -->
     <section class="impact" id="impact">
         <div class="container">
             <div class="section-header">
                 <div>
                     <div class="kicker" style="color:#bfe65c;">What we stand for</div>
-                    <h2>Our areas of impact</h2>
+                    <h2 id="impactTitle">Our areas of impact</h2>
                 </div>
-                <p>Sport provides a practical platform for connection, awareness, participation and community development.</p>
+                <p id="impactDesc">Sport provides a practical platform for connection, awareness, participation and community development.</p>
             </div>
-            <div class="impact-grid">
-                <div class="impact-card"><div class="impact-icon">🏃</div><h3>Sport &amp; health</h3><p>Promoting fitness, healthy lifestyles and sporting talent.</p></div>
-                <div class="impact-card"><div class="impact-icon">🎓</div><h3>Education &amp; youth</h3><p>Encouraging mentorship, skills development and meaningful participation.</p></div>
-                <div class="impact-card"><div class="impact-icon">🤝</div><h3>Gender equality</h3><p>Supporting safer, respectful and inclusive communities.</p></div>
-                <div class="impact-card"><div class="impact-icon">🕊️</div><h3>Peace &amp; cohesion</h3><p>Building tolerance, responsible citizenship and peaceful coexistence.</p></div>
-                <div class="impact-card"><div class="impact-icon">🌱</div><h3>Resilience</h3><p>Supporting sustainable community development and collective action.</p></div>
-                <div class="impact-card"><div class="impact-icon">🔗</div><h3>Partnerships</h3><p>Working with stakeholders and community partners toward long-term impact.</p></div>
+            <div class="impact-grid" id="impactGrid">
+                <!-- Impact cards loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -2052,28 +1194,12 @@
             <div class="section-header">
                 <div>
                     <div class="kicker">Captured moments</div>
-                    <h2>Event photo gallery</h2>
+                    <h2 id="galleryTitle">Event photo gallery</h2>
                 </div>
-                <p>A visual record of people, participation, support and the energy behind the movement.</p>
+                <p id="galleryDesc">A visual record of people, participation, support and the energy behind the movement.</p>
             </div>
-
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="hero-event.jpg.jpeg" alt="Community gathers for the event">
-                    <div class="gallery-caption">Community gathers for the event</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="community-talk.jpg.jpeg" alt="Community dialogue">
-                    <div class="gallery-caption">Let us talk</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="runners.jpg.jpeg" alt="Runners on the course">
-                    <div class="gallery-caption">On the course</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="partners.jpg.jpeg" alt="Support and solidarity">
-                    <div class="gallery-caption">Support &amp; solidarity</div>
-                </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -2086,10 +1212,10 @@
             </div>
             <div class="about-content">
                 <div class="kicker" style="color:#6a8f3a;text-transform:uppercase;letter-spacing:0.12em;font-size:0.7rem;font-weight:800;">About the movement</div>
-                <h2>Teso North Cross Country</h2>
-                <p>Teso North Cross Country is presented as a community sports platform where running creates opportunities for people to connect, participate and promote positive social change.</p>
-                <p>The movement's message is simple: <strong>RUN. UNITE. TRANSFORM.</strong> Sport can open conversations, strengthen relationships and encourage people to take collective action for healthier and more resilient communities.</p>
-                <div class="about-grid">
+                <h2 id="aboutTitle">Teso North Cross Country</h2>
+                <p id="aboutText1">Teso North Cross Country is presented as a community sports platform where running creates opportunities for people to connect, participate and promote positive social change.</p>
+                <p id="aboutText2">The movement's message is simple: <strong>RUN. UNITE. TRANSFORM.</strong> Sport can open conversations, strengthen relationships and encourage people to take collective action for healthier and more resilient communities.</p>
+                <div class="about-grid" id="aboutGrid">
                     <div class="about-box"><strong>Our message</strong><span>Run. Unite. Transform.</span></div>
                     <div class="about-box"><strong>Our approach</strong><span>Sport + community + action</span></div>
                     <div class="about-box"><strong>Our focus</strong><span>People and participation</span></div>
@@ -2099,153 +1225,136 @@
         </div>
     </section>
 
-    <!-- ===== PARTNERS (NEW) ===== -->
-    <section id="partners" style="background:#f8faf8;">
+    <!-- ===== REGISTER / GET INVOLVED ===== -->
+    <section class="register-section" id="register">
         <div class="container">
             <div class="section-header">
                 <div>
-                    <div class="kicker">Collaboration</div>
-                    <h2>Our Partners &amp; Supporters</h2>
+                    <div class="kicker">Join the movement</div>
+                    <h2>Get involved with TNCC</h2>
                 </div>
-                <p>We work with organizations and individuals who share our vision for community development through sport.</p>
+                <p>Whether you want to participate in events, volunteer, or become a member — there's a place for you.</p>
             </div>
-            <div class="partners-grid">
-                <div class="partner-card"><strong>🏛️ Community Partners</strong><p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">Local organizations</p></div>
-                <div class="partner-card"><strong>🏢 Government</strong><p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">County & national</p></div>
-                <div class="partner-card"><strong>💼 Corporate</strong><p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">Business sponsors</p></div>
-                <div class="partner-card"><strong>🌍 NGO Network</strong><p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">Non-profit partners</p></div>
-                <div class="partner-card"><strong>🤝 Volunteer</strong><p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">Individual supporters</p></div>
+            <div class="register-grid">
+                <div class="register-form">
+                    <h3>Register now</h3>
+                    <p class="sub">Fill in your details and we'll get back to you.</p>
+                    <form id="registrationForm" onsubmit="handleRegistration(event)">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" placeholder="e.g. Jane Muthoni" required>
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" placeholder="you@example.com" required>
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="e.g. 0728 682 749">
+                        <label for="interest">I'm interested in *</label>
+                        <select id="interest" required>
+                            <option value="">Select an option</option>
+                            <option value="event-participant">Event Participant (Runner)</option>
+                            <option value="volunteer">Volunteer</option>
+                            <option value="member">Become a Member</option>
+                            <option value="partner">Partnership / Sponsorship</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="message">Tell us more about yourself or your interest</label>
+                        <textarea id="message" rows="3" placeholder="Any special requests, skills, or questions..."></textarea>
+                        <button type="submit" class="btn btn-primary">Submit registration →</button>
+                    </form>
+                </div>
+                <div class="register-info">
+                    <h3>Why get involved?</h3>
+                    <ul>
+                        <li><strong>🏃 Participate</strong> — Join cross-country events and experience the energy of the community.</li>
+                        <li><strong>🤝 Volunteer</strong> — Support event coordination, community outreach, and logistics.</li>
+                        <li><strong>🌟 Become a member</strong> — Be part of a network that uses sport for social impact.</li>
+                        <li><strong>📢 Advocate</strong> — Spread the message of unity, equality and resilience.</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>Run. Unite. Transform.</strong><br>
+                        Every registration brings us closer to stronger, healthier communities.
+                    </div>
+                    <p style="font-size:0.85rem; color:var(--text-muted);">Questions? Call us at <strong>0728 682 749</strong> or email <strong>info@tesonorthcrosscountry.org</strong></p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== DONATE SECTION (NEW) ===== -->
-    <section class="donate-section" id="donate">
+    <!-- ===== DONATIONS ===== -->
+    <section class="donation-section" id="donate">
         <div class="container">
             <div class="section-header">
                 <div>
-                    <div class="kicker" style="color:#bfe65c;">Support Our Work</div>
-                    <h2>Make a Donation</h2>
+                    <div class="kicker">Support our work</div>
+                    <h2 id="donationTitle">Make a Donation</h2>
                 </div>
-                <p>Every contribution helps us reach more communities, organize more events, and create lasting impact through sport.</p>
+                <p id="donationDesc">Every contribution helps us reach more communities, organize more events, and create lasting impact through sport.</p>
             </div>
-            
-            <div class="donate-options">
-                <div class="donate-option">
-                    <div class="amount">KES 500</div>
-                    <p>Supports one runner's participation</p>
+            <div class="donation-grid">
+                <div>
+                    <div class="donation-cards" id="donationCards">
+                        <div class="donation-card selected" data-amount="500" onclick="selectDonation(this)">
+                            <div class="amount">KES 500</div>
+                            <div class="label">Supports one runner's participation</div>
+                        </div>
+                        <div class="donation-card" data-amount="2000" onclick="selectDonation(this)">
+                            <div class="amount">KES 2,000</div>
+                            <div class="label">Provides event equipment</div>
+                        </div>
+                        <div class="donation-card" data-amount="5000" onclick="selectDonation(this)">
+                            <div class="amount">KES 5,000</div>
+                            <div class="label">Funds community dialogue sessions</div>
+                        </div>
+                        <div class="donation-card" data-amount="10000" onclick="selectDonation(this)">
+                            <div class="amount">KES 10,000+</div>
+                            <div class="label">Sponsors a full community event</div>
+                        </div>
+                        <div class="donation-custom">
+                            <input type="number" id="customDonation" placeholder="Enter custom amount (KES)" min="1" oninput="customDonationSelected()">
+                            <button class="btn btn-primary" onclick="handleDonation()">Donate →</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="donate-option">
-                    <div class="amount">KES 2,000</div>
-                    <p>Provides event equipment</p>
+                <div class="donation-methods">
+                    <h3>Donate via M-Pesa / Call Us</h3>
+                    <ul>
+                        <li><span class="icon">📱</span> M-Pesa Paybill: <strong>0728 682 749</strong></li>
+                        <li><span class="icon">🏦</span> Bank Transfer: Contact us for details</li>
+                        <li><span class="icon">🤝</span> In-Kind Support: Equipment, supplies, services</li>
+                        <li><span class="icon">📞</span> Call: <strong>0728 682 749</strong> / <strong>0182 095 270</strong></li>
+                    </ul>
+                    <p style="margin-top:16px;font-size:0.85rem;color:var(--text-muted);">Contact us for donation details and receipt information</p>
                 </div>
-                <div class="donate-option">
-                    <div class="amount">KES 5,000</div>
-                    <p>Funds community dialogue sessions</p>
-                </div>
-                <div class="donate-option">
-                    <div class="amount">KES 10,000+</div>
-                    <p>Sponsors a full community event</p>
-                </div>
-            </div>
-
-            <div style="text-align:center;margin-top:30px;">
-                <a href="tel:0728682749" class="btn btn-primary" style="font-size:1.1rem;padding:16px 40px;">
-                    💳 Donate via M-Pesa / Call Us
-                </a>
-                <div class="donate-methods">
-                    <span>📱 M-Pesa Paybill</span>
-                    <span>💳 Bank Transfer</span>
-                    <span>🤝 In-Kind Support</span>
-                </div>
-                <p style="color:#b8d4c9;font-size:0.8rem;margin-top:10px;">Contact us for donation details and receipt information</p>
             </div>
         </div>
     </section>
 
-    <!-- ===== VOLUNTEER SECTION (NEW) ===== -->
-    <section id="volunteer" style="background:#f8faf8;">
+    <!-- ===== VOLUNTEERS ===== -->
+    <section class="volunteer-section" id="volunteer">
         <div class="container">
             <div class="section-header">
                 <div>
-                    <div class="kicker">Get Involved</div>
-                    <h2>Volunteer With Us</h2>
+                    <div class="kicker">Give your time</div>
+                    <h2 id="volunteerTitle">Volunteer With Us</h2>
                 </div>
-                <p>There are many ways to contribute your time, skills, and energy to the movement.</p>
+                <p id="volunteerDesc">Join our team of dedicated volunteers and help make a difference in the community.</p>
             </div>
-            <div class="volunteer-grid">
-                <div class="volunteer-item">
-                    <div class="vol-icon">🏃</div>
-                    <h4>Event Volunteer</h4>
-                    <p>Help organize and run our cross-country events</p>
+            <div class="volunteer-grid" id="volunteerGrid">
+                <div class="volunteer-card">
+                    <div class="icon">🏃</div>
+                    <h3>Event Support</h3>
+                    <p>Help with event coordination, registration, and logistics during cross-country events.</p>
+                    <button class="btn btn-primary" style="margin-top:12px;" onclick="openVolunteerForm('Event Support')">Apply</button>
                 </div>
-                <div class="volunteer-item">
-                    <div class="vol-icon">🗣️</div>
-                    <h4>Community Facilitator</h4>
-                    <p>Lead community dialogues and workshops</p>
+                <div class="volunteer-card">
+                    <div class="icon">📢</div>
+                    <h3>Community Outreach</h3>
+                    <p>Engage with communities, share information, and help spread the message of unity through sport.</p>
+                    <button class="btn btn-primary" style="margin-top:12px;" onclick="openVolunteerForm('Community Outreach')">Apply</button>
                 </div>
-                <div class="volunteer-item">
-                    <div class="vol-icon">📸</div>
-                    <h4>Media & Content</h4>
-                    <p>Capture stories, photos, and videos of our work</p>
-                </div>
-                <div class="volunteer-item">
-                    <div class="vol-icon">🎓</div>
-                    <h4>Youth Mentor</h4>
-                    <p>Guide and inspire young participants</p>
-                </div>
-                <div class="volunteer-item">
-                    <div class="vol-icon">🤝</div>
-                    <h4>Ambassador</h4>
-                    <p>Represent TNCC in your community</p>
-                </div>
-            </div>
-            <div style="text-align:center;margin-top:30px;">
-                <a href="#contact" class="btn btn-primary">Become a Volunteer →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== TRANSPARENCY SECTION (NEW) ===== -->
-    <section id="transparency">
-        <div class="container">
-            <div class="section-header">
-                <div>
-                    <div class="kicker">Accountability</div>
-                    <h2>Transparency &amp; Governance</h2>
-                </div>
-                <p>We believe in open, honest communication about our work, finances, and governance.</p>
-            </div>
-            <div class="transparency-grid">
-                <div class="transparency-item">
-                    <div class="doc-icon">📄</div>
-                    <h4>Annual Reports</h4>
-                    <p>Our yearly impact and financial summaries</p>
-                </div>
-                <div class="transparency-item">
-                    <div class="doc-icon">📊</div>
-                    <h4>Financial Reports</h4>
-                    <p>Detailed accounting of funds and resources</p>
-                </div>
-                <div class="transparency-item">
-                    <div class="doc-icon">⚖️</div>
-                    <h4>Governance</h4>
-                    <p>Our leadership, board, and organizational structure</p>
-                </div>
-                <div class="transparency-item">
-                    <div class="doc-icon">🛡️</div>
-                    <h4>Safeguarding Policy</h4>
-                    <p>Our commitment to protecting all participants</p>
-                </div>
-                <div class="transparency-item">
-                    <div class="doc-icon">🔒</div>
-                    <h4>Privacy Policy</h4>
-                    <p>How we protect your data and privacy</p>
-                </div>
-                <div class="transparency-item">
-                    <div class="doc-icon">📋</div>
-                    <h4>Feedback Mechanism</h4>
-                    <p>Share your questions, concerns, or suggestions</p>
+                <div class="volunteer-card">
+                    <div class="icon">📸</div>
+                    <h3>Media &amp; Communications</h3>
+                    <p>Capture moments, create content, and help tell the story of TNCC through photos and social media.</p>
+                    <button class="btn btn-primary" style="margin-top:12px;" onclick="openVolunteerForm('Media & Communications')">Apply</button>
                 </div>
             </div>
         </div>
@@ -2259,19 +1368,17 @@
                     <div class="kicker">Join the conversation</div>
                     <h2>Be part of the next story.</h2>
                     <p>Follow the movement, share community stories, support participation and help spread the message of unity through sport.</p>
-                    
                     <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
                         <input type="email" placeholder="Enter your email for updates" required>
                         <button type="submit" class="btn btn-primary">Subscribe →</button>
                     </form>
-                    
                     <div class="contact-info">
                         <a href="tel:0728682749">📞 0728 682 749</a>
                         <a href="tel:0182095270">📞 0182 095 270</a>
                         <a href="mailto:info@tesonorthcrosscountry.org">✉️ Email Us</a>
                     </div>
                 </div>
-                <a class="btn btn-primary" href="tel:0728682749" style="flex-shrink:0;">Contact TNCC →</a>
+                <a class="btn btn-primary" href="#donate" style="flex-shrink:0;">Support TNCC →</a>
             </div>
         </div>
     </section>
@@ -2300,22 +1407,12 @@
                     <h3>Quick links</h3>
                     <ul>
                         <li><a href="#stories">Stories</a></li>
-                        <li><a href="#programs">Programs</a></li>
                         <li><a href="#impact">Our Impact</a></li>
                         <li><a href="#gallery">Gallery</a></li>
                         <li><a href="#about">About Us</a></li>
-                        <li><a href="#partners">Partners</a></li>
+                        <li><a href="#register">Get Involved</a></li>
                         <li><a href="#donate">Donate</a></li>
                         <li><a href="#volunteer">Volunteer</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Transparency</h3>
-                    <ul>
-                        <li><a href="#transparency">Annual Reports</a></li>
-                        <li><a href="#transparency">Financial Reports</a></li>
-                        <li><a href="#transparency">Governance</a></li>
-                        <li><a href="#transparency">Policies</a></li>
                     </ul>
                 </div>
                 <div>
@@ -2325,7 +1422,6 @@
                         <li>📞 0182 095 270</li>
                         <li>📍 Community sports platform</li>
                         <li>🇰🇪 Kenya</li>
-                        <li><a href="mailto:info@tesonorthcrosscountry.org">✉️ Email Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -2357,428 +1453,622 @@
         </div>
     </div>
 
-    <!-- ===== FLOATING ADMIN BUTTON ===== -->
-    <button class="admin-toggle-btn" onclick="toggleAdmin()" id="adminToggleBtn">
-        <span class="lock-icon">🔐</span>
-        <span>Edit Content</span>
-    </button>
+    <!-- ===== VOLUNTEER MODAL ===== -->
+    <div class="modal" id="volunteerModal" onclick="closeVolunteerModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-body">
+                <button class="modal-close" onclick="closeVolunteerModal()">×</button>
+                <span class="tag">Volunteer Application</span>
+                <h2>Apply to Volunteer</h2>
+                <form id="volunteerForm" onsubmit="handleVolunteerApplication(event)">
+                    <input type="hidden" id="volunteerRole">
+                    <label>Full Name *</label>
+                    <input type="text" id="volName" placeholder="e.g. John Doe" required>
+                    <label>Email Address *</label>
+                    <input type="email" id="volEmail" placeholder="you@example.com" required>
+                    <label>Phone Number</label>
+                    <input type="tel" id="volPhone" placeholder="e.g. 0728 682 749">
+                    <label>Why do you want to volunteer?</label>
+                    <textarea id="volMessage" rows="3" placeholder="Tell us about your skills, availability, and motivation..."></textarea>
+                    <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px;">Submit Application →</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <!-- ===== ADMIN PANEL (OVERLAY) ===== -->
-    <div class="admin-overlay" id="adminOverlay">
-        <div class="admin-panel">
-            <button class="admin-close" onclick="toggleAdmin()">✕</button>
-            
-            <h1>🏃 TNCC Content Manager</h1>
-            <p class="subtitle">Edit your stories, create new content, and manage your blog</p>
-
-            <!-- LOGIN FORM -->
-            <div class="admin-login" id="adminLogin">
-                <div class="error-msg" id="loginError">Invalid password. Please try again.</div>
-                <input type="password" id="adminPassword" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') adminLogin()">
-                <button class="btn btn-primary" onclick="adminLogin()">Login to Dashboard</button>
-                <p style="margin-top: 12px; color: #94a3b8; font-size: 0.8rem;">Default password: <strong>admin123</strong> (change this!)</p>
+    <!-- ===== ADMIN PANEL ===== -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <button class="admin-close" onclick="closeAdmin()">×</button>
+            <h2>⚙️ Admin Dashboard</h2>
+            <div class="admin-tabs">
+                <button class="active" data-tab="content" onclick="switchAdminTab('content')">Content</button>
+                <button data-tab="submissions" onclick="switchAdminTab('submissions')">Submissions</button>
+                <button data-tab="donations" onclick="switchAdminTab('donations')">Donations</button>
+                <button data-tab="volunteers" onclick="switchAdminTab('volunteers')">Volunteers</button>
             </div>
 
-            <!-- DASHBOARD -->
-            <div class="admin-dashboard" id="adminDashboard">
-                <div class="admin-status">
-                    <div><span class="badge">🔐 Admin</span> <span style="font-size:0.85rem;color:var(--text-muted);margin-left:8px;">Logged in</span></div>
-                    <div>
-                        <button class="btn btn-secondary" onclick="adminLogout()" style="padding:6px 16px;font-size:0.8rem;">Logout</button>
-                    </div>
+            <!-- Content Tab -->
+            <div class="admin-tab-content active" id="tab-content">
+                <h3>Edit Content</h3>
+                <div class="form-group">
+                    <label>Hero Title</label>
+                    <input type="text" id="adminHeroTitle" value="Run. Unite. Transform.">
                 </div>
-
-                <div class="admin-message" id="adminMessage"></div>
-
-                <!-- Create/Edit Form -->
-                <div class="admin-form">
-                    <h3>✏️ Create / Edit Story</h3>
-                    <input type="hidden" id="editIndex" value="-1">
-                    
-                    <div class="form-group">
-                        <label>Story Title</label>
-                        <input type="text" id="postTitle" placeholder="Enter story title">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Content / Description</label>
-                        <textarea id="postContent" placeholder="Write your story content here..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Category / Tag</label>
-                        <select id="postTag">
-                            <option value="Featured story">⭐ Featured story</option>
-                            <option value="Community">👥 Community</option>
-                            <option value="Sport">🏃 Sport</option>
-                            <option value="Impact">💪 Impact</option>
-                            <option value="Partnership">🤝 Partnership</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Image Filename</label>
-                        <input type="text" id="postImage" placeholder="e.g., hero-event.jpg.jpeg" value="hero-event.jpg.jpeg">
-                        <small style="color:#94a3b8;">Must be in the same folder as this file</small>
-                    </div>
-
-                    <div class="inline-flex">
-                        <button class="btn btn-primary" onclick="savePost()">💾 Save Story</button>
-                        <button class="btn btn-secondary" onclick="clearForm()">🔄 Clear Form</button>
-                    </div>
+                <div class="form-group">
+                    <label>Hero Subtitle</label>
+                    <textarea id="adminHeroSubtitle" rows="2">A community movement using cross-country running, participation and collective action to promote healthy communities, equality, resilience and positive social change.</textarea>
                 </div>
-
-                <!-- Stories List -->
-                <div>
-                    <h3 style="color:var(--primary);margin-bottom:15px;">📚 All Stories</h3>
-                    <div class="posts-list" id="postsList"></div>
+                <div class="form-group">
+                    <label>Stories Title</label>
+                    <input type="text" id="adminStoriesTitle" value="Latest stories &amp; highlights">
                 </div>
+                <div class="form-group">
+                    <label>Stories Description</label>
+                    <textarea id="adminStoriesDesc" rows="2">Real moments from a community brought together by sport, participation and a shared commitment to positive change.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Impact Title</label>
+                    <input type="text" id="adminImpactTitle" value="Our areas of impact">
+                </div>
+                <div class="form-group">
+                    <label>Impact Description</label>
+                    <textarea id="adminImpactDesc" rows="2">Sport provides a practical platform for connection, awareness, participation and community development.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Gallery Title</label>
+                    <input type="text" id="adminGalleryTitle" value="Event photo gallery">
+                </div>
+                <div class="form-group">
+                    <label>Gallery Description</label>
+                    <textarea id="adminGalleryDesc" rows="2">A visual record of people, participation, support and the energy behind the movement.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Donation Title</label>
+                    <input type="text" id="adminDonationTitle" value="Make a Donation">
+                </div>
+                <div class="form-group">
+                    <label>Donation Description</label>
+                    <textarea id="adminDonationDesc" rows="2">Every contribution helps us reach more communities, organize more events, and create lasting impact through sport.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Volunteer Title</label>
+                    <input type="text" id="adminVolunteerTitle" value="Volunteer With Us">
+                </div>
+                <div class="form-group">
+                    <label>Volunteer Description</label>
+                    <textarea id="adminVolunteerDesc" rows="2">Join our team of dedicated volunteers and help make a difference in the community.</textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveContent()">Save Content</button>
+            </div>
 
-                <!-- Help Section -->
-                <div class="admin-help">
-                    <h4>💡 Quick Tips:</h4>
-                    <ul>
-                        <li>✅ All changes are saved in your browser's local storage</li>
-                        <li>✅ Changes appear immediately on your website</li>
-                        <li>✅ Use images that are already in your project folder</li>
-                        <li>✅ To backup data, copy the content from your browser's console</li>
-                        <li>🔒 Change the password in the JavaScript code (search for ADMIN_PASSWORD)</li>
-                    </ul>
+            <!-- Submissions Tab -->
+            <div class="admin-tab-content" id="tab-submissions">
+                <h3>User Submissions</h3>
+                <div id="submissionsList" class="admin-submissions">
+                    <!-- Loaded by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Donations Tab -->
+            <div class="admin-tab-content" id="tab-donations">
+                <h3>Donation Records</h3>
+                <div id="donationsList" class="admin-submissions">
+                    <!-- Loaded by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Volunteers Tab -->
+            <div class="admin-tab-content" id="tab-volunteers">
+                <h3>Volunteer Applications</h3>
+                <div id="volunteersList" class="admin-submissions">
+                    <!-- Loaded by JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
+
     <!-- ============================================
-       JAVASCRIPT - ALL FUNCTIONALITY
+       JAVASCRIPT
        ============================================ -->
     <script>
-        // ============================================
-        // CONFIGURATION
-        // ============================================
-        const ADMIN_PASSWORD = 'admin123'; // CHANGE THIS!
-        const STORAGE_KEY = 'tncc_posts';
-
-        // ============================================
-        // DEFAULT STORIES (Fallback)
-        // ============================================
-        const DEFAULT_STORIES = [
-            {
-                title: 'Running for a stronger, safer community',
-                content: 'Every step represents participation, courage and the belief that communities can work together to create lasting positive change. The event connects runners, supporters, organizers and community members through a shared purpose.',
-                tag: 'Featured story',
-                image: 'hero-event.jpg.jpeg'
-            },
-            {
-                title: 'Let us talk, listen and act',
-                content: 'Community dialogue is an important part of building trust and shared responsibility. Through conversation and participation, people can identify challenges, support one another and move toward practical solutions.',
-                tag: 'Community',
-                image: 'community-talk.jpg.jpeg'
-            },
-            {
-                title: 'Every step counts',
-                content: 'From the first step to the finish line, participation matters. Cross-country creates an environment where people can challenge themselves while sharing a common community experience.',
-                tag: 'Sport',
-                image: 'runners.jpg.jpeg'
-            }
-        ];
-
-        // ============================================
-        // STORAGE FUNCTIONS
-        // ============================================
-        function getPosts() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                if (data) {
-                    const parsed = JSON.parse(data);
-                    return parsed.length > 0 ? parsed : DEFAULT_STORIES;
+        // ===== DATA STORE =====
+        const STORE_KEY = 'tncc_data';
+        
+        function getDefaultData() {
+            return {
+                stories: [
+                    {
+                        id: 1,
+                        tag: 'Featured story',
+                        title: 'Running for a stronger, safer community',
+                        image: 'hero-event.jpg.jpeg',
+                        text: 'Every step represents participation, courage and the belief that communities can work together to create lasting positive change. The event connects runners, supporters, organizers and community members through a shared purpose.'
+                    },
+                    {
+                        id: 2,
+                        tag: 'Community',
+                        title: 'Let us talk, listen and act',
+                        image: 'community-talk.jpg.jpeg',
+                        text: 'Community dialogue is an important part of building trust and shared responsibility. Through conversation and participation, people can identify challenges, support one another and move toward practical solutions.'
+                    },
+                    {
+                        id: 3,
+                        tag: 'Sport',
+                        title: 'Every step counts',
+                        image: 'runners.jpg.jpeg',
+                        text: 'From the first step to the finish line, participation matters. Cross-country creates an environment where people can challenge themselves while sharing a common community experience.'
+                    }
+                ],
+                impact: [
+                    { icon: '🏃', title: 'Sport & health', desc: 'Promoting fitness, healthy lifestyles and sporting talent.' },
+                    { icon: '🎓', title: 'Education & youth', desc: 'Encouraging mentorship, skills development and meaningful participation.' },
+                    { icon: '🤝', title: 'Gender equality', desc: 'Supporting safer, respectful and inclusive communities.' },
+                    { icon: '🕊️', title: 'Peace & cohesion', desc: 'Building tolerance, responsible citizenship and peaceful coexistence.' },
+                    { icon: '🌱', title: 'Resilience', desc: 'Supporting sustainable community development and collective action.' },
+                    { icon: '🔗', title: 'Partnerships', desc: 'Working with stakeholders and community partners toward long-term impact.' }
+                ],
+                gallery: [
+                    { image: 'hero-event.jpg.jpeg', caption: 'Community gathers for the event' },
+                    { image: 'community-talk.jpg.jpeg', caption: 'Let us talk' },
+                    { image: 'runners.jpg.jpeg', caption: 'On the course' },
+                    { image: 'partners.jpg.jpeg', caption: 'Support & solidarity' }
+                ],
+                submissions: [],
+                donations: [],
+                volunteers: [],
+                content: {
+                    heroTitle: 'Run. Unite. Transform.',
+                    heroSubtitle: 'A community movement using cross-country running, participation and collective action to promote healthy communities, equality, resilience and positive social change.',
+                    storiesTitle: 'Latest stories &amp; highlights',
+                    storiesDesc: 'Real moments from a community brought together by sport, participation and a shared commitment to positive change.',
+                    impactTitle: 'Our areas of impact',
+                    impactDesc: 'Sport provides a practical platform for connection, awareness, participation and community development.',
+                    galleryTitle: 'Event photo gallery',
+                    galleryDesc: 'A visual record of people, participation, support and the energy behind the movement.',
+                    donationTitle: 'Make a Donation',
+                    donationDesc: 'Every contribution helps us reach more communities, organize more events, and create lasting impact through sport.',
+                    volunteerTitle: 'Volunteer With Us',
+                    volunteerDesc: 'Join our team of dedicated volunteers and help make a difference in the community.'
                 }
-                return DEFAULT_STORIES;
-            } catch {
-                return DEFAULT_STORIES;
+            };
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORE_KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    // Ensure all keys exist
+                    const defaults = getDefaultData();
+                    for (let key in defaults) {
+                        if (!(key in data)) {
+                            data[key] = defaults[key];
+                        }
+                    }
+                    return data;
+                }
+            } catch (e) {
+                console.error('Error loading data:', e);
             }
+            return getDefaultData();
         }
 
-        function savePosts(posts) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+        function saveData(data) {
+            localStorage.setItem(STORE_KEY, JSON.stringify(data));
         }
 
-        // ============================================
-        // RENDER STORIES ON WEBSITE
-        // ============================================
-        function renderWebsiteStories() {
-            const posts = getPosts();
+        let appData = loadData();
+
+        // ===== RENDER FUNCTIONS =====
+        function renderStories() {
             const grid = document.getElementById('storiesGrid');
-            
-            grid.innerHTML = posts.map((post, index) => `
+            grid.innerHTML = appData.stories.map(story => `
                 <article class="card">
                     <div class="card-image">
-                        <img src="${post.image || 'hero-event.jpg.jpeg'}" alt="${post.title}">
+                        <img src="${story.image}" alt="${story.title}">
                     </div>
                     <div class="card-body">
-                        <span class="card-tag">${post.tag || 'Story'}</span>
-                        <h3>${post.title}</h3>
-                        <p>${post.content.substring(0, 120)}${post.content.length > 120 ? '...' : ''}</p>
-                        <a class="card-link" href="#" onclick="openArticle(event, ${index})">Read story →</a>
+                        <span class="card-tag">${story.tag}</span>
+                        <h3>${story.title}</h3>
+                        <p>${story.text.substring(0, 100)}${story.text.length > 100 ? '...' : ''}</p>
+                        <a class="card-link" href="#" onclick="openArticle(event, '${story.title.replace(/'/g, "\\'")}', '${story.image}', '${story.text.replace(/'/g, "\\'")}')">Read story →</a>
                         <div class="share-buttons">
-                            <a href="#" class="share-btn twitter" onclick="shareStory('Twitter', '${post.title}')">🐦 Tweet</a>
-                            <a href="#" class="share-btn facebook" onclick="shareStory('Facebook', '${post.title}')">📘 Share</a>
-                            <a href="#" class="share-btn whatsapp" onclick="shareStory('WhatsApp', '${post.title}')">💬 WhatsApp</a>
+                            <a href="#" class="share-btn twitter" onclick="shareStory('Twitter', '${story.title.replace(/'/g, "\\'")}')">🐦 Tweet</a>
+                            <a href="#" class="share-btn facebook" onclick="shareStory('Facebook', '${story.title.replace(/'/g, "\\'")}')">📘 Share</a>
+                            <a href="#" class="share-btn whatsapp" onclick="shareStory('WhatsApp', '${story.title.replace(/'/g, "\\'")}')">💬 WhatsApp</a>
                         </div>
                     </div>
                 </article>
             `).join('');
         }
 
-        // ============================================
-        // ARTICLE MODAL
-        // ============================================
-        let currentArticleIndex = 0;
+        function renderImpact() {
+            const grid = document.getElementById('impactGrid');
+            grid.innerHTML = appData.impact.map(item => `
+                <div class="impact-card">
+                    <div class="impact-icon">${item.icon}</div>
+                    <h3>${item.title}</h3>
+                    <p>${item.desc}</p>
+                </div>
+            `).join('');
+        }
 
-        function openArticle(e, index) {
-            e.preventDefault();
-            const posts = getPosts();
-            const post = posts[index];
-            currentArticleIndex = index;
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = appData.gallery.map(item => `
+                <div class="gallery-item">
+                    <img src="${item.image}" alt="${item.caption}">
+                    <div class="gallery-caption">${item.caption}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderSubmissions() {
+            const list = document.getElementById('submissionsList');
+            if (appData.submissions.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);">No submissions yet.</p>';
+                return;
+            }
+            list.innerHTML = appData.submissions.map((sub, i) => `
+                <div class="admin-submission">
+                    <strong>${sub.name}</strong> (${sub.email})<br>
+                    <span>Interest: ${sub.interest}</span><br>
+                    <span class="date">${sub.date || new Date().toLocaleDateString()}</span>
+                    ${sub.message ? `<p>${sub.message}</p>` : ''}
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn" style="padding:4px 12px;font-size:0.7rem;background:#28a745;color:white;border:none;border-radius:50px;margin-left:8px;" onclick="approveSubmission(${i})">Approve</button>
+                    <button class="btn" style="padding:4px 12px;font-size:0.7rem;background:#dc3545;color:white;border:none;border-radius:50px;margin-left:4px;" onclick="deleteSubmission(${i})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderDonations() {
+            const list = document.getElementById('donationsList');
+            if (appData.donations.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);">No donations recorded yet.</p>';
+                return;
+            }
+            list.innerHTML = appData.donations.map((d, i) => `
+                <div class="admin-submission">
+                    <strong>KES ${d.amount}</strong> - ${d.name || 'Anonymous'}<br>
+                    <span class="date">${d.date || new Date().toLocaleDateString()}</span>
+                    ${d.email ? `<span>${d.email}</span>` : ''}
+                    <button class="btn" style="padding:4px 12px;font-size:0.7rem;background:#dc3545;color:white;border:none;border-radius:50px;margin-left:8px;" onclick="deleteDonation(${i})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderVolunteers() {
+            const list = document.getElementById('volunteersList');
+            if (appData.volunteers.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);">No volunteer applications yet.</p>';
+                return;
+            }
+            list.innerHTML = appData.volunteers.map((v, i) => `
+                <div class="admin-submission">
+                    <strong>${v.name}</strong> - ${v.role}<br>
+                    <span>${v.email}</span> ${v.phone ? `· ${v.phone}` : ''}<br>
+                    <span class="date">${v.date || new Date().toLocaleDateString()}</span>
+                    ${v.message ? `<p>${v.message}</p>` : ''}
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn" style="padding:4px 12px;font-size:0.7rem;background:#28a745;color:white;border:none;border-radius:50px;margin-left:8px;" onclick="approveVolunteer(${i})">Approve</button>
+                    <button class="btn" style="padding:4px 12px;font-size:0.7rem;background:#dc3545;color:white;border:none;border-radius:50px;margin-left:4px;" onclick="deleteVolunteer(${i})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderAll() {
+            renderStories();
+            renderImpact();
+            renderGallery();
+            renderSubmissions();
+            renderDonations();
+            renderVolunteers();
             
-            document.getElementById('modalTitle').textContent = post.title;
-            document.getElementById('modalImage').src = post.image || 'hero-event.jpg.jpeg';
-            document.getElementById('modalImage').alt = post.title;
-            document.getElementById('modalText').textContent = post.content;
+            // Update content from stored data
+            document.getElementById('storiesTitle').textContent = appData.content.storiesTitle;
+            document.getElementById('storiesDesc').textContent = appData.content.storiesDesc;
+            document.getElementById('impactTitle').textContent = appData.content.impactTitle;
+            document.getElementById('impactDesc').textContent = appData.content.impactDesc;
+            document.getElementById('galleryTitle').textContent = appData.content.galleryTitle;
+            document.getElementById('galleryDesc').textContent = appData.content.galleryDesc;
+            document.getElementById('donationTitle').textContent = appData.content.donationTitle;
+            document.getElementById('donationDesc').textContent = appData.content.donationDesc;
+            document.getElementById('volunteerTitle').textContent = appData.content.volunteerTitle;
+            document.getElementById('volunteerDesc').textContent = appData.content.volunteerDesc;
+            
+            // Fill admin fields
+            document.getElementById('adminHeroTitle').value = appData.content.heroTitle;
+            document.getElementById('adminHeroSubtitle').value = appData.content.heroSubtitle;
+            document.getElementById('adminStoriesTitle').value = appData.content.storiesTitle;
+            document.getElementById('adminStoriesDesc').value = appData.content.storiesDesc;
+            document.getElementById('adminImpactTitle').value = appData.content.impactTitle;
+            document.getElementById('adminImpactDesc').value = appData.content.impactDesc;
+            document.getElementById('adminGalleryTitle').value = appData.content.galleryTitle;
+            document.getElementById('adminGalleryDesc').value = appData.content.galleryDesc;
+            document.getElementById('adminDonationTitle').value = appData.content.donationTitle;
+            document.getElementById('adminDonationDesc').value = appData.content.donationDesc;
+            document.getElementById('adminVolunteerTitle').value = appData.content.volunteerTitle;
+            document.getElementById('adminVolunteerDesc').value = appData.content.volunteerDesc;
+        }
+
+        // ===== MENU =====
+        function toggleMenu() {
+            document.getElementById('mainMenu').classList.toggle('open');
+        }
+        function closeMenu() {
+            document.getElementById('mainMenu').classList.remove('open');
+        }
+
+        // ===== ARTICLE MODAL =====
+        let currentArticleTitle = '';
+        function openArticle(e, title, image, text) {
+            e.preventDefault();
+            currentArticleTitle = title;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalImage').src = image;
+            document.getElementById('modalImage').alt = title;
+            document.getElementById('modalText').textContent = text;
             document.getElementById('articleModal').classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
         function closeArticle(e) {
             if (e && e.target !== e.currentTarget) return;
             document.getElementById('articleModal').classList.remove('show');
             document.body.style.overflow = '';
         }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeArticle();
+        });
 
-        // ============================================
-        // SOCIAL SHARING
-        // ============================================
+        // ===== SHARING =====
         function shareStory(platform, title) {
             const url = window.location.href;
             const text = `Check out this story from Teso North Cross Country: "${title}" - Run. Unite. Transform.`;
-
             let shareUrl = '';
             switch (platform) {
-                case 'Twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-                    break;
-                case 'Facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
-                    break;
-                case 'WhatsApp':
-                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-                    break;
-                default:
-                    return;
+                case 'Twitter': shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`; break;
+                case 'Facebook': shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`; break;
+                case 'WhatsApp': shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`; break;
+                default: return;
             }
             window.open(shareUrl, '_blank', 'width=600,height=500');
             return false;
         }
-
         function shareModal(platform) {
-            const posts = getPosts();
-            const post = posts[currentArticleIndex];
-            shareStory(platform, post ? post.title : 'Teso North Cross Country');
+            const title = currentArticleTitle || 'Teso North Cross Country';
+            shareStory(platform, title);
             return false;
         }
 
-        // ============================================
-        // ADMIN PANEL FUNCTIONS
-        // ============================================
-        function toggleAdmin() {
-            const overlay = document.getElementById('adminOverlay');
-            overlay.classList.toggle('active');
-            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
-            
-            if (overlay.classList.contains('active')) {
-                renderAdminPosts();
-            }
-        }
-
-        function adminLogin() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('adminLogin').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.add('active');
-                document.getElementById('loginError').style.display = 'none';
-                renderAdminPosts();
-                sessionStorage.setItem('tncc_logged_in', 'true');
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-            }
-        }
-
-        function adminLogout() {
-            document.getElementById('adminLogin').classList.remove('hidden');
-            document.getElementById('adminDashboard').classList.remove('active');
-            document.getElementById('adminPassword').value = '';
-            sessionStorage.removeItem('tncc_logged_in');
-        }
-
-        function renderAdminPosts() {
-            const posts = getPosts();
-            const container = document.getElementById('postsList');
-            
-            if (posts.length === 0) {
-                container.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 20px;">No stories yet. Create your first one above!</p>';
-                return;
-            }
-
-            container.innerHTML = posts.map((post, index) => `
-                <div class="post-item">
-                    <div class="post-info">
-                        <h4>${post.title}</h4>
-                        <span class="post-tag">${post.tag || 'Story'}</span>
-                        <p>${post.content.substring(0, 80)}${post.content.length > 80 ? '...' : ''}</p>
-                    </div>
-                    <div class="post-actions">
-                        <button class="edit-btn" onclick="editPost(${index})">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deletePost(${index})">🗑️ Delete</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function savePost() {
-            const title = document.getElementById('postTitle').value.trim();
-            const content = document.getElementById('postContent').value.trim();
-            const tag = document.getElementById('postTag').value;
-            const image = document.getElementById('postImage').value.trim() || 'hero-event.jpg.jpeg';
-            const editIndex = parseInt(document.getElementById('editIndex').value);
-
-            if (!title || !content) {
-                showAdminMessage('Please fill in both title and content.', 'error');
-                return;
-            }
-
-            const posts = getPosts();
-            const newPost = { title, content, tag, image };
-
-            if (editIndex >= 0 && editIndex < posts.length) {
-                posts[editIndex] = newPost;
-                showAdminMessage('✅ Story updated successfully!', 'success');
-            } else {
-                posts.push(newPost);
-                showAdminMessage('✅ New story created successfully!', 'success');
-            }
-
-            savePosts(posts);
-            renderAdminPosts();
-            renderWebsiteStories();
-            clearForm();
-        }
-
-        function editPost(index) {
-            const posts = getPosts();
-            const post = posts[index];
-            document.getElementById('postTitle').value = post.title;
-            document.getElementById('postContent').value = post.content;
-            document.getElementById('postTag').value = post.tag || 'Featured story';
-            document.getElementById('postImage').value = post.image || 'hero-event.jpg.jpeg';
-            document.getElementById('editIndex').value = index;
-            document.getElementById('postsList').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function deletePost(index) {
-            if (!confirm('Are you sure you want to delete this story?')) return;
-            const posts = getPosts();
-            posts.splice(index, 1);
-            savePosts(posts);
-            renderAdminPosts();
-            renderWebsiteStories();
-            showAdminMessage('🗑️ Story deleted successfully!', 'success');
-        }
-
-        function clearForm() {
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postContent').value = '';
-            document.getElementById('postTag').value = 'Featured story';
-            document.getElementById('postImage').value = 'hero-event.jpg.jpeg';
-            document.getElementById('editIndex').value = '-1';
-        }
-
-        function showAdminMessage(text, type) {
-            const box = document.getElementById('adminMessage');
-            box.textContent = text;
-            box.className = 'admin-message ' + type;
-            box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 4000);
-        }
-
-        // ============================================
-        // NEWSLETTER SUBSCRIPTION
-        // ============================================
+        // ===== NEWSLETTER =====
         function subscribeNewsletter(e) {
             e.preventDefault();
             const email = e.target.querySelector('input[type="email"]').value;
             if (email) {
-                alert(`Thank you for subscribing! We'll send updates to ${email}`);
+                showToast('Thank you for subscribing!', 'success');
                 e.target.reset();
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'subscribe', {
-                        'event_category': 'engagement',
-                        'event_label': 'newsletter'
-                    });
-                }
             }
             return false;
         }
 
-        // ============================================
-        // MENU FUNCTIONS
-        // ============================================
-        function toggleMenu() {
-            document.getElementById('mainMenu').classList.toggle('open');
-        }
-
-        function closeMenu() {
-            document.getElementById('mainMenu').classList.remove('open');
-        }
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        function init() {
-            document.getElementById('year').textContent = new Date().getFullYear();
-            renderWebsiteStories();
+        // ===== REGISTRATION =====
+        function handleRegistration(e) {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const interest = document.getElementById('interest').value;
+            const message = document.getElementById('message').value.trim();
             
-            if (sessionStorage.getItem('tncc_logged_in') === 'true') {
-                document.getElementById('adminPassword').value = ADMIN_PASSWORD;
-                adminLogin();
+            if (!name || !email || !interest) {
+                showToast('Please fill in all required fields.', 'error');
+                return false;
             }
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('adminOverlay').classList.contains('active')) {
-                        toggleAdmin();
-                    }
-                    closeArticle(e);
-                }
-                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                    e.preventDefault();
-                    toggleAdmin();
-                }
+            appData.submissions.push({
+                name: name,
+                email: email,
+                interest: interest,
+                message: message,
+                date: new Date().toLocaleDateString()
             });
-
-            console.log('🏃 TNCC Website Loaded Successfully!');
-            console.log('📝 Stories: ' + getPosts().length);
-            console.log('🔐 Press Ctrl+Shift+A to open Admin Panel');
-            console.log('📧 Newsletter signup active');
-            console.log('✅ All NGO features have been added:');
-            console.log('   - Programs section');
-            console.log('   - Partners section');
-            console.log('   - Donate section');
-            console.log('   - Volunteer section');
-            console.log('   - Transparency section');
-            console.log('   - Enhanced footer with more links');
+            saveData(appData);
+            renderSubmissions();
+            showToast(`✅ Thank you, ${name}! Your registration has been received.`, 'success');
+            e.target.reset();
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'registration', { 'event_category': 'engagement', 'event_label': interest });
+            }
+            return false;
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        // ===== DONATIONS =====
+        let selectedDonation = 500;
+        function selectDonation(el) {
+            document.querySelectorAll('.donation-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedDonation = parseInt(el.dataset.amount);
+            document.getElementById('customDonation').value = '';
+        }
+        function customDonationSelected() {
+            document.querySelectorAll('.donation-card').forEach(c => c.classList.remove('selected'));
+            selectedDonation = parseInt(document.getElementById('customDonation').value) || 0;
+        }
+        function handleDonation() {
+            const custom = parseInt(document.getElementById('customDonation').value);
+            const amount = custom > 0 ? custom : selectedDonation;
+            if (!amount || amount <= 0) {
+                showToast('Please select or enter a valid donation amount.', 'error');
+                return;
+            }
+            const name = prompt('Your name (optional):') || 'Anonymous';
+            appData.donations.push({
+                amount: amount,
+                name: name,
+                date: new Date().toLocaleDateString()
+            });
+            saveData(appData);
+            renderDonations();
+            showToast(`Thank you for your donation of KES ${amount}! 🙏`, 'success');
+        }
+
+        // ===== VOLUNTEERS =====
+        function openVolunteerForm(role) {
+            document.getElementById('volunteerRole').value = role;
+            document.getElementById('volunteerModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeVolunteerModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('volunteerModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        function handleVolunteerApplication(e) {
+            e.preventDefault();
+            const name = document.getElementById('volName').value.trim();
+            const email = document.getElementById('volEmail').value.trim();
+            const phone = document.getElementById('volPhone').value.trim();
+            const role = document.getElementById('volunteerRole').value;
+            const message = document.getElementById('volMessage').value.trim();
+            
+            if (!name || !email) {
+                showToast('Please fill in all required fields.', 'error');
+                return false;
+            }
+
+            appData.volunteers.push({
+                name: name,
+                email: email,
+                phone: phone,
+                role: role,
+                message: message,
+                date: new Date().toLocaleDateString()
+            });
+            saveData(appData);
+            renderVolunteers();
+            showToast(`✅ Thank you, ${name}! Your volunteer application has been received.`, 'success');
+            e.target.reset();
+            closeVolunteerModal();
+            return false;
+        }
+
+        // ===== ADMIN PANEL =====
+        function openAdmin() {
+            document.getElementById('adminPanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderSubmissions();
+            renderDonations();
+            renderVolunteers();
+        }
+        function closeAdmin() {
+            document.getElementById('adminPanel').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.admin-tabs button[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        function saveContent() {
+            appData.content.heroTitle = document.getElementById('adminHeroTitle').value;
+            appData.content.heroSubtitle = document.getElementById('adminHeroSubtitle').value;
+            appData.content.storiesTitle = document.getElementById('adminStoriesTitle').value;
+            appData.content.storiesDesc = document.getElementById('adminStoriesDesc').value;
+            appData.content.impactTitle = document.getElementById('adminImpactTitle').value;
+            appData.content.impactDesc = document.getElementById('adminImpactDesc').value;
+            appData.content.galleryTitle = document.getElementById('adminGalleryTitle').value;
+            appData.content.galleryDesc = document.getElementById('adminGalleryDesc').value;
+            appData.content.donationTitle = document.getElementById('adminDonationTitle').value;
+            appData.content.donationDesc = document.getElementById('adminDonationDesc').value;
+            appData.content.volunteerTitle = document.getElementById('adminVolunteerTitle').value;
+            appData.content.volunteerDesc = document.getElementById('adminVolunteerDesc').value;
+            
+            saveData(appData);
+            renderAll();
+            showToast('Content saved successfully!', 'success');
+        }
+
+        function approveSubmission(index) {
+            showToast('Submission approved!', 'success');
+        }
+
+        function deleteSubmission(index) {
+            if (confirm('Delete this submission?')) {
+                appData.submissions.splice(index, 1);
+                saveData(appData);
+                renderSubmissions();
+                showToast('Submission deleted.', 'success');
+            }
+        }
+
+        function deleteDonation(index) {
+            if (confirm('Delete this donation record?')) {
+                appData.donations.splice(index, 1);
+                saveData(appData);
+                renderDonations();
+                showToast('Donation record deleted.', 'success');
+            }
+        }
+
+        function approveVolunteer(index) {
+            showToast('Volunteer application approved!', 'success');
+        }
+
+        function deleteVolunteer(index) {
+            if (confirm('Delete this volunteer application?')) {
+                appData.volunteers.splice(index, 1);
+                saveData(appData);
+                renderVolunteers();
+                showToast('Volunteer application deleted.', 'success');
+            }
+        }
+
+        // ===== TOAST =====
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // ===== YEAR =====
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ===== INIT =====
+        renderAll();
+        console.log('🏃 Teso North Cross Country website loaded successfully!');
+        console.log('📊 Admin dashboard ready - click ⚙️ Admin in navigation');
+        console.log('📝 All submissions stored locally');
+
+        // Admin login protection (simple)
+        let adminAttempts = 0;
+        document.querySelector('.admin-badge').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (adminAttempts === 0) {
+                const password = prompt('Enter admin password:');
+                if (password === 'admin123') {
+                    openAdmin();
+                    adminAttempts = 0;
+                } else {
+                    adminAttempts++;
+                    if (adminAttempts >= 3) {
+                        showToast('Too many failed attempts. Refresh to try again.', 'error');
+                    } else {
+                        showToast('Incorrect password. Attempts remaining: ' + (3 - adminAttempts), 'error');
+                    }
+                }
+            }
+        });
     </script>
 
 </body>
