@@ -1965,7 +1965,8 @@
             const countySelect = document.getElementById('county');
             const selectedCounty = countySelect.value;
             setLocationOptions(countySelect, counties.sort((first, second) => first.localeCompare(second)), 'Select county', false);
-            if (counties.includes(selectedCounty)) countySelect.value = selectedCounty;
+            const matchingCounty = [...countySelect.options].find(option => option.value.toLowerCase() === selectedCounty.toLowerCase());
+            if (matchingCounty) countySelect.value = matchingCounty.value;
             countySelect.disabled = disabled;
         }
 
@@ -1989,8 +1990,18 @@
             populateCounties(kenyaCounties.slice(), false);
             document.getElementById('locationStatus').textContent = 'Choose a county. Sub-counties and wards are loading...';
             try {
-                const response = await fetch('https://raw.githubusercontent.com/mbithuka/Counties/main/restructured_data.json');
-                if (!response.ok) throw new Error('Location data unavailable');
+                const urls = [
+                    'https://raw.githubusercontent.com/mbithuka/Counties/main/restructured_data.json',
+                    'https://cdn.jsdelivr.net/gh/mbithuka/Counties@main/restructured_data.json'
+                ];
+                let response;
+                for (const url of urls) {
+                    try {
+                        const candidate = await fetch(url, { cache: 'no-store' });
+                        if (candidate.ok) { response = candidate; break; }
+                    } catch (error) { }
+                }
+                if (!response) throw new Error('Location data unavailable');
                 kenyaLocations = await response.json();
                 populateCounties(Object.keys(kenyaLocations), false);
                 populateSubCounties();
