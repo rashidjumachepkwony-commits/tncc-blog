@@ -14,11 +14,26 @@ create table if not exists public.submissions (
   name text not null,
   email text not null,
   phone text,
+  county text not null,
+  sub_county text not null,
+  ward text not null,
+  guardian text,
+  education text,
+  age integer not null check (age between 5 and 120),
+  race_categories text[] not null,
   interest text not null,
   message text,
   status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
   created_at timestamptz not null default now()
 );
+
+alter table public.submissions add column if not exists county text;
+alter table public.submissions add column if not exists sub_county text;
+alter table public.submissions add column if not exists ward text;
+alter table public.submissions add column if not exists guardian text;
+alter table public.submissions add column if not exists education text;
+alter table public.submissions add column if not exists age integer;
+alter table public.submissions add column if not exists race_categories text[];
 
 create table if not exists public.volunteers (
   id uuid primary key default gen_random_uuid(),
