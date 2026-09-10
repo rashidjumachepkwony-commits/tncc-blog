@@ -597,14 +597,15 @@
         .register-form h3 { color: var(--primary); margin-bottom: 6px; font-size: 1.5rem; }
         .register-form .sub { color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .race-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 6px; }
-        .race-option { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.84rem; cursor: pointer; }
-        .race-option input { width: auto; accent-color: var(--primary); }
+        .race-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+        .race-option { position: relative; display: flex; align-items: center; gap: 10px; min-height: 68px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 14px; color: var(--text-muted); font-size: 0.82rem; cursor: pointer; background: linear-gradient(135deg, #ffffff, #f7faf5); transition: var(--transition); }
+        .race-option:hover { border-color: #b8d477; transform: translateY(-2px); box-shadow: 0 8px 18px rgba(7,59,43,0.08); }
+        .race-option input { position: absolute; opacity: 0; pointer-events: none; }
+        .race-icon { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; border-radius: 10px; background: #edf4e6; font-size: 1.15rem; }
+        .race-name { line-height: 1.25; }
         .field-note { color: var(--text-muted); font-size: 0.76rem; }
-        .race-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-        .race-option { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; color: var(--text-muted); font-size: 0.82rem; cursor: pointer; background: #fafcfa; }
-        .race-option:has(input:checked) { border-color: var(--accent); background: #eef6d8; color: var(--primary); }
-        .race-option input { width: auto; accent-color: var(--primary); }
+        .race-option:has(input:checked) { border-color: var(--accent); background: #eef6d8; color: var(--primary); box-shadow: 0 0 0 2px rgba(155,207,32,0.18); }
+        .race-option:has(input:checked) .race-icon { background: var(--accent); }
         .register-form select[multiple] { min-height: 132px; padding: 8px; }
         .register-form select[multiple] option { padding: 7px 8px; }
         .location-status { color: var(--text-muted); font-size: 0.76rem; margin-top: 6px; }
@@ -653,6 +654,9 @@
             border-left: 4px solid var(--accent);
         }
         .register-info .highlight strong { color: var(--primary); }
+        @media (max-width: 520px) {
+            .race-options { grid-template-columns: 1fr; }
+        }
 
         /* ===== DONATIONS ===== */
         .donation-section { background: #e8f0e5; }
@@ -1465,14 +1469,14 @@
                         <input type="tel" id="phone" placeholder="e.g. 0712 345 678" required>
                         <label>Running competition race(s) *</label>
                         <div class="race-options" id="raceCategories" role="group" aria-describedby="raceHelp">
-                            <label class="race-option"><input type="checkbox" value="Elite Race"> Elite Race</label>
-                            <label class="race-option"><input type="checkbox" value="Open Race"> Open Race</label>
-                            <label class="race-option"><input type="checkbox" value="Schools Category"> Schools Category</label>
-                            <label class="race-option"><input type="checkbox" value="Youth Category"> Youth Category</label>
-                            <label class="race-option"><input type="checkbox" value="Veterans Category"> Veterans Category</label>
-                            <label class="race-option"><input type="checkbox" value="Fun Run"> Fun Run</label>
-                            <label class="race-option"><input type="checkbox" value="PWD Category"> PWD Category</label>
-                            <label class="race-option"><input type="checkbox" value="VIP Challenge Race"> VIP Challenge Race <span class="field-note">(optional)</span></label>
+                            <label class="race-option"><input type="checkbox" value="Elite Race"><span class="race-icon" aria-hidden="true">🏅</span><span class="race-name">Elite Race</span></label>
+                            <label class="race-option"><input type="checkbox" value="Open Race"><span class="race-icon" aria-hidden="true">🏃</span><span class="race-name">Open Race</span></label>
+                            <label class="race-option"><input type="checkbox" value="Schools Category"><span class="race-icon" aria-hidden="true">🎓</span><span class="race-name">Schools Category</span></label>
+                            <label class="race-option"><input type="checkbox" value="Youth Category"><span class="race-icon" aria-hidden="true">⚡</span><span class="race-name">Youth Category</span></label>
+                            <label class="race-option"><input type="checkbox" value="Veterans Category"><span class="race-icon" aria-hidden="true">🏆</span><span class="race-name">Veterans Category</span></label>
+                            <label class="race-option"><input type="checkbox" value="Fun Run"><span class="race-icon" aria-hidden="true">🎉</span><span class="race-name">Fun Run</span></label>
+                            <label class="race-option"><input type="checkbox" value="PWD Category"><span class="race-icon" aria-hidden="true">♿</span><span class="race-name">PWD Category</span></label>
+                            <label class="race-option"><input type="checkbox" value="VIP Challenge Race"><span class="race-icon" aria-hidden="true">⭐</span><span class="race-name">VIP Challenge Race <span class="field-note">(optional)</span></span></label>
                         </div>
                         <p class="field-note" id="raceHelp">Choose one or more race categories.</p>
                         <label for="interest">I'm interested in *</label>
@@ -1951,6 +1955,19 @@
         let galleryAutoplay;
         let kenyaLocations = {};
         const kenyaCounties = ['Baringo', 'Bomet', 'Bungoma', 'Busia', 'Elgeyo-Marakwet', 'Embu', 'Garissa', 'Homa Bay', 'Isiolo', 'Kajiado', 'Kakamega', 'Kericho', 'Kiambu', 'Kilifi', 'Kirinyaga', 'Kisii', 'Kisumu', 'Kitui', 'Kwale', 'Laikipia', 'Lamu', 'Machakos', 'Makueni', 'Mandera', 'Marsabit', 'Meru', 'Migori', 'Mombasa', 'Murang\'a', 'Nairobi', 'Nakuru', 'Nandi', 'Narok', 'Nyamira', 'Nyandarua', 'Nyeri', 'Samburu', 'Siaya', 'Taita-Taveta', 'Tana River', 'Tharaka-Nithi', 'Trans Nzoia', 'Turkana', 'Uasin Gishu', 'Vihiga', 'Wajir', 'West Pokot'];
+        const fallbackLocations = {
+            Busia: {
+                Constituencies: {
+                    'Teso North': { Ward: ['Malaba Central', 'Malaba North', 'Malaba South', 'Angurai North', 'Angurai South', 'Angurai East'] },
+                    'Teso South': { Ward: ['Amukura Central', 'Amukura East', 'Amukura West', 'Angorom', 'Chakol North', 'Chakol South'] },
+                    'Matayos': { Ward: ['Bukhayo West', 'Mayenje', 'Matayos South', 'Busibwabo'] },
+                    'Nambale': { Ward: ['Nambale Township', 'Bukhayo North/Waltsi', 'Bukhayo Central', 'Bukhayo East'] },
+                    'Butula': { Ward: ['Marachi West', 'Kingandole', 'Marachi Central', 'Marachi East', 'Elugulu'] },
+                    'Funyula': { Ward: ['Bwiri', 'Namboboto Namboboto', 'Nangina', 'Ageng\'a Nanguba'] },
+                    'Budalangi': { Ward: ['Bunyala Central', 'Bunyala North', 'Bunyala West', 'Bunyala South'] }
+                }
+            }
+        };
 
         function formatLocationName(value) {
             return String(value).replace(/\s+/g, ' ').trim().split(' ').map(word => word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : '').join(' ');
@@ -2007,8 +2024,10 @@
                 populateSubCounties();
                 document.getElementById('locationStatus').textContent = 'Select your county, then sub-county and ward.';
             } catch (error) {
+                kenyaLocations = fallbackLocations;
                 populateCounties(kenyaCounties.slice(), false);
-                document.getElementById('locationStatus').textContent = 'County selection is ready. Connect to the internet to load sub-counties and wards.';
+                populateSubCounties();
+                document.getElementById('locationStatus').textContent = 'Select your county, sub-county and ward. Busia locations are available offline.';
             }
         }
         let authMode = 'signin';
