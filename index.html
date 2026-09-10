@@ -486,18 +486,29 @@
 
         /* ===== GALLERY ===== */
         .gallery-grid {
-            display: grid;
-            grid-template-columns: 1.3fr 0.7fr 0.7fr;
-            grid-auto-rows: 240px;
-            gap: 18px;
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            padding: 4px 2px 12px;
         }
+        .gallery-grid::-webkit-scrollbar { display: none; }
         .gallery-item {
+            flex: 0 0 calc((100% - 32px) / 3);
+            height: 210px;
             border-radius: 16px;
             overflow: hidden;
             position: relative;
             background: #dce3de;
+            cursor: pointer;
+            border: 0;
+            padding: 0;
+            text-align: left;
+            scroll-snap-align: start;
         }
-        .gallery-item:first-child { grid-row: span 2; }
         .gallery-item img {
             width: 100%;
             height: 100%;
@@ -505,6 +516,7 @@
             transition: transform 0.5s ease;
         }
         .gallery-item:hover img { transform: scale(1.04); }
+        .gallery-item:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
         .gallery-caption {
             position: absolute;
             bottom: 12px;
@@ -519,6 +531,21 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
+        .gallery-controls { display: flex; justify-content: flex-end; gap: 8px; margin: -8px 0 12px; }
+        .gallery-control { width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%; background: var(--white); color: var(--primary); cursor: pointer; font-size: 1.35rem; line-height: 1; transition: var(--transition); }
+        .gallery-control:hover, .gallery-control:focus-visible { background: var(--primary); color: var(--white); border-color: var(--primary); outline: none; }
+        .gallery-hint { color: var(--text-muted); font-size: 0.82rem; margin-top: 4px; }
+        .gallery-modal { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(4, 25, 18, 0.92); }
+        .gallery-modal.open { display: flex; }
+        .gallery-modal-content { width: min(100%, 1080px); position: relative; }
+        .gallery-modal-image { width: 100%; height: min(72vh, 720px); object-fit: contain; border-radius: 14px; background: #071a13; }
+        .gallery-modal-caption { color: var(--white); text-align: center; margin: 12px 56px 0; font-weight: 600; }
+        .gallery-modal-close, .gallery-modal-nav { position: absolute; border: 1px solid rgba(255,255,255,0.3); background: rgba(7,59,43,0.8); color: var(--white); cursor: pointer; display: grid; place-items: center; transition: var(--transition); }
+        .gallery-modal-close:hover, .gallery-modal-nav:hover { background: var(--accent); color: var(--primary-dark); }
+        .gallery-modal-close { top: -12px; right: -12px; width: 42px; height: 42px; border-radius: 50%; font-size: 1.5rem; }
+        .gallery-modal-nav { top: 50%; width: 48px; height: 48px; border-radius: 50%; font-size: 1.7rem; transform: translateY(-50%); }
+        .gallery-modal-prev { left: 16px; }
+        .gallery-modal-next { right: 16px; }
 
         /* ===== ABOUT ===== */
         .about {
@@ -569,6 +596,11 @@
         }
         .register-form h3 { color: var(--primary); margin-bottom: 6px; font-size: 1.5rem; }
         .register-form .sub { color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .race-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 6px; }
+        .race-option { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.84rem; cursor: pointer; }
+        .race-option input { width: auto; accent-color: var(--primary); }
+        .field-note { color: var(--text-muted); font-size: 0.76rem; }
         .register-form label {
             display: block;
             font-weight: 600;
@@ -1002,8 +1034,7 @@
             .stories-grid .card:first-child { grid-column: span 2; }
             .feature { grid-template-columns: 1fr; }
             .impact-grid { grid-template-columns: 1fr 1fr; }
-            .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 200px; }
-            .gallery-item:first-child { grid-row: auto; grid-column: span 2; }
+            .gallery-item { flex-basis: calc((100% - 16px) / 2); }
             .about { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
             .cta-box { flex-direction: column; text-align: center; padding: 35px 30px; }
@@ -1042,8 +1073,8 @@
             .stories-grid { grid-template-columns: 1fr; }
             .stories-grid .card:first-child { grid-column: auto; }
             .impact-grid { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
-            .gallery-item:first-child { grid-column: auto; }
+            .gallery-item { flex-basis: 82%; height: 200px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
             .about-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; gap: 28px; }
             .cta-box { padding: 28px 20px; }
@@ -1344,8 +1375,23 @@
             <div class="gallery-grid" id="galleryGrid">
                 <!-- Gallery loaded by JavaScript -->
             </div>
+            <div class="gallery-controls" role="group" aria-label="Gallery controls">
+                <button class="gallery-control" type="button" aria-label="Previous gallery photos" onclick="scrollGallery(-1)">&#8249;</button>
+                <button class="gallery-control" type="button" aria-label="Next gallery photos" onclick="scrollGallery(1)">&#8250;</button>
+            </div>
+            <p class="gallery-hint">Select a photo to open the full-screen slideshow. Use the arrow keys or the controls to move between moments.</p>
         </div>
     </section>
+
+    <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="Photo slideshow" hidden>
+        <div class="gallery-modal-content">
+            <button class="gallery-modal-close" type="button" aria-label="Close slideshow" onclick="closeGallery()">&times;</button>
+            <button class="gallery-modal-nav gallery-modal-prev" type="button" aria-label="Previous photo" onclick="changeGallerySlide(-1)">&#8249;</button>
+            <img class="gallery-modal-image" id="galleryModalImage" src="hero-event.jpg.jpeg" alt="">
+            <button class="gallery-modal-nav gallery-modal-next" type="button" aria-label="Next photo" onclick="changeGallerySlide(1)">&#8250;</button>
+            <p class="gallery-modal-caption" id="galleryModalCaption"></p>
+        </div>
+    </div>
 
     <!-- ===== ABOUT ===== -->
     <section id="about">
@@ -1392,10 +1438,33 @@
                     <form id="registrationForm" onsubmit="handleRegistration(event)">
                         <label for="fullName">Full Name *</label>
                         <input type="text" id="fullName" placeholder="e.g. Jane Muthoni" required>
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" placeholder="you@example.com" required>
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="e.g. 0182 095 270">
+                        <div class="form-row">
+                            <div><label for="county">County *</label><input type="text" id="county" placeholder="e.g. Busia" required></div>
+                            <div><label for="subCounty">Sub-County *</label><input type="text" id="subCounty" placeholder="e.g. Teso North" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div><label for="ward">Ward *</label><input type="text" id="ward" placeholder="Your ward" required></div>
+                            <div><label for="age">Age *</label><input type="number" id="age" min="5" max="120" placeholder="Your age" required></div>
+                        </div>
+                        <label for="guardian">Guardian</label>
+                        <input type="text" id="guardian" placeholder="Parent or guardian name (for minors)">
+                        <label for="education">Level of education</label>
+                        <select id="education"><option value="">Select level</option><option>Primary</option><option>Secondary</option><option>College / TVET</option><option>University</option><option>Other</option></select>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="you@example.com">
+                        <label for="phone">Tel no. *</label>
+                        <input type="tel" id="phone" placeholder="e.g. 0712 345 678" required>
+                        <label>Running competition race *</label>
+                        <div class="race-options">
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="Elite Race"> Elite Race</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="Open Race"> Open Race</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="Schools Category"> Schools Category</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="Youth Category"> Youth Category</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="Veterans Category"> Veterans Category</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="Fun Run"> Fun Run</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="PWD Category"> PWD Category</label>
+                            <label class="race-option"><input type="checkbox" name="raceCategory" value="VIP Challenge Race"> VIP Challenge Race <span class="field-note">(optional)</span></label>
+                        </div>
                         <label for="interest">I'm interested in *</label>
                         <select id="interest" required>
                             <option value="">Select an option</option>
@@ -1794,7 +1863,27 @@
                     { image: 'hero-event.jpg.jpeg', caption: 'Community gathers for the event' },
                     { image: 'community-talk.jpg.jpeg', caption: 'Let us talk' },
                     { image: 'runners.jpg.jpeg', caption: 'On the course' },
-                    { image: 'partners.jpg.jpeg', caption: 'Support & solidarity' }
+                    { image: 'runners (1).jpeg', caption: 'Ready for the starting line' },
+                    { image: 'runners (2).jpeg', caption: 'Running together' },
+                    { image: 'runners (3).jpeg', caption: 'Community in motion' },
+                    { image: 'runners (4).jpeg', caption: 'Race day energy' },
+                    { image: 'runners (5).jpeg', caption: 'Every step counts' },
+                    { image: 'runners (6).jpeg', caption: 'Strength in participation' },
+                    { image: 'runners (7).jpeg', caption: 'Young runners leading the way' },
+                    { image: 'runners (8).jpeg', caption: 'Together on the course' },
+                    { image: 'runners (9).jpeg', caption: 'A shared finish line' },
+                    { image: 'runners (10).jpeg', caption: 'Celebrating the movement' },
+                    { image: 'runners (11).jpeg', caption: 'The joy of running' },
+                    { image: 'runners (12).jpeg', caption: 'Focused and fearless' },
+                    { image: 'runners (13).jpeg', caption: 'Support & solidarity' },
+                    { image: 'run.jpg.jpeg', caption: 'Run. Unite. Transform.' },
+                    { image: 'running.jpg.jpeg', caption: 'On the road together' },
+                    { image: 'community.jpg.jpeg', caption: 'Building community through sport' },
+                    { image: 'partners.jpg.jpeg', caption: 'Partners making it possible' },
+                    { image: 'partners2.jpg.jpeg', caption: 'Working together for impact' },
+                    { image: 'images.jpg.jpeg', caption: 'Moments that connect us' },
+                    { image: 'images2.jpg.jpeg', caption: 'Participation for everyone' },
+                    { image: 'images3.jpg.jpeg', caption: 'A movement with purpose' }
                 ],
                 submissions: [],
                 donations: [],
@@ -1830,6 +1919,9 @@
                             data[key] = defaults[key];
                         }
                     }
+                    if (!Array.isArray(data.gallery) || data.gallery.length < defaults.gallery.length) {
+                        data.gallery = defaults.gallery;
+                    }
                     return data;
                 }
             } catch (e) {
@@ -1845,6 +1937,8 @@
         let appData = loadData();
         let visibleStoryCount = 3;
         let currentArticleId = null;
+        let currentGalleryIndex = 0;
+        let galleryAutoplay;
         let authMode = 'signin';
         function hasSupabase() { return Boolean(window.tnccSupabase); }
         async function insertRemote(table, payload) {
@@ -1925,12 +2019,72 @@
         function renderGallery() {
             const grid = document.getElementById('galleryGrid');
             grid.innerHTML = appData.gallery.map(item => `
-                <div class="gallery-item">
-                    <img src="${item.image}" alt="${item.caption}">
+                <button class="gallery-item" type="button" aria-label="Open photo: ${escapeHtml(item.caption)}" onclick="openGallery(${appData.gallery.indexOf(item)})">
+                    <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.caption)}" loading="lazy">
                     <div class="gallery-caption">${item.caption}</div>
-                </div>
+                </button>
             `).join('');
+            startGalleryAutoplay();
         }
+
+        function scrollGallery(direction) {
+            const grid = document.getElementById('galleryGrid');
+            const firstItem = grid.querySelector('.gallery-item');
+            if (!firstItem) return;
+            const distance = firstItem.getBoundingClientRect().width + 16;
+            const atEnd = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 8;
+            const atStart = grid.scrollLeft <= 8;
+            if (direction > 0 && atEnd) grid.scrollTo({ left: 0, behavior: 'smooth' });
+            else if (direction < 0 && atStart) grid.scrollTo({ left: grid.scrollWidth, behavior: 'smooth' });
+            else grid.scrollBy({ left: direction * distance, behavior: 'smooth' });
+            startGalleryAutoplay();
+        }
+
+        function startGalleryAutoplay() {
+            clearInterval(galleryAutoplay);
+            galleryAutoplay = setInterval(() => scrollGallery(1), 4500);
+        }
+
+        function openGallery(index) {
+            currentGalleryIndex = index;
+            updateGallerySlide();
+            const modal = document.getElementById('galleryModal');
+            modal.hidden = false;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            modal.querySelector('.gallery-modal-close').focus();
+        }
+
+        function closeGallery() {
+            const modal = document.getElementById('galleryModal');
+            modal.classList.remove('open');
+            modal.hidden = true;
+            document.body.style.overflow = '';
+        }
+
+        function changeGallerySlide(direction) {
+            currentGalleryIndex = (currentGalleryIndex + direction + appData.gallery.length) % appData.gallery.length;
+            updateGallerySlide();
+        }
+
+        function updateGallerySlide() {
+            const item = appData.gallery[currentGalleryIndex];
+            document.getElementById('galleryModalImage').src = item.image;
+            document.getElementById('galleryModalImage').alt = item.caption;
+            document.getElementById('galleryModalCaption').textContent = `${item.caption} (${currentGalleryIndex + 1} of ${appData.gallery.length})`;
+        }
+
+        document.addEventListener('keydown', event => {
+            const modal = document.getElementById('galleryModal');
+            if (modal.hidden) return;
+            if (event.key === 'Escape') closeGallery();
+            if (event.key === 'ArrowLeft') changeGallerySlide(-1);
+            if (event.key === 'ArrowRight') changeGallerySlide(1);
+        });
+
+        document.getElementById('galleryModal')?.addEventListener('click', event => {
+            if (event.target.id === 'galleryModal') closeGallery();
+        });
 
         function renderSubmissions() {
             const list = document.getElementById('submissionsList');
@@ -2175,16 +2329,28 @@
             const email = document.getElementById('email').value.trim();
             const interest = document.getElementById('interest').value;
             const message = document.getElementById('message').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const raceCategories = [...document.querySelectorAll('input[name="raceCategory"]:checked')].map(input => input.value);
+            const details = {
+                county: document.getElementById('county').value.trim(),
+                subCounty: document.getElementById('subCounty').value.trim(),
+                ward: document.getElementById('ward').value.trim(),
+                guardian: document.getElementById('guardian').value.trim(),
+                education: document.getElementById('education').value,
+                age: document.getElementById('age').value,
+                raceCategories
+            };
             
-            if (!name || !email || !interest) {
+            if (!name || !details.county || !details.subCounty || !details.ward || !details.age || !phone || !interest || raceCategories.length === 0) {
                 showToast('Please fill in all required fields.', 'error');
                 return false;
             }
 
             try {
-                const remote = await insertRemote('submissions', { name, email, phone: document.getElementById('phone').value.trim(), interest, message });
-                if (!remote) { appData.submissions.push({ name, email, interest, message, date: new Date().toLocaleDateString() }); saveData(appData); renderSubmissions(); }
-                await notifyRemote('registration', { name, email, interest, message });
+                const payload = { name, email, phone, interest, message, ...details };
+                const remote = await insertRemote('submissions', payload);
+                if (!remote) { appData.submissions.push({ ...payload, date: new Date().toLocaleDateString() }); saveData(appData); renderSubmissions(); }
+                await notifyRemote('registration', payload);
                 showToast(`Thank you, ${name}! Your registration has been received.`, 'success'); e.target.reset();
             } catch (error) { console.error(error); showToast('Registration could not be submitted. Please try again.', 'error'); }
             if (typeof gtag !== 'undefined') {
