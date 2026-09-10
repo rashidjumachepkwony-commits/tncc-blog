@@ -601,6 +601,10 @@
         .race-option { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.84rem; cursor: pointer; }
         .race-option input { width: auto; accent-color: var(--primary); }
         .field-note { color: var(--text-muted); font-size: 0.76rem; }
+        .race-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+        .race-option { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; color: var(--text-muted); font-size: 0.82rem; cursor: pointer; background: #fafcfa; }
+        .race-option:has(input:checked) { border-color: var(--accent); background: #eef6d8; color: var(--primary); }
+        .race-option input { width: auto; accent-color: var(--primary); }
         .register-form select[multiple] { min-height: 132px; padding: 8px; }
         .register-form select[multiple] option { padding: 7px 8px; }
         .location-status { color: var(--text-muted); font-size: 0.76rem; margin-top: 6px; }
@@ -1274,6 +1278,7 @@
                 <li><a href="#gallery" onclick="closeMenu()">Gallery</a></li>
                 <li><a href="#about" onclick="closeMenu()">About</a></li>
                 <li><a href="#register" onclick="closeMenu()">Get Involved</a></li>
+                <li><a class="cta" href="#register" onclick="closeMenu()">Register Now</a></li>
                 <li><a href="#donate" onclick="closeMenu()">Donate</a></li>
                 <li><a href="#volunteer" onclick="closeMenu()">Volunteer</a></li>
                 <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
@@ -1458,17 +1463,17 @@
                         <input type="email" id="email" placeholder="you@example.com" required>
                         <label for="phone">Tel no. *</label>
                         <input type="tel" id="phone" placeholder="e.g. 0712 345 678" required>
-                        <label for="raceCategories">Running competition race(s) *</label>
-                        <select id="raceCategories" multiple required aria-describedby="raceHelp">
-                            <option value="Elite Race">Elite Race</option>
-                            <option value="Open Race">Open Race</option>
-                            <option value="Schools Category">Schools Category</option>
-                            <option value="Youth Category">Youth Category</option>
-                            <option value="Veterans Category">Veterans Category</option>
-                            <option value="Fun Run">Fun Run</option>
-                            <option value="PWD Category">PWD Category</option>
-                            <option value="VIP Challenge Race">VIP Challenge Race (optional)</option>
-                        </select>
+                        <label>Running competition race(s) *</label>
+                        <div class="race-options" id="raceCategories" role="group" aria-describedby="raceHelp">
+                            <label class="race-option"><input type="checkbox" value="Elite Race"> Elite Race</label>
+                            <label class="race-option"><input type="checkbox" value="Open Race"> Open Race</label>
+                            <label class="race-option"><input type="checkbox" value="Schools Category"> Schools Category</label>
+                            <label class="race-option"><input type="checkbox" value="Youth Category"> Youth Category</label>
+                            <label class="race-option"><input type="checkbox" value="Veterans Category"> Veterans Category</label>
+                            <label class="race-option"><input type="checkbox" value="Fun Run"> Fun Run</label>
+                            <label class="race-option"><input type="checkbox" value="PWD Category"> PWD Category</label>
+                            <label class="race-option"><input type="checkbox" value="VIP Challenge Race"> VIP Challenge Race <span class="field-note">(optional)</span></label>
+                        </div>
                         <p class="field-note" id="raceHelp">Choose one or more race categories.</p>
                         <label for="interest">I'm interested in *</label>
                         <select id="interest" required>
@@ -1958,7 +1963,9 @@
 
         function populateCounties(counties, disabled = false) {
             const countySelect = document.getElementById('county');
+            const selectedCounty = countySelect.value;
             setLocationOptions(countySelect, counties.sort((first, second) => first.localeCompare(second)), 'Select county', false);
+            if (counties.includes(selectedCounty)) countySelect.value = selectedCounty;
             countySelect.disabled = disabled;
         }
 
@@ -1979,16 +1986,18 @@
         }
 
         async function loadKenyaLocations() {
-            populateCounties(kenyaCounties.slice(), true);
+            populateCounties(kenyaCounties.slice(), false);
+            document.getElementById('locationStatus').textContent = 'Choose a county. Sub-counties and wards are loading...';
             try {
                 const response = await fetch('https://raw.githubusercontent.com/mbithuka/Counties/main/restructured_data.json');
                 if (!response.ok) throw new Error('Location data unavailable');
                 kenyaLocations = await response.json();
                 populateCounties(Object.keys(kenyaLocations), false);
+                populateSubCounties();
                 document.getElementById('locationStatus').textContent = 'Select your county, then sub-county and ward.';
             } catch (error) {
                 populateCounties(kenyaCounties.slice(), false);
-                document.getElementById('locationStatus').textContent = 'Location data could not load. Please refresh while connected to the internet.';
+                document.getElementById('locationStatus').textContent = 'County selection is ready. Connect to the internet to load sub-counties and wards.';
             }
         }
         let authMode = 'signin';
@@ -2387,7 +2396,7 @@
             const interest = document.getElementById('interest').value;
             const message = document.getElementById('message').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            const raceCategories = [...document.getElementById('raceCategories').selectedOptions].map(option => option.value);
+            const raceCategories = [...document.querySelectorAll('#raceCategories input:checked')].map(input => input.value);
             const details = {
                 county: document.getElementById('county').value,
                 subCounty: document.getElementById('subCounty').value,
