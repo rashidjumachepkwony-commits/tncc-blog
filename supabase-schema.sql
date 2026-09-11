@@ -101,3 +101,58 @@ $$;
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute procedure public.handle_new_user();
+
+create table if not exists public.content_items (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  title text not null,
+  category text not null default 'Community',
+  excerpt text not null default '',
+  body text not null default '',
+  image_url text,
+  published boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.content_items enable row level security;
+
+create or replace function public.is_admin()
+returns boolean language sql security definer set search_path = public as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
+  );
+$$;
+
+drop policy if exists "Anyone can read published content" on public.content_items;
+create policy "Anyone can read published content" on public.content_items
+  for select using (published = true or public.is_admin());
+
+drop policy if exists "Admins manage content" on public.content_items;
+create policy "Admins manage content" on public.content_items
+  for all to authenticated using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "Admins read submissions" on public.submissions;
+create policy "Admins read submissions" on public.submissions
+  for select to authenticated using (public.is_admin());
+
+drop policy if exists "Admins update submissions" on public.submissions;
+create policy "Admins update submissions" on public.submissions
+  for update to authenticated using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "Admins read volunteers" on public.volunteers;
+create policy "Admins read volunteers" on public.volunteers
+  for select to authenticated using (public.is_admin());
+
+drop policy if exists "Admins update volunteers" on public.volunteers;
+create policy "Admins update volunteers" on public.volunteers
+  for update to authenticated using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "Admins read contact messages" on public.contact_messages;
+create policy "Admins read contact messages" on public.contact_messages
+  for select to authenticated using (public.is_admin());
+
+drop policy if exists "Admins read donations" on public.donations;
+create policy "Admins read donations" on public.donations
+  for select to authenticated using (public.is_admin());

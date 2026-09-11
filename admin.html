@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Teso North Cross Country CBO</title>
+    <meta name="description" content="Secure admin dashboard for TNCC content and submissions." />
+    <link rel="canonical" href="https://example.com/admin.html" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container navbar">
+        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="programs.html">Programs</a>
+          <a href="impact.html">Impact</a>
+          <a href="stories.html">Stories</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="get-involved.html">Get Involved</a>
+          <a href="donate.html">Donate</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
+          <button class="btn btn-secondary btn-small" id="logoutBtn" type="button">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container page-hero-inner">
+          <div>
+            <span class="eyebrow">Admin</span>
+            <h1>Dashboard</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-sm">
+        <div class="container">
+          <div class="card reveal" style="padding: 24px;">
+            <h2 style="margin-top: 0; color: var(--primary);">Protected admin access</h2>
+            <p style="color: var(--muted);">This dashboard is only available to authenticated admins using Supabase authorization.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>Administrative access and content oversight.</p></div>
+        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
+        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
+        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
+      </div>
+      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
+    </footer>
+
+    <div class="toast" aria-live="polite"></div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
+
+        const client = getClient();
+        if (!client) {
+          showToast('Supabase configuration is required for admin access.', 'error');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const { data: { user }, error: userError } = await client.auth.getUser();
+        if (userError || !user) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single();
+        if (profileError || !profile || profile.role !== 'admin') {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+          await client.auth.signOut();
+          window.location.href = 'login.html';
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donate | Teso North Cross Country CBO</title>
+    <meta name="description" content="Support TNCC with a donation and help fund community sport, youth initiatives, and local action in Teso North." />
+    <link rel="canonical" href="https://example.com/donate.html" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container navbar">
+        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="programs.html">Programs</a>
+          <a href="impact.html">Impact</a>
+          <a href="stories.html">Stories</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="get-involved.html">Get Involved</a>
+          <a href="donate.html" class="active">Donate</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
+          <a class="btn btn-secondary btn-small" href="login.html">Login</a>
+          <a class="btn btn-primary btn-small header-cta" href="donate.html">Support</a>
+          <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Toggle menu">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container page-hero-inner">
+          <div>
+            <span class="eyebrow">Donate</span>
+            <h1>Support the next chapter of community impact.</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-sm">
+        <div class="container donation-grid">
+          <div class="card reveal" style="padding: 22px;">
+            <div class="section-heading" style="margin-bottom: 20px;">
+              <span class="eyebrow">Make a contribution</span>
+              <h2>Choose an amount</h2>
+            </div>
+
+            <form data-donation-form>
+              <div class="amount-row">
+                <button type="button" class="donation-amount" data-amount="500">KES 500</button>
+                <button type="button" class="donation-amount" data-amount="1000">KES 1,000</button>
+                <button type="button" class="donation-amount" data-amount="2500">KES 2,500</button>
+                <button type="button" class="donation-amount" data-amount="5000">KES 5,000</button>
+              </div>
+
+              <div class="form-grid two">
+                <div class="field">
+                  <label for="donor-name">Name</label>
+                  <input id="donor-name" data-donor-name type="text" placeholder="Your name" />
+                </div>
+                <div class="field">
+                  <label for="donor-email">Email</label>
+                  <input id="donor-email" data-donor-email type="email" placeholder="you@example.com" />
+                </div>
+              </div>
+
+              <div class="field" style="margin-top: 16px;">
+                <label for="custom-amount">Custom amount (KES)</label>
+                <input id="custom-amount" data-custom-amount type="number" min="100" step="100" placeholder="Enter your amount" />
+              </div>
+
+              <div class="button-row" style="margin-top: 18px;">
+                <button class="btn btn-primary" type="submit">Continue to secure checkout</button>
+              </div>
+            </form>
+          </div>
+
+          <aside class="notice-card reveal">
+            <h3>Your support helps us:</h3>
+            <ul>
+              <li>Fund community events and training</li>
+              <li>Support youth participation and mentorship</li>
+              <li>Expand outreach and local partnerships</li>
+              <li>Strengthen practical community action</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>Every contribution helps expand community impact.</p></div>
+        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
+        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
+        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
+      </div>
+      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
+    </footer>
+
+    <div class="toast" aria-live="polite"></div>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Teso North Cross Country CBO</title>
+    <meta name="description" content="Browse the TNCC photo gallery, community highlights, and event moments." />
+    <link rel="canonical" href="https://example.com/gallery.html" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container navbar">
+        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="programs.html">Programs</a>
+          <a href="impact.html">Impact</a>
+          <a href="stories.html">Stories</a>
+          <a href="gallery.html" class="active">Gallery</a>
+          <a href="get-involved.html">Get Involved</a>
+          <a href="donate.html">Donate</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
+          <a class="btn btn-secondary btn-small" href="login.html">Login</a>
+          <a class="btn btn-primary btn-small header-cta" href="donate.html">Support</a>
+          <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Toggle menu">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container page-hero-inner">
+          <div>
+            <span class="eyebrow">Gallery</span>
+            <h1>Moments, people, and stories in motion.</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-sm">
+        <div class="container">
+          <div class="gallery-grid" data-gallery-grid></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="gallery-modal" data-gallery-modal aria-modal="true" role="dialog" aria-label="Gallery dialog">
+      <div class="gallery-modal-inner">
+        <button class="gallery-close" type="button" data-gallery-close aria-label="Close image">×</button>
+        <button class="gallery-nav prev" type="button" data-gallery-prev aria-label="Previous image">‹</button>
+        <img src="hero-event.jpg.jpeg" alt="Gallery preview" />
+        <button class="gallery-nav next" type="button" data-gallery-next aria-label="Next image">›</button>
+        <div class="gallery-caption-modal" data-gallery-caption></div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container footer-grid">
+        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>Visual stories from communities in motion.</p></div>
+        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
+        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
+        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
+      </div>
+      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
+    </footer>
+
+    <div class="toast" aria-live="polite"></div>
+  </body>
+</html>

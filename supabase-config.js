@@ -1,7 +1,7 @@
 /* Public browser configuration only. Never place Stripe or Resend secrets here. */
 window.TNCC_CONFIG = {
-  supabaseUrl: '',
-  supabaseAnonKey: '',
+  supabaseUrl: 'https://egbuwozvasromegnpnwu.supabase.co',
+  supabaseAnonKey: 'sb_publishable_vvHCLKdR7sULONL1VKa36g_BstzE4bU',
   stripeCheckoutEndpoint: '',
   notificationEndpoint: '',
   utterancesRepo: ''
