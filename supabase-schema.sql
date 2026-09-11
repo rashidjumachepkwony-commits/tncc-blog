@@ -84,13 +84,42 @@ alter table public.contact_messages enable row level security;
 alter table public.comments enable row level security;
 alter table public.donations enable row level security;
 
-create policy "Anyone can submit registration" on public.submissions for insert with check (true);
-create policy "Anyone can submit volunteer application" on public.volunteers for insert with check (true);
-create policy "Anyone can submit contact message" on public.contact_messages for insert with check (true);
-create policy "Anyone can read approved comments" on public.comments for select using (approved = true);
-create policy "Authenticated users can create comments" on public.comments for insert to authenticated with check (auth.uid() = user_id);
-create policy "Users can read their own profile" on public.profiles for select using (auth.uid() = id);
+drop policy if exists "Anyone can submit registration" on public.submissions;
+create policy "Anyone can submit registration"
+on public.submissions
+for insert
+with check (true);
 
+drop policy if exists "Anyone can submit volunteer application" on public.volunteers;
+create policy "Anyone can submit volunteer application"
+on public.volunteers
+for insert
+with check (true);
+
+drop policy if exists "Anyone can submit contact message" on public.contact_messages;
+create policy "Anyone can submit contact message"
+on public.contact_messages
+for insert
+with check (true);
+
+drop policy if exists "Anyone can read approved comments" on public.comments;
+create policy "Anyone can read approved comments"
+on public.comments
+for select
+using (approved = true);
+
+drop policy if exists "Authenticated users can create comments" on public.comments;
+create policy "Authenticated users can create comments"
+on public.comments
+for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+drop policy if exists "Users can read their own profile" on public.profiles;
+create policy "Users can read their own profile"
+on public.profiles
+for select
+using (auth.uid() = id);
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
