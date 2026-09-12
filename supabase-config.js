@@ -7,7 +7,7 @@ window.TNCC_CONFIG = {
   utterancesRepo: 'your-github-username/your-comments-repo'
 };
 
-window.addEventListener('load', () => {
+(function initSupabaseClient() {
   const config = window.TNCC_CONFIG || {};
   const hasValidSupabaseConfig = config.supabaseUrl
     && config.supabaseAnonKey
@@ -15,7 +15,7 @@ window.addEventListener('load', () => {
     && !config.supabaseAnonKey.includes('YOUR_')
     && window.supabase;
 
-  if (hasValidSupabaseConfig) {
+  if (hasValidSupabaseConfig && !window.tnccSupabase) {
     window.tnccSupabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
   }
-});
+})();
