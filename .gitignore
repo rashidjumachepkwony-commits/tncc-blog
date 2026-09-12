@@ -1,1 +1,7 @@
 supabase/.temp/
+# Local secrets - never commit real API keys
+.env
+.env.local
+.env.*.local
+supabase/.env
+supabase/functions/*/.env
