@@ -3,134 +3,87 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login | Teso North Cross Country CBO</title>
-    <meta name="description" content="Sign in to TNCC using Supabase authentication." />
-    <link rel="canonical" href="https://example.com/login.html" />
+    <title>Sign in | Teso North Cross Country CBO</title>
+    <meta name="description" content="Sign in to the Teso North Cross Country administration portal." />
     <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="assets/css/site.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
     <script src="assets/js/app.js" defer></script>
   </head>
-  <body>
-    <header class="site-header">
-      <div class="container navbar">
-        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="programs.html">Programs</a>
-          <a href="impact.html">Impact</a>
-          <a href="stories.html">Stories</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="get-involved.html">Get Involved</a>
-          <a href="donate.html">Donate</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
-          <a class="btn btn-primary btn-small header-cta" href="donate.html">Support</a>
-          <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Toggle menu">☰</button>
-        </div>
+  <body class="login-page">
+    <main class="login-shell">
+      <div class="login-background-shape login-shape-one"></div>
+      <div class="login-background-shape login-shape-two"></div>
+      <div class="login-topbar">
+        <a class="login-back-link" href="index.html" aria-label="Back to TNCC home"><span aria-hidden="true">←</span> Back to site</a>
+        <button class="login-theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">◐</button>
       </div>
-    </header>
-
-    <main>
-      <section class="section-sm">
-        <div class="container" style="max-width: 560px;">
-          <div class="card reveal" style="padding: 24px;">
-            <div class="section-heading" style="margin-bottom: 20px;">
-              <span class="eyebrow">Member access</span>
-              <h2>Sign in</h2>
-            </div>
-
-            <form id="tnccLoginForm" class="form-grid">
-              <div class="field">
-                <label for="login-email">Email</label>
-                <input id="login-email" type="email" required />
-              </div>
-              <div class="field">
-                <label for="login-password">Password</label>
-                <input id="login-password" type="password" required />
-              </div>
-              <div class="button-row">
-                <button class="btn btn-primary" type="submit">Sign in</button>
-                <button class="btn btn-secondary" type="button" id="googleLoginBtn">Continue with Google</button>
-              </div>
-            </form>
+      <section class="login-card" aria-labelledby="login-title">
+        <div class="login-branding">
+          <img class="login-logo" src="logo.jpeg" alt="Teso North Cross Country logo" />
+          <div><strong>Teso North</strong><span>Cross Country CBO</span></div>
+        </div>
+        <div class="login-intro">
+          <span class="login-kicker">Staff access</span>
+          <h1 id="login-title">Welcome back</h1>
+          <p>Sign in to continue to your account.</p>
+        </div>
+        <form id="tnccLoginForm" class="login-form" novalidate>
+          <div class="login-field">
+            <label for="login-email">Email address</label>
+            <div class="login-input-wrap"><span class="login-input-icon" aria-hidden="true">@</span><input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required /></div>
           </div>
-        </div>
+          <div class="login-field">
+            <label for="login-password">Password</label>
+            <div class="login-input-wrap"><span class="login-input-icon" aria-hidden="true">&#8226;</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required /><button class="login-password-toggle" type="button" id="togglePassword" aria-label="Show password" aria-pressed="false">&#9673;</button></div>
+          </div>
+          <div class="login-form-meta"><span>Authorized staff only</span><span class="login-secure-mark"><span aria-hidden="true">&#10003;</span> Secure sign-in</span></div>
+          <button class="login-primary-button" type="submit"><span class="login-button-spinner" aria-hidden="true"></span><span class="login-submit-label">Sign in</span></button>
+          <div class="login-divider"><span>or continue with</span></div>
+          <button class="login-google-button" type="button" id="googleLoginBtn"><span class="google-icon" aria-hidden="true">G</span><span>Continue with Google</span></button>
+        </form>
+        <p class="login-support">Having trouble signing in? <a href="contact.html">Contact support</a></p>
       </section>
+      <p class="login-footer">© <span data-year></span> Teso North Cross Country CBO <span aria-hidden="true">·</span> Run. Unite. Transform.</p>
     </main>
-
-    <footer>
-      <div class="container footer-grid">
-        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>Secure access for authorized team members.</p></div>
-        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
-        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
-        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
-      </div>
-      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
-    </footer>
     <div class="toast" aria-live="polite"></div>
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
         const form = document.getElementById('tnccLoginForm');
         const googleBtn = document.getElementById('googleLoginBtn');
-
+        const submitButton = form.querySelector('.login-primary-button');
+        const submitLabel = form.querySelector('.login-submit-label');
+        const passwordInput = document.getElementById('login-password');
+        const passwordToggle = document.getElementById('togglePassword');
         const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
-
-        const redirectIfSignedIn = async () => {
-          const client = getClient();
-          if (!client) return;
-          const { data: { user } } = await client.auth.getUser();
-          if (user) window.location.href = 'admin.html';
-        };
-
+        const setLoading = (loading) => { submitButton.disabled = loading; googleBtn.disabled = loading; submitButton.classList.toggle('is-loading', loading); submitLabel.textContent = loading ? 'Signing in...' : 'Sign in'; };
+        passwordToggle.addEventListener('click', () => { const showing = passwordInput.type === 'text'; passwordInput.type = showing ? 'password' : 'text'; passwordToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password'); passwordToggle.setAttribute('aria-pressed', String(!showing)); passwordToggle.textContent = showing ? '◉' : '◌'; });
+        const redirectIfSignedIn = async () => { const client = getClient(); if (!client) return; const { data: { user } } = await client.auth.getUser(); if (user) window.location.href = 'admin.html'; };
         form.addEventListener('submit', async (event) => {
           event.preventDefault();
+          if (!form.reportValidity()) return;
           const client = getClient();
-          if (!client) {
-            showToast('Supabase config is not set. Add your project URL and anon key first.', 'error');
-            return;
-          }
-
+          if (!client) { showToast('Supabase config is not set. Add your project URL and anon key first.', 'error'); return; }
+          setLoading(true);
           const email = document.getElementById('login-email').value.trim();
           const password = document.getElementById('login-password').value;
-
           const { data, error } = await client.auth.signInWithPassword({ email, password });
-          if (error) {
-            showToast(error.message, 'error');
-            return;
-          }
-
+          if (error) { setLoading(false); showToast(error.message, 'error'); return; }
           if (data.user) {
             const { data: profileData, error: profileError } = await client.from('profiles').select('role').eq('id', data.user.id).single();
-            if (profileError || !profileData || profileData.role !== 'admin') {
-              showToast('This account is not authorized for admin access.', 'error');
-              await client.auth.signOut();
-              return;
-            }
+            if (profileError || !profileData || profileData.role !== 'admin') { setLoading(false); showToast('This account is not authorized for admin access.', 'error'); await client.auth.signOut(); return; }
             window.location.href = 'admin.html';
-          }
+          } else setLoading(false);
         });
-
         googleBtn.addEventListener('click', async () => {
           const client = getClient();
-          if (!client) {
-            showToast('Supabase config is not set. Add your project URL and anon key first.', 'error');
-            return;
-          }
-
+          if (!client) { showToast('Supabase config is not set. Add your project URL and anon key first.', 'error'); return; }
+          googleBtn.disabled = true; googleBtn.classList.add('is-loading');
           const redirectUrl = new URL('admin.html', window.location.href).toString();
-          const { error } = await client.auth.signInWithOAuth({
-            provider: 'google',
-            options: { redirectTo: redirectUrl }
-          });
-
-          if (error) showToast(error.message, 'error');
+          const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
+          if (error) { googleBtn.disabled = false; googleBtn.classList.remove('is-loading'); showToast(error.message, 'error'); }
         });
-
         await redirectIfSignedIn();
       });
     </script>
