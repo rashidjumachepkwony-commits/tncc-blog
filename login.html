@@ -12,6 +12,7 @@
     <script src="assets/js/app.js" defer></script>
   </head>
   <body class="login-page">
+    <script>if (localStorage.getItem('tncc-theme') === 'dark') document.body.classList.add('dark');</script>
     <main class="login-shell">
       <div class="login-background-shape login-shape-one"></div>
       <div class="login-background-shape login-shape-two"></div>
@@ -63,11 +64,12 @@
         const loginDescription = document.getElementById('login-description');
         let authMode = 'signin';
         const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
-        const setLoading = (loading) => { submitButton.disabled = loading; googleBtn.disabled = loading; submitButton.classList.toggle('is-loading', loading); submitLabel.textContent = loading ? 'Signing in...' : 'Sign in'; };
+        const setLoading = (loading) => { submitButton.disabled = loading; googleBtn.disabled = loading; submitButton.classList.toggle('is-loading', loading); submitLabel.textContent = loading ? (authMode === 'signup' ? 'Creating account...' : 'Signing in...') : (authMode === 'signup' ? 'Create account' : 'Sign in'); };
         const setAuthMode = (mode) => { authMode = mode; const signingUp = mode === 'signup'; loginTitle.textContent = signingUp ? 'Request access' : 'Welcome back'; loginDescription.textContent = signingUp ? 'Create an account for developer approval.' : 'Sign in to continue to your account.'; submitLabel.textContent = signingUp ? 'Create account' : 'Sign in'; modeText.textContent = signingUp ? 'Already registered?' : 'Need an account?'; modeToggle.textContent = signingUp ? 'Sign in' : 'Create one'; };
         modeToggle.addEventListener('click', () => setAuthMode(authMode === 'signin' ? 'signup' : 'signin'));
         passwordToggle.addEventListener('click', () => { const showing = passwordInput.type === 'text'; passwordInput.type = showing ? 'password' : 'text'; passwordToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password'); passwordToggle.setAttribute('aria-pressed', String(!showing)); passwordToggle.textContent = showing ? '◉' : '◌'; });
         const redirectIfSignedIn = async () => { const client = getClient(); if (!client) return; const { data: { user } } = await client.auth.getUser(); if (user) window.location.href = 'admin.html'; };
+        await redirectIfSignedIn();
         form.addEventListener('submit', async (event) => {
           event.preventDefault();
           if (!form.reportValidity()) return;
@@ -102,7 +104,6 @@
           const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
           if (error) { googleBtn.disabled = false; googleBtn.classList.remove('is-loading'); showToast(error.message, 'error'); }
         });
-        await redirectIfSignedIn();
       });
     </script>
   </body>

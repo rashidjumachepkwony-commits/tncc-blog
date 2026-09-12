@@ -12,6 +12,7 @@
     <script src="assets/js/app.js" defer></script>
   </head>
   <body class="admin-page admin-auth-pending">
+    <script>if (localStorage.getItem('tncc-theme') === 'dark') document.body.classList.add('dark');</script>
     <div class="admin-shell">
       <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
         <div class="admin-brand-wrap">
@@ -95,13 +96,13 @@
         if (!client) { showToast('Supabase configuration is required for admin access.', 'error'); window.location.href = 'login.html'; return; }
         const { data: { user }, error: userError } = await client.auth.getUser(); if (userError || !user) { window.location.href = 'login.html'; return; }
         const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profileError || !profile || profile.role !== 'admin') { window.location.href = 'login.html'; return; }
+        document.body.classList.remove('admin-auth-pending');
         try {
           const [submissions, volunteers, messages, donations, users] = await Promise.all([callAdminEdge('getSubmissions'), callAdminEdge('getVolunteers'), callAdminEdge('getContactMessages'), callAdminEdge('getDonations'), callAdminEdge('getUsers')]);
           adminState.submissions = submissions.data || []; adminState.volunteers = volunteers.data || []; adminState.messages = messages.data || []; adminState.donations = donations.data || []; adminState.users = users.data || [];
           const { data: content } = await client.from('content_items').select('*').order('updated_at', { ascending: false }); adminState.content = content || [];
           renderStats(); renderSubmissions(); renderVolunteers(); renderDonations(); renderMessages(); renderUsers(); renderContent(); document.getElementById('lastUpdated').textContent = `Synced ${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
         } catch (error) { console.error(error); showToast(error.message || 'Could not load admin data.', 'error'); ['submissionsTable', 'volunteersTable', 'donationsTable', 'messagesTable', 'usersTable'].forEach(id => { document.getElementById(id).innerHTML = emptyRow('Could not load this data', id === 'usersTable' ? 4 : 6); }); }
-        document.body.classList.remove('admin-auth-pending');
         document.getElementById('logoutBtn').addEventListener('click', async () => { await client.auth.signOut(); window.location.href = 'login.html'; }); document.getElementById('sidebarLogout').addEventListener('click', async event => { event.preventDefault(); await client.auth.signOut(); window.location.href = 'login.html'; });
         document.querySelector('[data-table-search="submissions"]').addEventListener('input', event => filterTable(event.target.value));
         document.addEventListener('change', async event => {
