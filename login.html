@@ -7,11 +7,12 @@
     <meta name="description" content="Sign in to the Teso North Cross Country administration portal." />
     <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="assets/css/site.css" />
+    <style>body.login-auth-pending .login-shell { visibility: hidden; }</style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
     <script src="assets/js/app.js" defer></script>
   </head>
-  <body class="login-page">
+  <body class="login-page login-auth-pending">
     <script>if (localStorage.getItem('tncc-theme') === 'dark') document.body.classList.add('dark');</script>
     <main class="login-shell">
       <div class="login-background-shape login-shape-one"></div>
@@ -68,8 +69,9 @@
         const setAuthMode = (mode) => { authMode = mode; const signingUp = mode === 'signup'; loginTitle.textContent = signingUp ? 'Request access' : 'Welcome back'; loginDescription.textContent = signingUp ? 'Create an account for developer approval.' : 'Sign in to continue to your account.'; submitLabel.textContent = signingUp ? 'Create account' : 'Sign in'; modeText.textContent = signingUp ? 'Already registered?' : 'Need an account?'; modeToggle.textContent = signingUp ? 'Sign in' : 'Create one'; };
         modeToggle.addEventListener('click', () => setAuthMode(authMode === 'signin' ? 'signup' : 'signin'));
         passwordToggle.addEventListener('click', () => { const showing = passwordInput.type === 'text'; passwordInput.type = showing ? 'password' : 'text'; passwordToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password'); passwordToggle.setAttribute('aria-pressed', String(!showing)); passwordToggle.textContent = showing ? '◉' : '◌'; });
-        const redirectIfSignedIn = async () => { const client = getClient(); if (!client) return; const { data: { user } } = await client.auth.getUser(); if (user) window.location.href = 'admin.html'; };
+        const redirectIfSignedIn = async () => { const client = getClient(); if (!client) return; const { data: { user } } = await client.auth.getUser(); if (!user) return; const { data: profile } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profile?.role === 'admin') window.location.href = 'admin.html'; };
         await redirectIfSignedIn();
+        document.body.classList.remove('login-auth-pending');
         form.addEventListener('submit', async (event) => {
           event.preventDefault();
           if (!form.reportValidity()) return;

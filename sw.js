@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tncc-blog-v2';
+const CACHE_NAME = 'tncc-blog-v3';
 const APP_SHELL = ['./', './index.html', './manifest.json', './logo.jpeg'];
 
 self.addEventListener('install', event => {
