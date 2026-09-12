@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tncc-blog-v1';
+const CACHE_NAME = 'tncc-blog-v2';
 const APP_SHELL = ['./', './index.html', './manifest.json', './logo.jpeg'];
 
 self.addEventListener('install', event => {
@@ -13,6 +13,17 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+  const isDocumentAsset = ['document', 'style', 'script'].includes(event.request.destination);
+
+  if (isDocumentAsset) {
+    event.respondWith(fetch(event.request).then(response => {
+      const copy = response.clone();
+      caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      return response;
+    }).catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html'))));
+    return;
+  }
+
   event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
     const copy = response.clone();
     caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
