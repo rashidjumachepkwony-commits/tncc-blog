@@ -8,8 +8,9 @@ The browser app remains deployable as static HTML, while production services are
 2. Run `supabase-schema.sql` in the SQL Editor.
 3. Enable Email and Google providers under Authentication > Providers.
 4. Put the project URL and public anon key in `supabase-config.js`.
-5. Set the production site URL and OAuth redirect URL to the deployed site.
-6. Promote the first admin by changing that user's `profiles.role` to `admin` in the dashboard.
+5. Set the production site URL and OAuth redirect URL to the deployed site. The site must be reachable over HTTPS (OAuth is blocked over `file://` and plain HTTP).
+6. Under Authentication > URL Configuration > Redirect URLs, add the exact deployed callback page, e.g. `https://your-site.com/auth-callback.html`. Google (and every OAuth) sign-in routes through `auth-callback.html`, which shows the sign-in result on screen.
+7. Promote the first admin by changing that user's `profiles.role` to `admin` in the dashboard.
 
 ### Admin and user access
 

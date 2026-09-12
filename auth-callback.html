@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-in status | Teso North Cross Country CBO</title>
+    <meta name="description" content="Completing your TNCC sign-in." />
+    <meta name="robots" content="noindex" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <style>
+      .auth-status-card { width: min(100%, 468px); padding: 38px 42px 32px; border: 1px solid rgba(255,255,255,.55); border-radius: 24px; background: rgba(255,255,255,.98); box-shadow: 0 26px 70px rgba(0,0,0,.2); text-align: center; }
+      .auth-status-card .login-branding { justify-content: center; }
+      .auth-status-card h1 { margin: 0; color: var(--login-forest); font-size: clamp(1.5rem, 5vw, 1.9rem); line-height: 1.12; letter-spacing: -.035em; }
+      .auth-status-body { margin: 12px 0 0; color: var(--login-muted); font-size: .88rem; line-height: 1.6; }
+      .auth-status-body strong, .auth-status-body code { color: var(--login-ink); }
+      .auth-status-hint { margin: 14px auto 0; max-width: 360px; padding: 12px 14px; border: 1px solid #f0dfc0; border-radius: 10px; background: #fffaf0; color: #6b5a2e; font-size: .76rem; line-height: 1.55; text-align: left; }
+      .auth-status-hint strong { color: #6b5a2e; }
+      .auth-status-actions { display: grid; gap: 12px; margin-top: 24px; }
+      .auth-status-actions a, .auth-status-actions button { width: 100%; text-decoration: none; }
+      .auth-status-err .login-kicker { color: #c0392b; }
+      @media (max-width: 600px) { .auth-status-card { padding: 30px 24px 27px; border-radius: 20px; } }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+  </head>
+<body class="login-page">
+    <script>if (localStorage.getItem('tncc-theme') === 'dark') document.body.classList.add('dark');</script>
+    <main class="login-shell">
+      <div class="login-background-shape login-shape-one"></div>
+      <div class="login-background-shape login-shape-two"></div>
+      <div class="login-topbar">
+        <a class="login-back-link" href="index.html" aria-label="Back to TNCC home"><span aria-hidden="true">←</span> Back to site</a>
+      </div>
+      <section class="auth-status-card" aria-live="polite" id="authStatusCard">
+        <div class="login-branding">
+          <img class="login-logo" src="logo.jpeg" alt="Teso North Cross Country logo" />
+          <div><strong>Teso North</strong><span>Cross Country CBO</span></div>
+        </div>
+        <span class="login-kicker">Staff access</span>
+        <h1>Completing your sign-in…</h1>
+        <p class="auth-status-body">Please wait a moment while we confirm your account with Google.</p>
+        <div class="auth-status-actions" id="authStatusActions" hidden></div>
+      </section>
+      <p class="login-footer">© <span data-year></span> Teso North Cross Country CBO <span aria-hidden="true">·</span> Run. Unite. Transform.</p>
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const card = document.getElementById('authStatusCard');
+        const kicker = card.querySelector('.login-kicker');
+        const titleNode = card.querySelector('h1');
+        const bodyNode = card.querySelector('.auth-status-body');
+        const actionsNode = document.getElementById('authStatusActions');
+        const yearNode = document.querySelector('[data-year]');
+        if (yearNode) yearNode.textContent = new Date().getFullYear();
+
+        const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        const render = ({ state = 'ok', title, body, actions = '' }) => {
+          card.classList.remove('auth-status-ok', 'auth-status-err');
+          card.classList.add(state === 'err' ? 'auth-status-err' : 'auth-status-ok');
+          kicker.textContent = state === 'err' ? 'Action needed' : 'Staff access';
+          titleNode.textContent = title;
+          bodyNode.innerHTML = body;
+          actionsNode.innerHTML = actions;
+          actionsNode.hidden = !actions;
+          const signOutButton = document.getElementById('authSignOutBtn');
+          if (signOutButton) signOutButton.addEventListener('click', async () => {
+            signOutButton.disabled = true;
+            signOutButton.textContent = 'Signing out…';
+            try { await client.auth.signOut(); } catch (e) { /* session already gone */ }
+            window.location.href = 'login.html';
+          });
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const oauthError = params.get('error');
+        const oauthErrorDescription = params.get('error_description') || params.get('error');
+
+        const client = window.tnccSupabase || (window.TNCC_CONFIG && window.TNCC_CONFIG.supabaseUrl && window.TNCC_CONFIG.supabaseAnonKey && window.supabase
+          ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey)
+          : null);
+
+        if (!client) {
+          render({
+            state: 'err',
+            title: 'Supabase is not configured',
+            body: '<p>Add the Supabase project URL and anon key to <code>supabase-config.js</code> and redeploy the site before using Google sign-in.</p>',
+            actions: '<a class="login-google-button" href="login.html">Back to sign-in</a>'
+          });
+          return;
+        }
+
+        if (oauthError) {
+          render({
+            state: 'err',
+            title: 'Google sign-in could not be completed',
+            body: `<p>${escapeHtml(oauthErrorDescription)}</p><div class="auth-status-hint">This happens inside Supabase before this page loads. Ask the developer to confirm this site&#39;s address is authorised under <strong>Authentication → URL Configuration → Redirect URLs</strong>, then try again.</div>`,
+            actions: '<a class="login-google-button" href="login.html">Try again</a>'
+          });
+          return;
+        }
+
+        let user = null;
+        let getUserError = null;
+        try {
+          const { data, error } = await client.auth.getUser();
+          user = data?.user || null;
+          getUserError = error || null;
+        } catch (error) { getUserError = error; }
+
+        if (!user) {
+          render({
+            state: 'err',
+            title: 'No active session found',
+            body: `<p>We could not find a signed-in session after the redirect${getUserError ? ` — ${escapeHtml(getUserError.message)}` : '.'}</p><div class="auth-status-hint">Check that: this page&#39;s address is listed under <strong>Authentication → URL Configuration → Redirect URLs</strong> in Supabase; the Google provider is enabled; and you completed the Google page instead of cancelling it.</div>`,
+            actions: '<a class="login-google-button" href="login.html">Go to sign-in</a>'
+          });
+          return;
+        }
+
+        let role = null;
+        try {
+          const { data, error } = await client.from('profiles').select('role').eq('id', user.id).single();
+          if (error) console.error('profiles lookup failed:', error.message);
+          role = data?.role ?? null;
+        } catch (error) { console.error(error); }
+
+        if (role === 'admin') {
+          render({
+            state: 'ok',
+            title: 'Welcome back!',
+            body: `<p>You&#39;re signed in as <strong>${escapeHtml(user.email || 'staff member')}</strong>. Opening your admin workspace…</p>`,
+            actions: '<a class="login-primary-button" href="admin.html">Open admin workspace</a>'
+          });
+          setTimeout(() => { window.location.replace('admin.html'); }, 1200);
+          return;
+        }
+
+        if (role === null) {
+          render({
+            state: 'err',
+            title: 'Account created, but profile missing',
+            body: `<p>You&#39;re signed in as <strong>${escapeHtml(user.email || 'unrecognised')}</strong>, but the account profile could not be loaded.</p><div class="auth-status-hint">Ask the developer to run <code>supabase-schema.sql</code> in the Supabase SQL editor so new accounts get a <code>profiles</code> row (the <code>handle_new_user</code> trigger).</div>`,
+            actions: '<a class="login-google-button" href="index.html">Back to the site</a>'
+          });
+          return;
+        }
+
+        // Reader: a new (or existing) account waiting for developer approval.
+        const notifiedFlag = `tncc_google_approval_notified_${user.id}`;
+        if (!localStorage.getItem(notifiedFlag)) {
+          const notificationEndpoint = window.TNCC_CONFIG?.notificationEndpoint;
+          if (notificationEndpoint) {
+            fetch(notificationEndpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ type: 'registration', payload: { email: user.email, name: user.user_metadata?.full_name || '' } })
+            }).catch(() => {});
+          }
+          localStorage.setItem(notifiedFlag, '1');
+        }
+
+        render({
+          state: 'ok',
+          title: 'Your access request is in review',
+          body: `<p>Thanks for signing up as <strong>${escapeHtml(user.email || 'a TNCC supporter')}</strong>. Your account has been created, and the developer has been notified. You&#39;ll be able to use the admin workspace once your access is approved.</p>`,
+          actions: '<a class="login-primary-button" href="index.html">Back to the site</a><button class="login-google-button" type="button" id="authSignOutBtn">Sign out</button>'
+        });
+      });
+    </script>
+  </body>
+</html>

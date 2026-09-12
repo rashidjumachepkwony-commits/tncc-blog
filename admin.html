@@ -93,9 +93,9 @@
       }
       document.addEventListener('DOMContentLoaded', async () => {
         const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null); const client = getClient();
-        if (!client) { showToast('Supabase configuration is required for admin access.', 'error'); window.location.href = 'login.html'; return; }
-        const { data: { user }, error: userError } = await client.auth.getUser(); if (userError || !user) { window.location.href = 'login.html'; return; }
-        const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profileError || !profile || profile.role !== 'admin') { window.location.href = 'login.html'; return; }
+        if (!client) { showToast('Supabase configuration is required for admin access.', 'error'); window.location.href = 'login.html?reason=config'; return; }
+        const { data: { user }, error: userError } = await client.auth.getUser(); if (userError || !user) { window.location.href = 'login.html?reason=session'; return; }
+        const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profileError || !profile || profile.role !== 'admin') { window.location.href = 'login.html?reason=not-approved'; return; }
         document.body.classList.remove('admin-auth-pending');
         try {
           const [submissions, volunteers, messages, donations, users] = await Promise.all([callAdminEdge('getSubmissions'), callAdminEdge('getVolunteers'), callAdminEdge('getContactMessages'), callAdminEdge('getDonations'), callAdminEdge('getUsers')]);

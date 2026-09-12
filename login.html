@@ -30,6 +30,7 @@
           <span class="login-kicker">Staff access</span>
           <h1 id="login-title">Welcome back</h1>
           <p id="login-description">Sign in to continue to your account.</p>
+          <p class="login-notice" id="loginNotice" hidden></p>
         </div>
         <form id="tnccLoginForm" class="login-form" novalidate>
           <div class="login-field">
@@ -63,13 +64,33 @@
         const modeText = document.getElementById('login-switch-text');
         const loginTitle = document.getElementById('login-title');
         const loginDescription = document.getElementById('login-description');
+        const loginNotice = document.getElementById('loginNotice');
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         let authMode = 'signin';
         const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
         const setLoading = (loading) => { submitButton.disabled = loading; googleBtn.disabled = loading; submitButton.classList.toggle('is-loading', loading); submitLabel.textContent = loading ? (authMode === 'signup' ? 'Creating account...' : 'Signing in...') : (authMode === 'signup' ? 'Create account' : 'Sign in'); };
         const setAuthMode = (mode) => { authMode = mode; const signingUp = mode === 'signup'; loginTitle.textContent = signingUp ? 'Request access' : 'Welcome back'; loginDescription.textContent = signingUp ? 'Create an account for developer approval.' : 'Sign in to continue to your account.'; submitLabel.textContent = signingUp ? 'Create account' : 'Sign in'; modeText.textContent = signingUp ? 'Already registered?' : 'Need an account?'; modeToggle.textContent = signingUp ? 'Sign in' : 'Create one'; };
+        const showNotice = (message, type = 'info', withSignOut = false) => { loginNotice.dataset.type = type; loginNotice.innerHTML = message + (withSignOut ? ' <button type="button" data-login-signout>Sign out</button>' : ''); loginNotice.hidden = false; };
+        loginNotice.addEventListener('click', async (event) => {
+          if (!event.target.matches('[data-login-signout]')) return;
+          const client = getClient();
+          if (client) await client.auth.signOut().catch(() => {});
+          window.location.href = 'login.html';
+        });
+        const reason = new URLSearchParams(window.location.search).get('reason');
+        if (reason === 'not-approved') showNotice('You have a session, but your account has not been approved for admin access yet. A developer will grant access after review.', 'info', true);
+        else if (reason === 'session') showNotice('Your session could not be verified. Please sign in again.', 'danger');
+        else if (reason === 'config') showNotice('Admin access is unavailable because Supabase is not configured on this site.', 'danger');
         modeToggle.addEventListener('click', () => setAuthMode(authMode === 'signin' ? 'signup' : 'signin'));
         passwordToggle.addEventListener('click', () => { const showing = passwordInput.type === 'text'; passwordInput.type = showing ? 'password' : 'text'; passwordToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password'); passwordToggle.setAttribute('aria-pressed', String(!showing)); passwordToggle.textContent = showing ? '◉' : '◌'; });
-        const redirectIfSignedIn = async () => { const client = getClient(); if (!client) return; const { data: { user } } = await client.auth.getUser(); if (!user) return; const { data: profile } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profile?.role === 'admin') window.location.href = 'admin.html'; };
+        const redirectIfSignedIn = async () => {
+          const client = getClient(); if (!client) return;
+          const { data: { user } } = await client.auth.getUser(); if (!user) return;
+          const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single();
+          if (profile?.role === 'admin') { window.location.href = 'admin.html'; return; }
+          if (profileError || !profile) { showNotice(`You're signed in as <strong>${escapeHtml(user.email)}</strong>, but your account profile is missing. Ask the developer to run supabase-schema.sql so profiles are created for new accounts.`, 'danger', true); return; }
+          showNotice(`You're signed in as <strong>${escapeHtml(user.email)}</strong>, but your account has not been approved for admin access yet. The developer will be notified of your request.`, 'info', true);
+        };
         await redirectIfSignedIn();
         document.body.classList.remove('login-auth-pending');
         form.addEventListener('submit', async (event) => {
@@ -102,8 +123,9 @@
           const client = getClient();
           if (!client) { showToast('Supabase config is not set. Add your project URL and anon key first.', 'error'); return; }
           googleBtn.disabled = true; googleBtn.classList.add('is-loading');
-          const redirectUrl = new URL('admin.html', window.location.href).toString();
-          const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
+          const callbackUrl = new URL('auth-callback.html', window.location.href);
+          callbackUrl.searchParams.set('next', 'admin.html');
+          const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: callbackUrl.toString() } });
           if (error) { googleBtn.disabled = false; googleBtn.classList.remove('is-loading'); showToast(error.message, 'error'); }
         });
       });
