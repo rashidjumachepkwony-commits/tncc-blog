@@ -27,7 +27,7 @@
         <div class="login-intro">
           <span class="login-kicker">Staff access</span>
           <h1 id="login-title">Welcome back</h1>
-          <p>Sign in to continue to your account.</p>
+          <p id="login-description">Sign in to continue to your account.</p>
         </div>
         <form id="tnccLoginForm" class="login-form" novalidate>
           <div class="login-field">
@@ -43,6 +43,7 @@
           <div class="login-divider"><span>or continue with</span></div>
           <button class="login-google-button" type="button" id="googleLoginBtn"><span class="google-icon" aria-hidden="true">G</span><span>Continue with Google</span></button>
         </form>
+        <p class="login-account-switch"><span id="login-switch-text">Need an account?</span> <button type="button" id="login-mode-toggle">Create one</button></p>
         <p class="login-support">Having trouble signing in? <a href="contact.html">Contact support</a></p>
       </section>
       <p class="login-footer">© <span data-year></span> Teso North Cross Country CBO <span aria-hidden="true">·</span> Run. Unite. Transform.</p>
@@ -56,8 +57,15 @@
         const submitLabel = form.querySelector('.login-submit-label');
         const passwordInput = document.getElementById('login-password');
         const passwordToggle = document.getElementById('togglePassword');
+        const modeToggle = document.getElementById('login-mode-toggle');
+        const modeText = document.getElementById('login-switch-text');
+        const loginTitle = document.getElementById('login-title');
+        const loginDescription = document.getElementById('login-description');
+        let authMode = 'signin';
         const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
         const setLoading = (loading) => { submitButton.disabled = loading; googleBtn.disabled = loading; submitButton.classList.toggle('is-loading', loading); submitLabel.textContent = loading ? 'Signing in...' : 'Sign in'; };
+        const setAuthMode = (mode) => { authMode = mode; const signingUp = mode === 'signup'; loginTitle.textContent = signingUp ? 'Request access' : 'Welcome back'; loginDescription.textContent = signingUp ? 'Create an account for developer approval.' : 'Sign in to continue to your account.'; submitLabel.textContent = signingUp ? 'Create account' : 'Sign in'; modeText.textContent = signingUp ? 'Already registered?' : 'Need an account?'; modeToggle.textContent = signingUp ? 'Sign in' : 'Create one'; };
+        modeToggle.addEventListener('click', () => setAuthMode(authMode === 'signin' ? 'signup' : 'signin'));
         passwordToggle.addEventListener('click', () => { const showing = passwordInput.type === 'text'; passwordInput.type = showing ? 'password' : 'text'; passwordToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password'); passwordToggle.setAttribute('aria-pressed', String(!showing)); passwordToggle.textContent = showing ? '◉' : '◌'; });
         const redirectIfSignedIn = async () => { const client = getClient(); if (!client) return; const { data: { user } } = await client.auth.getUser(); if (user) window.location.href = 'admin.html'; };
         form.addEventListener('submit', async (event) => {
@@ -68,8 +76,18 @@
           setLoading(true);
           const email = document.getElementById('login-email').value.trim();
           const password = document.getElementById('login-password').value;
-          const { data, error } = await client.auth.signInWithPassword({ email, password });
+          const result = authMode === 'signup'
+            ? await client.auth.signUp({ email, password })
+            : await client.auth.signInWithPassword({ email, password });
+          const { data, error } = result;
           if (error) { setLoading(false); showToast(error.message, 'error'); return; }
+          if (authMode === 'signup') {
+            const notificationEndpoint = window.TNCC_CONFIG?.notificationEndpoint;
+            if (notificationEndpoint) {
+              fetch(notificationEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'registration', payload: { email } }) }).catch(error => console.error('Access notification failed:', error));
+            }
+            setLoading(false); showToast('Account created. The developer will review your access request.', 'success'); form.reset(); setAuthMode('signin'); return;
+          }
           if (data.user) {
             const { data: profileData, error: profileError } = await client.from('profiles').select('role').eq('id', data.user.id).single();
             if (profileError || !profileData || profileData.role !== 'admin') { setLoading(false); showToast('This account is not authorized for admin access.', 'error'); await client.auth.signOut(); return; }

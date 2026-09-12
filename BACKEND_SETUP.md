@@ -48,10 +48,22 @@ Recommended environment variables:
 - `STRIPE_WEBHOOK_SECRET`
 - `RESEND_API_KEY`
 - `TNCC_ADMIN_EMAIL`
+- `TNCC_SENDER_EMAIL`
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 
 The payment endpoint should create a Checkout Session in KES, insert a pending donation, and return its hosted URL. A Stripe webhook must mark the donation paid before any receipt is trusted. The notification endpoint should send registration, volunteer, contact, and payment emails through Resend after validating input.
+
+### Access request email
+
+The `send-notification` Edge Function sends new registration notices to `rashidjumachepkwony@gmail.com` by default. Configure the Supabase secrets and deploy it:
+
+```bash
+supabase secrets set RESEND_API_KEY=your-resend-api-key TNCC_ADMIN_EMAIL=rashidjumachepkwony@gmail.com TNCC_SENDER_EMAIL="TNCC website <no-reply@your-verified-domain.com>"
+supabase functions deploy send-notification
+```
+
+After receiving a request, confirm the user in Supabase Authentication and change that user's `profiles.role` from `reader` to `admin`. The public homepage does not expose an Admin button; only approved users can enter `admin.html`.
 
 ## Utterances
 
