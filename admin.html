@@ -3,96 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard | Teso North Cross Country CBO</title>
-    <meta name="description" content="Secure admin dashboard for TNCC content and submissions." />
-    <link rel="canonical" href="https://example.com/admin.html" />
+    <title>Admin workspace | Teso North Cross Country CBO</title>
+    <meta name="description" content="Secure admin workspace for TNCC content and submissions." />
     <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="assets/css/site.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
     <script src="assets/js/app.js" defer></script>
   </head>
-  <body>
-    <header class="site-header">
-      <div class="container navbar">
-        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="programs.html">Programs</a>
-          <a href="impact.html">Impact</a>
-          <a href="stories.html">Stories</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="get-involved.html">Get Involved</a>
-          <a href="donate.html">Donate</a>
-          <a href="contact.html">Contact</a>
+  <body class="admin-page">
+    <div class="admin-shell">
+      <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+        <div class="admin-brand-wrap">
+          <a class="admin-brand" href="index.html" aria-label="TNCC home"><span class="brand-mark">TN</span><span><strong>TNCC</strong><small>Admin workspace</small></span></a>
+          <button class="admin-icon-button admin-sidebar-close" type="button" data-admin-menu-close aria-label="Close navigation">&times;</button>
+        </div>
+        <div class="admin-nav-label">Workspace</div>
+        <nav class="admin-nav" aria-label="Workspace sections">
+          <a class="active" href="#overview" data-admin-nav="overview"><span class="admin-nav-icon">⌂</span>Overview</a>
+          <a href="#content" data-admin-nav="content"><span class="admin-nav-icon">▣</span>Content</a>
+          <a href="#submissions" data-admin-nav="submissions"><span class="admin-nav-icon">♙</span>Submissions</a>
+          <a href="#volunteers" data-admin-nav="volunteers"><span class="admin-nav-icon">✦</span>Volunteers</a>
+          <a href="#messages" data-admin-nav="messages"><span class="admin-nav-icon">▱</span>Messages</a>
+          <a href="#donations" data-admin-nav="donations"><span class="admin-nav-icon">◈</span>Donations</a>
         </nav>
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
-          <button class="btn btn-secondary btn-small" id="logoutBtn" type="button">Log out</button>
+        <div class="admin-sidebar-footer">
+          <div class="admin-secure-note"><span class="admin-status-dot"></span><span><strong>Secure workspace</strong><small>Admin access verified</small></span></div>
+          <a class="admin-logout-link" href="login.html" id="sidebarLogout"><span class="admin-nav-icon">↪</span>Log out</a>
         </div>
+      </aside>
+      <div class="admin-sidebar-backdrop" data-admin-menu-close></div>
+
+      <div class="admin-main">
+        <header class="admin-topbar"><div class="admin-topbar-inner"><button class="admin-icon-button admin-menu-toggle" type="button" data-admin-menu-open aria-label="Open navigation">☰</button><div class="admin-breadcrumb"><span>TNCC</span><b>/</b><strong>Workspace</strong></div><div class="admin-top-actions"><button class="admin-icon-button" type="button" data-theme-toggle aria-label="Toggle theme">◐</button><span class="admin-divider"></span><div class="admin-user"><span class="admin-avatar">A</span><span><strong>Administrator</strong><small>Content &amp; operations</small></span></div><button class="admin-icon-button admin-logout-button" type="button" id="logoutBtn" aria-label="Log out">↪</button></div></div></header>
+
+        <main class="admin-content">
+          <section class="admin-page-heading" id="overview"><div><span class="admin-kicker">Operations overview</span><h1>Good morning, admin.</h1><p>Keep the TNCC community experience current and respond to new activity.</p></div><div class="admin-heading-meta"><span class="admin-live-dot"></span><span>Live data</span><span class="admin-meta-separator">&middot;</span><span id="lastUpdated">Waiting for sync</span></div></section>
+
+          <section class="admin-stats-grid" aria-label="Workspace summary">
+            <article class="admin-stat-card"><div class="admin-stat-top"><span>Total submissions</span><span class="admin-stat-icon admin-icon-green">♙</span></div><strong id="statSubmissions">--</strong><small>Community registrations</small></article>
+            <article class="admin-stat-card"><div class="admin-stat-top"><span>Volunteers</span><span class="admin-stat-icon admin-icon-blue">✦</span></div><strong id="statVolunteers">--</strong><small>People ready to help</small></article>
+            <article class="admin-stat-card"><div class="admin-stat-top"><span>Donations</span><span class="admin-stat-icon admin-icon-amber">◈</span></div><strong id="statDonations">--</strong><small>Recorded contributions</small></article>
+            <article class="admin-stat-card"><div class="admin-stat-top"><span>Messages</span><span class="admin-stat-icon admin-icon-rose">▱</span></div><strong id="statMessages">--</strong><small>Contact messages received</small></article>
+          </section>
+
+          <section class="admin-panel admin-overview-panel"><div class="admin-panel-heading"><div><span class="admin-kicker">Recent activity</span><h2>Latest submissions</h2></div><a class="admin-text-link" href="#submissions">View all <span aria-hidden="true">→</span></a></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Applicant</th><th>Interest</th><th>Status</th><th>Received</th></tr></thead><tbody id="recentSubmissions"><tr><td colspan="4"><div class="admin-loading"><span></span>Loading activity</div></td></tr></tbody></table></div></section>
+
+          <section class="admin-section" id="content"><div class="admin-section-heading"><div><span class="admin-kicker">Publishing</span><h2>Content library</h2><p>Review the stories that are available on the public site.</p></div></div><div class="admin-content-grid" id="contentList"><div class="admin-empty admin-panel"><span class="admin-empty-icon">▣</span><h3>Loading content</h3><p>Fetching the current publishing library.</p></div></div></section>
+
+          <section class="admin-section" id="submissions"><div class="admin-section-heading"><div><span class="admin-kicker">Community intake</span><h2>Submissions</h2><p>Review registrations and keep their status up to date.</p></div><label class="admin-search"><span aria-hidden="true">⌕</span><input type="search" data-table-search="submissions" placeholder="Search submissions" aria-label="Search submissions" /></label></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Applicant</th><th>Contact</th><th>Interest</th><th>Status</th><th>Received</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="submissionsTable"></tbody></table></div></div></section>
+
+          <section class="admin-section admin-two-column" id="volunteers"><div><div class="admin-section-heading"><div><span class="admin-kicker">People power</span><h2>Volunteers</h2><p>Applications from people who want to contribute.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Role</th><th>Contact</th><th>Received</th></tr></thead><tbody id="volunteersTable"></tbody></table></div></div></div><div id="donations"><div class="admin-section-heading"><div><span class="admin-kicker">Support</span><h2>Donations</h2><p>Recent contribution records.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Donor</th><th>Amount</th><th>Status</th><th>Received</th></tr></thead><tbody id="donationsTable"></tbody></table></div></div></div></section>
+
+          <section class="admin-section" id="messages"><div class="admin-section-heading"><div><span class="admin-kicker">Inbox</span><h2>Contact messages</h2><p>Messages submitted through the public contact form.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>From</th><th>Email</th><th>Message</th><th>Received</th></tr></thead><tbody id="messagesTable"></tbody></table></div></div></section>
+        </main>
+        <footer class="admin-footer"><span>TNCC Admin workspace</span><span>© <span data-year></span> Teso North Cross Country CBO</span></footer>
       </div>
-    </header>
-
-    <main>
-      <section class="page-hero">
-        <div class="container page-hero-inner">
-          <div>
-            <span class="eyebrow">Admin</span>
-            <h1>Dashboard</h1>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-sm">
-        <div class="container">
-          <div class="card reveal" style="padding: 24px;">
-            <h2 style="margin-top: 0; color: var(--primary);">Protected admin access</h2>
-            <p style="color: var(--muted);">This dashboard is only available to authenticated admins using Supabase authorization.</p>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="container footer-grid">
-        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>Administrative access and content oversight.</p></div>
-        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
-        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
-        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
-      </div>
-      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
-    </footer>
-
+    </div>
     <div class="toast" aria-live="polite"></div>
 
     <script>
+      const adminState = { submissions: [], volunteers: [], messages: [], donations: [], content: [] };
+      function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character])); }
+      function formatDate(value) { if (!value) return '—'; return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)); }
+      function statusBadge(status) { const normalized = String(status || 'pending').toLowerCase(); return `<span class="admin-badge admin-badge-${escapeHtml(normalized)}">${escapeHtml(normalized)}</span>`; }
+      function emptyRow(message, columns) { return `<tr><td colspan="${columns}"><div class="admin-table-empty"><span class="admin-empty-icon">⌁</span><strong>${escapeHtml(message)}</strong><span>New activity will appear here.</span></div></td></tr>`; }
+      function renderStats() { document.getElementById('statSubmissions').textContent = adminState.submissions.length; document.getElementById('statVolunteers').textContent = adminState.volunteers.length; document.getElementById('statDonations').textContent = adminState.donations.length; document.getElementById('statMessages').textContent = adminState.messages.length; }
+      function renderSubmissions() {
+        const rows = adminState.submissions.map(item => `<tr data-searchable="${escapeHtml(`${item.name} ${item.email} ${item.interest}`)}"><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.county || 'TNCC community')}</small></td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>${escapeHtml(item.phone || 'No phone number')}</small></td><td>${escapeHtml(item.interest || 'Community participation')}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td><td><select class="admin-status-select" data-submission-status="${escapeHtml(item.id)}" aria-label="Update status for ${escapeHtml(item.name)}"><option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${item.status === 'rejected' ? 'selected' : ''}>Rejected</option></select></td></tr>`).join('');
+        document.getElementById('submissionsTable').innerHTML = rows || emptyRow('No submissions yet', 6);
+        document.getElementById('recentSubmissions').innerHTML = adminState.submissions.slice(0, 5).map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.email)}</small></td><td>${escapeHtml(item.interest || 'Community participation')}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No recent submissions', 4);
+      }
+      function renderVolunteers() { document.getElementById('volunteersTable').innerHTML = adminState.volunteers.map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.role)}</td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>${escapeHtml(item.phone || 'No phone number')}</small></td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No volunteer applications yet', 4); }
+      function renderDonations() { document.getElementById('donationsTable').innerHTML = adminState.donations.map(item => `<tr><td><strong>${escapeHtml(item.donor_name || 'Anonymous donor')}</strong><small>${escapeHtml(item.email || 'No email')}</small></td><td class="admin-amount">KES ${Number(item.amount_kes || 0).toLocaleString()}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No donations recorded yet', 4); }
+      function renderMessages() { document.getElementById('messagesTable').innerHTML = adminState.messages.map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.email)}</td><td class="admin-message-cell">${escapeHtml(item.message)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No contact messages yet', 4); }
+      function renderContent() { document.getElementById('contentList').innerHTML = adminState.content.map(item => `<article class="admin-content-card"><div class="admin-content-card-top"><span class="admin-content-category">${escapeHtml(item.category)}</span>${item.published ? '<span class="admin-badge admin-badge-approved">Published</span>' : '<span class="admin-badge admin-badge-pending">Draft</span>'}</div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.excerpt || 'No excerpt added yet.')}</p><div class="admin-content-card-footer"><small>Updated ${formatDate(item.updated_at || item.created_at)}</small><label class="admin-switch"><input type="checkbox" data-content-published="${escapeHtml(item.id)}" ${item.published ? 'checked' : ''} /><span></span><b>${item.published ? 'Published' : 'Draft'}</b></label></div></article>`).join('') || '<div class="admin-empty admin-panel"><span class="admin-empty-icon">▣</span><h3>No content items</h3><p>Published stories will appear here when added.</p></div>'; }
+      function filterTable(query) { document.querySelectorAll('#submissionsTable tr[data-searchable]').forEach(row => { row.hidden = !row.dataset.searchable.toLowerCase().includes(query.toLowerCase()); }); }
+      async function callAdminEdge(action, payload = {}) {
+        const client = window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
+        if (!client) throw new Error('Supabase configuration is required for admin access.');
+        const { data: { session } } = await client.auth.getSession(); if (!session) throw new Error('No active session');
+        const response = await fetch(`${window.TNCC_CONFIG.supabaseUrl}/functions/v1/admin`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ action, ...payload }) });
+        const result = await response.json().catch(() => ({})); if (!response.ok) throw new Error(result.error || 'Admin request failed'); return result;
+      }
       document.addEventListener('DOMContentLoaded', async () => {
-        const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null);
-
-        const client = getClient();
-        if (!client) {
-          showToast('Supabase configuration is required for admin access.', 'error');
-          window.location.href = 'login.html';
-          return;
-        }
-
-        const { data: { user }, error: userError } = await client.auth.getUser();
-        if (userError || !user) {
-          window.location.href = 'login.html';
-          return;
-        }
-
-        const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single();
-        if (profileError || !profile || profile.role !== 'admin') {
-          window.location.href = 'login.html';
-          return;
-        }
-
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-          await client.auth.signOut();
-          window.location.href = 'login.html';
+        const getClient = () => window.tnccSupabase || (window.TNCC_CONFIG && window.supabase ? window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey) : null); const client = getClient();
+        if (!client) { showToast('Supabase configuration is required for admin access.', 'error'); window.location.href = 'login.html'; return; }
+        const { data: { user }, error: userError } = await client.auth.getUser(); if (userError || !user) { window.location.href = 'login.html'; return; }
+        const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profileError || !profile || profile.role !== 'admin') { window.location.href = 'login.html'; return; }
+        try {
+          const [submissions, volunteers, messages, donations] = await Promise.all([callAdminEdge('getSubmissions'), callAdminEdge('getVolunteers'), callAdminEdge('getContactMessages'), callAdminEdge('getDonations')]);
+          adminState.submissions = submissions.data || []; adminState.volunteers = volunteers.data || []; adminState.messages = messages.data || []; adminState.donations = donations.data || [];
+          const { data: content } = await client.from('content_items').select('*').order('updated_at', { ascending: false }); adminState.content = content || [];
+          renderStats(); renderSubmissions(); renderVolunteers(); renderDonations(); renderMessages(); renderContent(); document.getElementById('lastUpdated').textContent = `Synced ${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
+        } catch (error) { console.error(error); showToast(error.message || 'Could not load admin data.', 'error'); ['submissionsTable', 'volunteersTable', 'donationsTable', 'messagesTable'].forEach(id => { document.getElementById(id).innerHTML = emptyRow('Could not load this data', 6); }); }
+        document.getElementById('logoutBtn').addEventListener('click', async () => { await client.auth.signOut(); window.location.href = 'login.html'; }); document.getElementById('sidebarLogout').addEventListener('click', async event => { event.preventDefault(); await client.auth.signOut(); window.location.href = 'login.html'; });
+        document.querySelector('[data-table-search="submissions"]').addEventListener('input', event => filterTable(event.target.value));
+        document.addEventListener('change', async event => {
+          if (event.target.matches('[data-submission-status]')) { const select = event.target; select.disabled = true; try { await callAdminEdge('updateSubmissionStatus', { id: select.dataset.submissionStatus, status: select.value }); const item = adminState.submissions.find(entry => String(entry.id) === String(select.dataset.submissionStatus)); if (item) item.status = select.value; renderSubmissions(); showToast('Submission status updated.', 'success'); } catch (error) { showToast(error.message, 'error'); renderSubmissions(); } finally { select.disabled = false; } }
+          if (event.target.matches('[data-content-published]')) { const checkbox = event.target; checkbox.disabled = true; try { await callAdminEdge('setContentItemPublished', { id: checkbox.dataset.contentPublished, published: checkbox.checked }); const item = adminState.content.find(entry => String(entry.id) === String(checkbox.dataset.contentPublished)); if (item) item.published = checkbox.checked; renderContent(); showToast('Content visibility updated.', 'success'); } catch (error) { checkbox.checked = !checkbox.checked; showToast(error.message, 'error'); } finally { checkbox.disabled = false; } }
         });
+        document.querySelectorAll('[data-admin-nav]').forEach(link => link.addEventListener('click', () => document.body.classList.remove('admin-menu-open'))); document.querySelector('[data-admin-menu-open]').addEventListener('click', () => document.body.classList.add('admin-menu-open')); document.querySelectorAll('[data-admin-menu-close]').forEach(button => button.addEventListener('click', () => document.body.classList.remove('admin-menu-open')));
       });
     </script>
   </body>
