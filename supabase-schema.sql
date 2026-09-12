@@ -58,7 +58,7 @@ create table if not exists public.contact_messages (
 
 create table if not exists public.comments (
   id uuid primary key default gen_random_uuid(),
-  article_id bigint not null,
+  article_id text not null,
   user_id uuid references auth.users(id) on delete set null,
   author_name text not null,
   body text not null check (char_length(body) between 1 and 2000),
@@ -185,3 +185,22 @@ create policy "Admins read contact messages" on public.contact_messages
 drop policy if exists "Admins read donations" on public.donations;
 create policy "Admins read donations" on public.donations
   for select to authenticated using (public.is_admin());
+
+-- Migrate existing comment rows so article_id can reference uuid story ids.
+alter table public.comments alter column article_id type text using article_id::text;
+
+drop policy if exists "Anyone can record a pending donation" on public.donations;
+create policy "Anyone can record a pending donation"
+on public.donations
+for insert
+with check (status = 'pending');
+
+drop policy if exists "Admins update comments" on public.comments;
+create policy "Admins update comments"
+on public.comments
+for update to authenticated using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "Admins delete comments" on public.comments;
+create policy "Admins delete comments"
+on public.comments
+for delete to authenticated using (public.is_admin());

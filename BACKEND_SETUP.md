@@ -29,11 +29,13 @@ After the first admin is promoted:
 3. An existing admin opens **Admin > User access** and changes that user to `admin`.
 4. The user signs out and signs in again; the protected admin page then allows access.
 
-Deploy the admin Edge Function after adding the user-management actions in `supabase/functions/admin/index.ts`:
+Deploy the admin Edge Function after adding the user-management and content actions in `supabase/functions/admin/index.ts`:
 
 ```bash
 supabase functions deploy admin
 ```
+
+The admin dashboard can now publish, edit, and delete stories without editing HTML. The public site, `stories.html`, and `story.html` all read published rows from `content_items`, so a change made in **Admin > Content** appears on the site on the next page load.
 
 Only the Edge Function uses the service-role key. It must never be added to browser files or committed to GitHub.
 
@@ -66,9 +68,15 @@ supabase functions deploy send-notification
 
 After receiving a request, confirm the user in Supabase Authentication and change that user's `profiles.role` from `reader` to `admin`. The public homepage does not expose an Admin button; only approved users can enter `admin.html`.
 
-## Utterances
+## Comments
 
-Create a public GitHub repository for comments, install the Utterances GitHub App, and set `utterancesRepo` to `owner/repository` in `supabase-config.js`. For private content or moderated comments, use the Supabase comments table instead.
+Comments use the Supabase `comments` table by default. Signed-in users post comments on `story.html` and the homepage article modal; each comment starts as `approved = false` and only appears publicly after an admin sets `approved = true`:
+
+```sql
+update public.comments set approved = true where id = '<comment-id>';
+```
+
+The schema has already migrated `comments.article_id` from `bigint` to `text` so comments can attach to UUID story ids. The optional Utterances fallback still works if you set `utterancesRepo` to `owner/repository` in `supabase-config.js`, but comments are stored and moderated in Supabase by default.
 
 ## Production checklist
 

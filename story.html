@@ -40,6 +40,21 @@
       <section class="section-sm">
         <div class="container">
           <div class="story-detail" data-story-detail></div>
+          <section class="story-comments-card" data-story-comments>
+            <div class="story-comments-head">
+              <h2>Comments</h2>
+              <span class="story-comments-count" data-story-comment-count></span>
+            </div>
+            <div class="story-comments-list" data-story-comment-list></div>
+            <div class="story-comment-form">
+              <textarea data-story-comment-input rows="3" placeholder="Share a thought..."></textarea>
+              <div class="story-comment-form-row">
+                <button class="btn btn-primary btn-small" type="button" data-story-comment-submit>Post comment</button>
+                <a class="btn btn-secondary btn-small" href="login.html" data-story-comment-login>Sign in to comment</a>
+              </div>
+              <p class="story-comments-hint" data-story-comment-hint></p>
+            </div>
+          </section>
         </div>
       </section>
     </main>

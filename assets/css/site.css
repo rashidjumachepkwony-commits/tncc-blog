@@ -543,6 +543,20 @@ body.dark .donation-amount {
   color: var(--muted);
   font-size: 1.04rem;
 }
+.story-comments-card { margin-top: 28px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 26px; box-shadow: var(--shadow); }
+.story-comments-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.story-comments-head h2 { margin: 0; color: var(--primary); }
+.story-comments-count { color: var(--muted); font-size: .8rem; font-weight: 700; }
+.story-comments-list { display: grid; gap: 14px; margin-bottom: 18px; }
+.story-comment { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: #fbfdfb; }
+.story-comment-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+.story-comment-meta small { color: var(--muted); }
+.story-comment p { margin: 0; color: var(--ink); }
+.story-comments-empty { margin: 0; color: var(--muted); font-size: .88rem; }
+.story-comment-form { display: grid; gap: 10px; }
+.story-comment-form textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: .9rem; min-height: 74px; resize: vertical; }
+.story-comment-form-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.story-comments-hint { margin: 0; font-size: .8rem; color: var(--muted); }
 .share-row {
   display: flex;
   flex-wrap: wrap;

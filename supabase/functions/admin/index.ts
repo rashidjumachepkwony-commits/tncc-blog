@@ -200,6 +200,89 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (action === "createContent") {
+      const { title, category, excerpt, body, image_url, published } = body;
+      if (!title || typeof title !== "string" || !title.trim()) {
+        return new Response(JSON.stringify({ error: "Title is required" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const slugBase = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || `post-${Date.now()}`;
+      const insertContent = (slug: string) =>
+        adminClient
+          .from("content_items")
+          .insert({
+            slug,
+            title: title.trim(),
+            category: (category || "Community").trim(),
+            excerpt: (excerpt || "").trim(),
+            body: (body || "").trim(),
+            image_url: image_url || null,
+            published: Boolean(published)
+          })
+          .select()
+          .single();
+
+      let result = await insertContent(slugBase);
+      if (result.error && /duplicate/i.test(result.error.message)) {
+        result = await insertContent(`${slugBase}-${Date.now().toString(36)}`);
+      }
+      if (result.error) throw result.error;
+
+      return new Response(JSON.stringify({ data: result.data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    if (action === "updateContent") {
+      const { id, title, category, excerpt, body, image_url, published } = body;
+      if (!id) {
+        return new Response(JSON.stringify({ error: "Missing content id" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const updateFields: Record<string, unknown> = { updated_at: new Date().toISOString() };
+      if (typeof title === "string" && title.trim()) updateFields.title = title.trim();
+      if (typeof category === "string") updateFields.category = category.trim() || "Community";
+      if (typeof excerpt === "string") updateFields.excerpt = excerpt.trim();
+      if (typeof body === "string") updateFields.body = body.trim();
+      if (typeof image_url === "string") updateFields.image_url = image_url.trim() || null;
+      if (typeof published === "boolean") updateFields.published = published;
+
+      const { data, error } = await adminClient
+        .from("content_items")
+        .update(updateFields)
+        .eq("id", id)
+        .select()
+        .single();
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    if (action === "deleteContent") {
+      const { id } = body;
+      if (!id) {
+        return new Response(JSON.stringify({ error: "Missing content id" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const { error } = await adminClient.from("content_items").delete().eq("id", id);
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ data: { id } }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400,
       headers: { "Content-Type": "application/json" }

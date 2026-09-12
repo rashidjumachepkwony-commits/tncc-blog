@@ -153,6 +153,12 @@ function initReveal() {
   revealItems.forEach(item => observer.observe(item));
 }
 
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+let currentStoryId = null;
+
 async function initStoryPage() {
   const storyList = document.querySelector('[data-story-list]');
   const storyFilter = document.querySelector('[data-story-filter]');
@@ -218,6 +224,7 @@ async function initStoryPage() {
     const params = new URLSearchParams(window.location.search);
     const storyId = params.get('id') || '1';
     const story = stories.find(item => String(item.id) === String(storyId)) || stories[0];
+    currentStoryId = String(story.id);
 
     storyDetail.innerHTML = `
       <img src="${story.image}" alt="${story.title}" />
@@ -239,7 +246,68 @@ async function initStoryPage() {
         </div>
       </div>
     `;
+
+    await renderStoryComments(currentStoryId);
+    wireStoryCommentForm(currentStoryId);
   }
+}
+
+async function renderStoryComments(storyId) {
+  const list = document.querySelector('[data-story-comment-list]');
+  const countNode = document.querySelector('[data-story-comment-count]');
+  if (!list) return;
+  const client = getSupabaseClient();
+  if (!client) { list.innerHTML = '<p class="story-comments-empty">Comments are available when the site is connected to Supabase.</p>'; return; }
+  try {
+    const { data, error } = await client.from('comments').select('*').eq('article_id', String(storyId)).eq('approved', true).order('created_at', { ascending: false });
+    if (error) throw error;
+    const comments = data || [];
+    if (countNode) countNode.textContent = `${comments.length} comment${comments.length === 1 ? '' : 's'}`;
+    const formatCommentDate = value => { if (!value) return ''; const date = new Date(value); return isNaN(date) ? '' : date.toLocaleDateString(); };
+    list.innerHTML = comments.length
+      ? comments.map(comment => `<div class="story-comment"><div class="story-comment-meta"><strong>${escapeHtml(comment.author_name)}</strong><small>${escapeHtml(formatCommentDate(comment.created_at))}</small></div><p>${escapeHtml(comment.body)}</p></div>`).join('')
+      : '<p class="story-comments-empty">No comments yet. Be the first to share a thought.</p>';
+  } catch (error) {
+    console.error(error);
+    list.innerHTML = '<p class="story-comments-empty">Comments could not be loaded.</p>';
+  }
+}
+
+function wireStoryCommentForm(storyId) {
+  const input = document.querySelector('[data-story-comment-input]');
+  const button = document.querySelector('[data-story-comment-submit]');
+  const hint = document.querySelector('[data-story-comment-hint]');
+  const loginLink = document.querySelector('[data-story-comment-login]');
+  const client = getSupabaseClient();
+  const list = document.querySelector('[data-story-comment-list]');
+  if (!input || !button || !client) return;
+
+  const refreshSignedInState = async () => {
+    const { data: { user } } = await client.auth.getUser();
+    const signedIn = Boolean(user);
+    if (loginLink) loginLink.hidden = signedIn;
+    button.hidden = !signedIn;
+    input.disabled = !signedIn;
+    if (signedIn && hint) hint.textContent = '';
+  };
+
+  refreshSignedInState();
+
+  button.addEventListener('click', async () => {
+    const text = input.value.trim();
+    if (!text) { if (hint) hint.textContent = 'Please write a comment first.'; return; }
+    const { data: { user } } = await client.auth.getUser();
+    if (!user) { if (hint) hint.textContent = 'Sign in to post a comment.'; return; }
+    button.disabled = true;
+    const { error } = await client.from('comments').insert({ article_id: String(storyId), user_id: user.id, author_name: user.user_metadata?.full_name || user.email, body: text });
+    button.disabled = false;
+    if (error) { console.error(error); if (hint) hint.textContent = 'Your comment could not be posted.'; return; }
+    input.value = '';
+    if (hint) hint.textContent = 'Thanks! Your comment has been submitted for review.';
+    if (list) list.insertAdjacentHTML('beforeend', `<div class="story-comment"><div class="story-comment-meta"><strong>${escapeHtml(user.user_metadata?.full_name || user.email)}</strong><small>awaiting approval</small></div><p>${escapeHtml(text)}</p></div>`);
+  });
+
+  input.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); button.click(); } });
 }
 
 function initGalleryPage() {
