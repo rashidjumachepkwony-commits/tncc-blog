@@ -816,6 +816,8 @@ footer {
   color: var(--admin-text);
   font-family: "Plus Jakarta Sans", Inter, "Segoe UI", sans-serif;
 }
+.admin-page.admin-auth-pending .admin-shell { visibility: hidden; }
+.admin-page.admin-auth-pending { background: #102a22; }
 .admin-page.dark { --admin-bg: #0f1d19; --admin-surface: #172a23; --admin-border: rgba(255,255,255,.1); --admin-text: #edf5f0; --admin-muted: #a8bbb2; }
 .admin-shell { min-height: 100vh; display: flex; }
 .admin-sidebar { width: 252px; flex: 0 0 252px; display: flex; flex-direction: column; padding: 25px 16px 18px; color: #f7fbf8; background: var(--admin-sidebar); }

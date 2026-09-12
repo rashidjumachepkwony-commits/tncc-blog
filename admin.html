@@ -11,7 +11,7 @@
     <script src="supabase-config.js" defer></script>
     <script src="assets/js/app.js" defer></script>
   </head>
-  <body class="admin-page">
+  <body class="admin-page admin-auth-pending">
     <div class="admin-shell">
       <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
         <div class="admin-brand-wrap">
@@ -26,6 +26,7 @@
           <a href="#volunteers" data-admin-nav="volunteers"><span class="admin-nav-icon">✦</span>Volunteers</a>
           <a href="#messages" data-admin-nav="messages"><span class="admin-nav-icon">▱</span>Messages</a>
           <a href="#donations" data-admin-nav="donations"><span class="admin-nav-icon">◈</span>Donations</a>
+          <a href="#users" data-admin-nav="users"><span class="admin-nav-icon">◎</span>User access</a>
         </nav>
         <div class="admin-sidebar-footer">
           <div class="admin-secure-note"><span class="admin-status-dot"></span><span><strong>Secure workspace</strong><small>Admin access verified</small></span></div>
@@ -56,6 +57,8 @@
           <section class="admin-section admin-two-column" id="volunteers"><div><div class="admin-section-heading"><div><span class="admin-kicker">People power</span><h2>Volunteers</h2><p>Applications from people who want to contribute.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Role</th><th>Contact</th><th>Received</th></tr></thead><tbody id="volunteersTable"></tbody></table></div></div></div><div id="donations"><div class="admin-section-heading"><div><span class="admin-kicker">Support</span><h2>Donations</h2><p>Recent contribution records.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Donor</th><th>Amount</th><th>Status</th><th>Received</th></tr></thead><tbody id="donationsTable"></tbody></table></div></div></div></section>
 
           <section class="admin-section" id="messages"><div class="admin-section-heading"><div><span class="admin-kicker">Inbox</span><h2>Contact messages</h2><p>Messages submitted through the public contact form.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>From</th><th>Email</th><th>Message</th><th>Received</th></tr></thead><tbody id="messagesTable"></tbody></table></div></div></section>
+
+          <section class="admin-section" id="users"><div class="admin-section-heading"><div><span class="admin-kicker">Access control</span><h2>User access</h2><p>Approve trusted users by changing their workspace role. New accounts start as readers.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Created</th><th>Role</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="usersTable"><tr><td colspan="4"><div class="admin-loading"><span></span>Loading users</div></td></tr></tbody></table></div></div></section>
         </main>
         <footer class="admin-footer"><span>TNCC Admin workspace</span><span>© <span data-year></span> Teso North Cross Country CBO</span></footer>
       </div>
@@ -63,7 +66,7 @@
     <div class="toast" aria-live="polite"></div>
 
     <script>
-      const adminState = { submissions: [], volunteers: [], messages: [], donations: [], content: [] };
+      const adminState = { submissions: [], volunteers: [], messages: [], donations: [], content: [], users: [] };
       function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character])); }
       function formatDate(value) { if (!value) return '—'; return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)); }
       function statusBadge(status) { const normalized = String(status || 'pending').toLowerCase(); return `<span class="admin-badge admin-badge-${escapeHtml(normalized)}">${escapeHtml(normalized)}</span>`; }
@@ -77,6 +80,7 @@
       function renderVolunteers() { document.getElementById('volunteersTable').innerHTML = adminState.volunteers.map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.role)}</td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>${escapeHtml(item.phone || 'No phone number')}</small></td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No volunteer applications yet', 4); }
       function renderDonations() { document.getElementById('donationsTable').innerHTML = adminState.donations.map(item => `<tr><td><strong>${escapeHtml(item.donor_name || 'Anonymous donor')}</strong><small>${escapeHtml(item.email || 'No email')}</small></td><td class="admin-amount">KES ${Number(item.amount_kes || 0).toLocaleString()}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No donations recorded yet', 4); }
       function renderMessages() { document.getElementById('messagesTable').innerHTML = adminState.messages.map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.email)}</td><td class="admin-message-cell">${escapeHtml(item.message)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No contact messages yet', 4); }
+      function renderUsers() { document.getElementById('usersTable').innerHTML = adminState.users.map(item => `<tr><td><strong>${escapeHtml(item.full_name || 'Unnamed user')}</strong><small>${escapeHtml(item.email || 'No email')}</small></td><td>${formatDate(item.created_at)}</td><td>${statusBadge(item.role)}</td><td><select class="admin-status-select" data-user-role="${escapeHtml(item.id)}" aria-label="Change role for ${escapeHtml(item.email || item.full_name || 'user')}"><option value="reader" ${item.role === 'reader' ? 'selected' : ''}>Reader</option><option value="admin" ${item.role === 'admin' ? 'selected' : ''}>Admin</option></select></td></tr>`).join('') || emptyRow('No registered users yet', 4); }
       function renderContent() { document.getElementById('contentList').innerHTML = adminState.content.map(item => `<article class="admin-content-card"><div class="admin-content-card-top"><span class="admin-content-category">${escapeHtml(item.category)}</span>${item.published ? '<span class="admin-badge admin-badge-approved">Published</span>' : '<span class="admin-badge admin-badge-pending">Draft</span>'}</div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.excerpt || 'No excerpt added yet.')}</p><div class="admin-content-card-footer"><small>Updated ${formatDate(item.updated_at || item.created_at)}</small><label class="admin-switch"><input type="checkbox" data-content-published="${escapeHtml(item.id)}" ${item.published ? 'checked' : ''} /><span></span><b>${item.published ? 'Published' : 'Draft'}</b></label></div></article>`).join('') || '<div class="admin-empty admin-panel"><span class="admin-empty-icon">▣</span><h3>No content items</h3><p>Published stories will appear here when added.</p></div>'; }
       function filterTable(query) { document.querySelectorAll('#submissionsTable tr[data-searchable]').forEach(row => { row.hidden = !row.dataset.searchable.toLowerCase().includes(query.toLowerCase()); }); }
       async function callAdminEdge(action, payload = {}) {
@@ -92,16 +96,18 @@
         const { data: { user }, error: userError } = await client.auth.getUser(); if (userError || !user) { window.location.href = 'login.html'; return; }
         const { data: profile, error: profileError } = await client.from('profiles').select('role').eq('id', user.id).single(); if (profileError || !profile || profile.role !== 'admin') { window.location.href = 'login.html'; return; }
         try {
-          const [submissions, volunteers, messages, donations] = await Promise.all([callAdminEdge('getSubmissions'), callAdminEdge('getVolunteers'), callAdminEdge('getContactMessages'), callAdminEdge('getDonations')]);
-          adminState.submissions = submissions.data || []; adminState.volunteers = volunteers.data || []; adminState.messages = messages.data || []; adminState.donations = donations.data || [];
+          const [submissions, volunteers, messages, donations, users] = await Promise.all([callAdminEdge('getSubmissions'), callAdminEdge('getVolunteers'), callAdminEdge('getContactMessages'), callAdminEdge('getDonations'), callAdminEdge('getUsers')]);
+          adminState.submissions = submissions.data || []; adminState.volunteers = volunteers.data || []; adminState.messages = messages.data || []; adminState.donations = donations.data || []; adminState.users = users.data || [];
           const { data: content } = await client.from('content_items').select('*').order('updated_at', { ascending: false }); adminState.content = content || [];
-          renderStats(); renderSubmissions(); renderVolunteers(); renderDonations(); renderMessages(); renderContent(); document.getElementById('lastUpdated').textContent = `Synced ${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
-        } catch (error) { console.error(error); showToast(error.message || 'Could not load admin data.', 'error'); ['submissionsTable', 'volunteersTable', 'donationsTable', 'messagesTable'].forEach(id => { document.getElementById(id).innerHTML = emptyRow('Could not load this data', 6); }); }
+          renderStats(); renderSubmissions(); renderVolunteers(); renderDonations(); renderMessages(); renderUsers(); renderContent(); document.getElementById('lastUpdated').textContent = `Synced ${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
+        } catch (error) { console.error(error); showToast(error.message || 'Could not load admin data.', 'error'); ['submissionsTable', 'volunteersTable', 'donationsTable', 'messagesTable', 'usersTable'].forEach(id => { document.getElementById(id).innerHTML = emptyRow('Could not load this data', id === 'usersTable' ? 4 : 6); }); }
+        document.body.classList.remove('admin-auth-pending');
         document.getElementById('logoutBtn').addEventListener('click', async () => { await client.auth.signOut(); window.location.href = 'login.html'; }); document.getElementById('sidebarLogout').addEventListener('click', async event => { event.preventDefault(); await client.auth.signOut(); window.location.href = 'login.html'; });
         document.querySelector('[data-table-search="submissions"]').addEventListener('input', event => filterTable(event.target.value));
         document.addEventListener('change', async event => {
           if (event.target.matches('[data-submission-status]')) { const select = event.target; select.disabled = true; try { await callAdminEdge('updateSubmissionStatus', { id: select.dataset.submissionStatus, status: select.value }); const item = adminState.submissions.find(entry => String(entry.id) === String(select.dataset.submissionStatus)); if (item) item.status = select.value; renderSubmissions(); showToast('Submission status updated.', 'success'); } catch (error) { showToast(error.message, 'error'); renderSubmissions(); } finally { select.disabled = false; } }
           if (event.target.matches('[data-content-published]')) { const checkbox = event.target; checkbox.disabled = true; try { await callAdminEdge('setContentItemPublished', { id: checkbox.dataset.contentPublished, published: checkbox.checked }); const item = adminState.content.find(entry => String(entry.id) === String(checkbox.dataset.contentPublished)); if (item) item.published = checkbox.checked; renderContent(); showToast('Content visibility updated.', 'success'); } catch (error) { checkbox.checked = !checkbox.checked; showToast(error.message, 'error'); } finally { checkbox.disabled = false; } }
+          if (event.target.matches('[data-user-role]')) { const select = event.target; const previousRole = adminState.users.find(item => String(item.id) === String(select.dataset.userRole))?.role; select.disabled = true; try { await callAdminEdge('updateUserRole', { id: select.dataset.userRole, role: select.value }); const item = adminState.users.find(entry => String(entry.id) === String(select.dataset.userRole)); if (item) item.role = select.value; renderUsers(); showToast('User access updated.', 'success'); } catch (error) { select.value = previousRole || 'reader'; showToast(error.message, 'error'); } finally { select.disabled = false; } }
         });
         document.querySelectorAll('[data-admin-nav]').forEach(link => link.addEventListener('click', () => document.body.classList.remove('admin-menu-open'))); document.querySelector('[data-admin-menu-open]').addEventListener('click', () => document.body.classList.add('admin-menu-open')); document.querySelectorAll('[data-admin-menu-close]').forEach(button => button.addEventListener('click', () => document.body.classList.remove('admin-menu-open')));
       });

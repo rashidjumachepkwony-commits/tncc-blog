@@ -11,6 +11,31 @@ The browser app remains deployable as static HTML, while production services are
 5. Set the production site URL and OAuth redirect URL to the deployed site.
 6. Promote the first admin by changing that user's `profiles.role` to `admin` in the dashboard.
 
+### Admin and user access
+
+There is intentionally no default username or password in this project. A shared default credential would expose the admin workspace to anyone who finds the site. Create the first account through the normal login page, then promote it in Supabase:
+
+```sql
+update public.profiles
+set role = 'admin'
+where id = (select id from auth.users where email = 'your-admin-email@example.com');
+```
+
+After the first admin is promoted:
+
+1. A chosen user signs in with email/password or Google on `login.html`.
+2. Supabase creates their `profiles` row with the default `reader` role.
+3. An existing admin opens **Admin > User access** and changes that user to `admin`.
+4. The user signs out and signs in again; the protected admin page then allows access.
+
+Deploy the admin Edge Function after adding the user-management actions in `supabase/functions/admin/index.ts`:
+
+```bash
+supabase functions deploy admin
+```
+
+Only the Edge Function uses the service-role key. It must never be added to browser files or committed to GitHub.
+
 Only the Supabase anon key belongs in the browser. Never publish a service-role key.
 
 ## Stripe and Resend

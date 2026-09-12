@@ -52,6 +52,58 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const action = body.action;
 
+    if (action === "getUsers") {
+      const { data: users, error: usersError } = await adminClient.auth.admin.listUsers();
+      if (usersError) throw usersError;
+
+      const { data: profiles, error: profilesError } = await adminClient
+        .from("profiles")
+        .select("id, full_name, role, created_at");
+      if (profilesError) throw profilesError;
+
+      const profileById = new Map((profiles || []).map(profile => [profile.id, profile]));
+      const data = (users?.users || []).map(authUser => ({
+        id: authUser.id,
+        email: authUser.email,
+        full_name: profileById.get(authUser.id)?.full_name || authUser.user_metadata?.full_name || null,
+        role: profileById.get(authUser.id)?.role || "reader",
+        created_at: profileById.get(authUser.id)?.created_at || authUser.created_at
+      }));
+
+      return new Response(JSON.stringify({ data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    if (action === "updateUserRole") {
+      const { id, role } = body;
+      if (!id || !["reader", "admin"].includes(role)) {
+        return new Response(JSON.stringify({ error: "Missing id or valid role" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      if (id === user.id && role !== "admin") {
+        return new Response(JSON.stringify({ error: "You cannot remove your own admin access" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const { data, error } = await adminClient
+        .from("profiles")
+        .update({ role })
+        .eq("id", id)
+        .select("id, full_name, role, created_at")
+        .single();
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
     if (action === "getSubmissions") {
       const { data, error } = await adminClient
         .from("submissions")
