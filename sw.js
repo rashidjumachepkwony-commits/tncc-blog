@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tncc-blog-v4';
+const CACHE_NAME = 'tncc-blog-v6';
 const APP_SHELL = ['./', './index.html', './manifest.json', './logo.jpeg'];
 
 self.addEventListener('install', event => {
@@ -16,7 +16,9 @@ self.addEventListener('fetch', event => {
   const isDocumentAsset = ['document', 'style', 'script'].includes(event.request.destination);
 
   if (isDocumentAsset) {
-    event.respondWith(fetch(event.request).then(response => {
+    // Always revalidate the page with the server (bypass the browser HTTP cache)
+    // so newly deployed changes appear immediately on the next visit.
+    event.respondWith(fetch(event.request, { cache: 'no-store' }).then(response => {
       const copy = response.clone();
       caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
       return response;
