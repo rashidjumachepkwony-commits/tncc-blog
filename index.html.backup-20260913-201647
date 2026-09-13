@@ -19,52 +19,31 @@
     
     <!-- ===== OPEN GRAPH / FACEBOOK ===== -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Teso North Cross Country CBO">
-    <meta property="og:locale" content="en_KE">
+    <meta property="og:url" content="https://yourwebsite.com/">
     <meta property="og:title" content="Teso North Cross Country CBO | Run. Unite. Transform.">
     <meta property="og:description" content="Community sports and social impact organization using cross-country running to promote health, equality, and resilience.">
     <meta property="og:image" content="hero-event.jpg.jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="The Teso North Cross Country community gathered for an event">
     
-    <!-- ===== TWITTER / X ===== -->
+    <!-- ===== TWITTER ===== -->
     <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourwebsite.com/">
     <meta property="twitter:title" content="Teso North Cross Country CBO | Run. Unite. Transform.">
     <meta property="twitter:description" content="Community sports and social impact organization using cross-country running to promote health, equality, and resilience.">
     <meta property="twitter:image" content="hero-event.jpg.jpeg">
-    <meta property="twitter:image:alt" content="The Teso North Cross Country community gathered for an event">
     
-    <!-- ===== CANONICAL URL (optional) =====
-         The site has no custom domain yet, so no canonical tag is set
-         (a wrong canonical would mislead search engines). When the site is
-         deployed to a real domain, uncomment the line below and fill it in:
-         <link rel="canonical" href="https://www.example.com/"> -->
+    <!-- ===== CANONICAL URL ===== -->
+    <link rel="canonical" href="https://yourwebsite.com/">
     
     <!-- ===== FAVICON ===== -->
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
     
-    <!-- ===== PERFORMANCE HINTS ===== -->
-    <link rel="preload" as="image" href="hero-event.jpg.jpeg" fetchpriority="high">
-    <link rel="preload" as="image" href="logo.jpeg">
-    <meta name="color-scheme" content="light dark">
-    
-    <!-- ===== GOOGLE ANALYTICS (optional) =====
-         Replace the GA_MEASUREMENT_ID string below with your real Measurement ID
-         (e.g. "G-XXXXXXX") to enable Analytics. gtag() is always defined so the
-         existing event calls elsewhere on this page remain safe either way. -->
+    <!-- ===== GOOGLE ANALYTICS ===== -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_ID"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        var GA_MEASUREMENT_ID = '';
-        if (GA_MEASUREMENT_ID) {
-            gtag('js', new Date());
-            gtag('config', GA_MEASUREMENT_ID);
-            var gtScript = document.createElement('script');
-            gtScript.async = true;
-            gtScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_MEASUREMENT_ID);
-            document.head.appendChild(gtScript);
-        }
+        gtag('js', new Date());
+        gtag('config', 'G-YOUR_ID');
     </script>
     
                 <title>Teso North Cross Country CBO | Run. Unite. Transform.</title>
@@ -76,6 +55,8 @@
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Teso North Cross Country CBO",
+            "url": "https://yourwebsite.com/",
+            "logo": "https://yourwebsite.com/logo.jpeg",
             "description": "A community sports and social impact organization using cross-country running to promote health, equality and resilience.",
             "sameAs": []
         }
@@ -1153,78 +1134,10 @@
             .donation-card .amount { font-size: 1.35rem; }
             .cookie-banner { left: 10px; right: 10px; bottom: 10px; padding: 14px; }
         }
-    /* ===== PREMIUM UPGRADES ===== */
-        html { scroll-padding-top: 96px; scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: var(--primary-light) rgba(0,0,0,0); }
-        ::selection { background: var(--accent); color: var(--primary-dark); }
-        :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-        .skip-link {
-            position: absolute; left: -9999px; top: 0; z-index: 10000;
-            background: var(--primary); color: var(--white);
-            padding: 12px 20px; border-radius: 8px;
-            font-weight: 700; font-size: .85rem;
-        }
-        .skip-link:focus { left: 14px; top: 12px; }
-        .scroll-progress {
-            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-            border-radius: 3px; z-index: 1001; pointer-events: none;
-        }
-        .back-to-top {
-            position: fixed; right: 20px; bottom: 20px; width: 46px; height: 46px;
-            border-radius: 50%; border: 1px solid var(--primary-light);
-            background: var(--primary); color: var(--white);
-            font-size: 1.15rem; line-height: 1; cursor: pointer;
-            box-shadow: var(--shadow); z-index: 950;
-            opacity: 0; transform: translateY(14px); transition: all .3s ease;
-            display: grid; place-items: center;
-        }
-        .back-to-top.visible { opacity: 1; transform: none; }
-        .back-to-top:hover { background: var(--primary-light); transform: translateY(-2px); }
-        .marquee {
-            position: relative; overflow: hidden;
-            background: var(--primary); color: var(--accent);
-            border-top: 1px solid rgba(255,255,255,.07);
-            padding: 13px 0; z-index: 1;
-        }
-        .marquee-track {
-            display: flex; width: max-content;
-            animation: marquee-scroll 38s linear infinite;
-        }
-        .marquee-track span {
-            font-family: 'DM Mono', monospace;
-            font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
-            color: var(--accent); white-space: nowrap; padding: 0 4px;
-        }
-        .marquee-track span::before {
-            content: '★';
-            color: rgba(214,243,106,.45);
-            margin: 0 26px;
-        }
-        @keyframes marquee-scroll { to { transform: translateX(-50%); } }
-        @media (min-width: 769px) {
-            ::-webkit-scrollbar { width: 12px; height: 12px; }
-            ::-webkit-scrollbar-thumb {
-                background: linear-gradient(var(--primary-light), var(--primary));
-                border-radius: 8px; border: 2px solid transparent;
-            }
-            ::-webkit-scrollbar-track { background: transparent; }
-        }
-        @media (max-width: 768px) {
-            .back-to-top { width: 40px; height: 40px; right: 14px; bottom: 14px; font-size: 1rem; }
-            .scroll-progress { height: 3px; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .marquee-track { animation: none; }
-            .back-to-top { transition-duration: .01ms; }
-        }
     </style>
 </head>
 
 <body>
-
-    <!-- ===== ACCESSIBILITY & READING PROGRESS ===== -->
-    <a class="skip-link" href="#stories">Skip to content</a>
-    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <!-- ===== TOP BAR ===== -->
     <div class="topbar">
@@ -1284,14 +1197,6 @@
             </div>
         </div>
     </section>
-
-    <!-- ===== VALUES MARQUEE ===== -->
-    <div class="marquee" aria-hidden="true">
-        <div class="marquee-track">
-            <span>Run</span><span>Unite</span><span>Transform</span><span>Community through sport</span><span>Every step counts</span><span>Participation for everyone</span><span>Healthy communities</span><span>Equality &amp; inclusion</span>
-            <span>Run</span><span>Unite</span><span>Transform</span><span>Community through sport</span><span>Every step counts</span><span>Participation for everyone</span><span>Healthy communities</span><span>Equality &amp; inclusion</span>
-        </div>
-    </div>
 
     <!-- ===== STORIES ===== -->
     <section id="stories">
@@ -2038,16 +1943,7 @@
 
         function startGalleryAutoplay() {
             clearInterval(galleryAutoplay);
-            galleryAutoplay = setInterval(() => {
-                if (document.visibilityState === 'hidden') return;
-                if (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)')) return;
-                if (document.querySelector('.modal.show, .gallery-modal.open')) return;
-                const section = document.querySelector('section#gallery');
-                if (!section) return;
-                const rect = section.getBoundingClientRect();
-                if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-                scrollGallery(1);
-            }, 4500);
+            galleryAutoplay = setInterval(() => scrollGallery(1), 4500);
         }
 
         function openGallery(index) {
@@ -2112,9 +2008,7 @@
 
         // ===== MENU =====
         function toggleMenu() {
-            const menu = document.getElementById('mainMenu');
-            const open = menu.classList.toggle('open');
-            document.querySelector('.menu-btn')?.setAttribute('aria-expanded', open ? 'true' : 'false');
+            document.getElementById('mainMenu').classList.toggle('open');
         }
         function closeMenu() {
             document.getElementById('mainMenu').classList.remove('open');
@@ -2411,40 +2305,6 @@
         document.querySelectorAll('img').forEach(image => image.loading = 'lazy');
         if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 
-        // ===== PREMIUM UX =====
-        (function initPremiumUi() {
-            var bar = document.getElementById('scrollProgress');
-            var topBtn = document.getElementById('backToTop');
-            var ticking = false;
-            function updateProgress() {
-                ticking = false;
-                var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-                var max = document.documentElement.scrollHeight - window.innerHeight;
-                var ratio = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
-                if (bar) bar.style.width = (ratio * 100).toFixed(2) + '%';
-                if (topBtn) topBtn.classList.toggle('visible', y > 600);
-            }
-            window.addEventListener('scroll', function () {
-                if (!ticking) { ticking = true; window.requestAnimationFrame(updateProgress); }
-            }, { passive: true });
-            window.addEventListener('resize', updateProgress, { passive: true });
-            updateProgress();
-            if (topBtn) topBtn.addEventListener('click', function () {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                topBtn.blur();
-            });
-        })();
-
-        // Press "/" anywhere on the page to focus the story search.
-        document.addEventListener('keydown', function (event) {
-            if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey) return;
-            var tag = (event.target && event.target.tagName) || '';
-            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-            if (document.querySelector('.modal.show')) return;
-            var search = document.getElementById('storySearch');
-            if (search) { event.preventDefault(); search.focus(); search.select(); }
-        });
-
         // ===== INIT =====
         renderAll();
         document.addEventListener('DOMContentLoaded', () => loadContentStories().then(() => populateCategories() || renderStories()));
@@ -2453,8 +2313,6 @@
         console.log('📊 Admin dashboard ready - log in at login.html for admin access');
         console.log('💾 Data stored in Supabase');
     </script>
-
-    <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">↑</button>
 
 </body>
 </html>

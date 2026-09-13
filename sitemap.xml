@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================
+     Sitemap template - DISABLED on purpose (no custom domain yet).
+     Sitemaps require absolute URLs, so a placeholder domain here
+     would be worse than none.
+
+     When the site is deployed to a real domain:
+       1. Replace https://yourwebsite.com/ below with your domain.
+       2. Uncomment the <url> entries.
+       3. Uncomment the "Sitemap:" line in robots.txt.
+     ============================================================ -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!--
   <url><loc>https://yourwebsite.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://yourwebsite.com/#stories</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://yourwebsite.com/#about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://yourwebsite.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://yourwebsite.com/programs.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://yourwebsite.com/impact.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://yourwebsite.com/stories.html</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://yourwebsite.com/gallery.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://yourwebsite.com/get-involved.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://yourwebsite.com/donate.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://yourwebsite.com/contact.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  -->
 </urlset>

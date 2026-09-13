@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin
-Sitemap: https://yourwebsite.com/sitemap.xml
+
+# The site has no custom domain yet, so no sitemap is advertised.
+# Once you have a domain, restore the line below with your real URL:
+# Sitemap: https://www.yourdomain.com/sitemap.xml
