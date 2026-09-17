@@ -156,6 +156,20 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (action === "getChepsaitaRunRegistrations") {
+      const { data, error } = await adminClient
+        .from("submissions")
+        .select("id, event_id, event_name, name, email, phone, age, gender, county, sub_county, ward, guardian, guardian_phone, selected_category, race_distance, registration_fee, payment_method, payment_status, mpesa_reference, status, created_at")
+        .eq("event_id", "great-chepsaita-run")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
     if (action === "updateSubmissionStatus") {
       const { id, status } = body;
       if (!id || !status) {
@@ -168,6 +182,33 @@ Deno.serve(async (req) => {
       const { data, error } = await adminClient
         .from("submissions")
         .update({ status })
+        .eq("id", id)
+        .select();
+
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    if (action === "updateChepsaitaRegistration") {
+      const { id, payment_status, mpesa_reference, status } = body;
+      if (!id) {
+        return new Response(JSON.stringify({ error: "Missing id" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      const updateFields: Record<string, unknown> = {};
+      if (typeof payment_status === "string") updateFields.payment_status = payment_status;
+      if (typeof mpesa_reference === "string") updateFields.mpesa_reference = mpesa_reference;
+      if (typeof status === "string") updateFields.status = status;
+
+      const { data, error } = await adminClient
+        .from("submissions")
+        .update(updateFields)
         .eq("id", id)
         .select();
 

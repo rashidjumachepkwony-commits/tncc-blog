@@ -6,6 +6,7 @@ const TNCC_NAVIGATION = [
   ['Stories', 'stories.html'],
   ['Gallery', 'gallery.html'],
   ['Get Involved', 'get-involved.html'],
+  ['Great Chepsaita Run', 'great-chepsaita-run.html'],
   ['Donate', 'donate.html'],
   ['Contact', 'contact.html']
 ];

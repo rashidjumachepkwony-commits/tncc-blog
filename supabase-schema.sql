@@ -35,6 +35,19 @@ alter table public.submissions add column if not exists education text;
 alter table public.submissions add column if not exists age integer;
 alter table public.submissions add column if not exists race_categories text[];
 
+-- Event registration fields (backward-compatible, additive)
+alter table public.submissions add column if not exists event_id text;
+alter table public.submissions add column if not exists event_name text;
+alter table public.submissions add column if not exists event_date text;
+alter table public.submissions add column if not exists selected_category text;
+alter table public.submissions add column if not exists race_distance text;
+alter table public.submissions add column if not exists registration_fee integer;
+alter table public.submissions add column if not exists payment_method text;
+alter table public.submissions add column if not exists payment_status text;
+alter table public.submissions add column if not exists mpesa_reference text;
+alter table public.submissions add column if not exists guardian_phone text;
+alter table public.submissions add column if not exists gender text;
+
 create table if not exists public.volunteers (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete set null,

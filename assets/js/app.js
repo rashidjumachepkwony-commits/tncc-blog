@@ -7,7 +7,8 @@
    5. Story article page (share, related, comments)
    6. Gallery page (filters + lightbox)
    7. Homepage previews + impact counters
-   8. Forms (contact, volunteer, event registration, donation)
+   8. Event registration (Great Chepsaita Run)
+   9. Forms (contact, volunteer, registration, donation)
    ============================================================ */
 
 /* ---------- 1. Utilities ---------- */
@@ -607,7 +608,304 @@ function initCounters() {
   counters.forEach(node => observer.observe(node));
 }
 
-/* ---------- 8. Forms ---------- */
+/* ---------- 8. Event registration (great-chepsaita-run.html) ---------- */
+
+const CHEPSAITA_RUN_CATEGORIES = [
+  { value: '5-7-years', label: '5–7 years', distance: '500m', fee: 0, ageMin: 5, ageMax: 7, requiresGender: false },
+  { value: '8-10-years', label: '8–10 years', distance: '1km', fee: 0, ageMin: 8, ageMax: 10, requiresGender: false },
+  { value: '11-13-years', label: '11–13 years', distance: '2km', fee: 0, ageMin: 11, ageMax: 13, requiresGender: false },
+  { value: '14-15-years', label: '14–15 years', distance: '4km', fee: 0, ageMin: 14, ageMax: 15, requiresGender: false },
+  { value: 'u20-women', label: 'U20 Women', distance: '6km', fee: 0, ageMax: 19, requiresGender: 'female' },
+  { value: 'u20-men', label: 'U20 Men', distance: '8km', fee: 0, ageMax: 19, requiresGender: 'male' },
+  { value: 'elite', label: 'Elite', distance: '10km', fee: 0, ageMin: null, ageMax: null, requiresGender: false }
+];
+
+const CHEPSAITA_RUN_CONFIG = {
+  eventName: 'The Great Chepsaita Run',
+  organizer: 'Teso North Cross Country CBO',
+  location: 'Eldoret, Kenya',
+  eventDate: '2026-12-05',
+  deadline: new Date('2026-11-20T23:59:59+03:00'),
+  eventId: 'great-chepsaita-run',
+  fee: 0,
+  currency: 'KES'
+};
+
+function isRegistrationOpen() {
+  return new Date() < CHEPSAITA_RUN_CONFIG.deadline;
+}
+
+function findCategory(value) {
+  return CHEPSAITA_RUN_CATEGORIES.find(category => category.value === value);
+}
+
+function validateAgeForCategory(age, category) {
+  if (category.ageMin !== null && age < category.ageMin) return false;
+  if (category.ageMax !== null && age > category.ageMax) return false;
+  return true;
+}
+
+async function initGreatChepsaitaRunForm() {
+  const form = document.querySelector('[data-great-chepsaita-run-form]');
+  if (!form) return;
+
+  const deadlineBanner = document.getElementById('eventDeadlineBanner');
+  const eventSection = document.getElementById('eventRegistrationSection');
+  const confirmationSection = document.getElementById('eventConfirmation');
+  const countySelect = form.querySelector('[data-reg-county]');
+  const subCountySelect = form.querySelector('[data-reg-sub-county]');
+  const wardSelect = form.querySelector('[data-reg-ward]');
+  const status = form.querySelector('[data-reg-location-status]');
+  const ageError = form.querySelector('[data-age-error]');
+  const categoryError = form.querySelector('[data-category-error]');
+  const genderField = form.querySelector('[data-reg-gender]').closest('.field');
+  const minorFields = document.getElementById('chepsaitaMinorFields');
+  const guardianInput = form.querySelector('[data-reg-guardian]');
+  const guardianPhoneInput = form.querySelector('[data-reg-guardian-phone]');
+  const feeDisplay = form.querySelector('[data-reg-fee-display]');
+  const paymentMethodDisplay = form.querySelector('[data-reg-payment-method]');
+  const mpesaDetails = form.querySelector('[data-reg-mpesa-details]');
+  const submitBtn = form.querySelector('[data-reg-submit-btn]');
+  const categoryInputs = form.querySelectorAll('[data-reg-category]');
+
+  let locations = {};
+
+  if (!isRegistrationOpen()) {
+    if (deadlineBanner) deadlineBanner.hidden = false;
+    if (eventSection) eventSection.hidden = true;
+    return;
+  }
+
+  if (deadlineBanner) deadlineBanner.hidden = true;
+  if (eventSection) eventSection.hidden = false;
+
+  setSelectOptions(countySelect, KENYA_COUNTIES.slice().sort((a, b) => a.localeCompare(b)), 'Select county', false);
+
+  function populateSubCounties() {
+    const county = countySelect.value;
+    const subCounties = Object.keys(locations[county]?.Constituencies || {});
+    setSelectOptions(subCountySelect, subCounties, county ? 'Select sub-county' : 'Select county first', !county || !subCounties.length);
+    setSelectOptions(wardSelect, [], 'Select sub-county first', true);
+  }
+
+  function populateWards() {
+    const county = countySelect.value;
+    const subCounty = subCountySelect.value;
+    const wards = locations[county]?.Constituencies?.[subCounty]?.Ward || [];
+    setSelectOptions(wardSelect, wards, subCounty ? 'Select ward' : 'Select sub-county first', !subCounty || !wards.length);
+  }
+
+  countySelect?.addEventListener('change', populateSubCounties);
+  subCountySelect?.addEventListener('change', populateWards);
+
+  try {
+    const urls = [
+      'https://cdn.jsdelivr.net/gh/mbithuka/Counties@main/restructured_data.json',
+      'https://raw.githubusercontent.com/mbithuka/Counties/main/restructured_data.json'
+    ];
+    let response = null;
+    for (const url of urls) {
+      try {
+        const candidate = await fetch(url);
+        if (candidate.ok) { response = candidate; break; }
+      } catch (error) { /* try next */ }
+    }
+    if (!response) throw new Error('Location data unavailable');
+    locations = await response.json();
+    const remoteCounties = Object.keys(locations);
+    if (remoteCounties.length) {
+      setSelectOptions(countySelect, remoteCounties.sort((a, b) => a.localeCompare(b)), 'Select county', false);
+    }
+    if (status) status.textContent = 'Select your county, then sub-county and ward.';
+  } catch (error) {
+    locations = KENYA_FALLBACK_LOCATIONS;
+    if (status) status.textContent = 'Select your county, sub-county and ward. Busia locations are available offline.';
+  }
+  populateSubCounties();
+
+  categoryInputs.forEach(input => {
+    input.addEventListener('change', () => {
+      const selectedCategory = findCategory(input.value);
+      if (!selectedCategory) return;
+
+      if (feeDisplay) feeDisplay.textContent = selectedCategory.fee > 0
+        ? `${CHEPSAITA_RUN_CONFIG.currency} ${selectedCategory.fee.toLocaleString('en-US')}`
+        : 'FREE';
+
+      const genderRequired = selectedCategory.requiresGender;
+      if (genderField) {
+        const genderLabel = genderField.querySelector('label');
+        genderField.style.display = genderRequired ? 'block' : 'none';
+        if (genderRequired && genderLabel) {
+          genderLabel.textContent = genderRequired === 'female'
+            ? 'Gender * (U20 Women)'
+            : 'Gender * (U20 Men)';
+        }
+      }
+
+      if (categoryError) categoryError.textContent = '';
+    });
+  });
+
+  function updateGuardianVisibility() {
+    const age = Number(form.querySelector('[data-reg-age]')?.value.trim() || 0);
+    const show = age > 0 && age < 18;
+    if (minorFields) minorFields.hidden = !show;
+    if (guardianInput) guardianInput.required = show;
+    if (guardianPhoneInput) guardianPhoneInput.required = show;
+  }
+
+  const ageInput = form.querySelector('[data-reg-age]');
+  ageInput?.addEventListener('input', updateGuardianVisibility);
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!isRegistrationOpen()) {
+      showToast('Registration is closed. The deadline was 20 November 2026 at 23:59 Kenya time.', 'error');
+      return;
+    }
+
+    const name = form.querySelector('[data-reg-name]')?.value.trim() || '';
+    const email = form.querySelector('[data-reg-email]')?.value.trim() || '';
+    const phone = form.querySelector('[data-reg-phone]')?.value.trim() || '';
+    const age = Number(form.querySelector('[data-reg-age]')?.value.trim() || 0);
+    const gender = form.querySelector('[data-reg-gender]')?.value || '';
+    const county = countySelect?.value || '';
+    const subCounty = subCountySelect?.value || '';
+    const ward = wardSelect?.value || '';
+    const guardian = form.querySelector('[data-reg-guardian]')?.value.trim() || '';
+    const guardianPhone = form.querySelector('[data-reg-guardian-phone]')?.value.trim() || '';
+    const message = form.querySelector('[data-reg-message]')?.value.trim() || '';
+    const selectedCategoryValue = form.querySelector('[data-reg-category]:checked')?.value || '';
+    const selectedCategory = findCategory(selectedCategoryValue);
+
+    let isValid = true;
+
+    if (!name || !email || !phone || !age || !county || !subCounty || !ward || !selectedCategoryValue) {
+      showToast('Please complete all required fields, including your race category.', 'error');
+      return;
+    }
+
+    if (!selectedCategory) {
+      if (categoryError) categoryError.textContent = 'Please select a valid race category.';
+      isValid = false;
+    }
+
+    if (age < 5 || age > 120) {
+      if (ageError) ageError.textContent = 'Please enter a valid age between 5 and 120.';
+      isValid = false;
+    } else {
+      if (!validateAgeForCategory(age, selectedCategory)) {
+        const range = selectedCategory.ageMin !== null && selectedCategory.ageMax !== null
+          ? `ages ${selectedCategory.ageMin}-${selectedCategory.ageMax}`
+          : selectedCategory.ageMax !== null
+            ? `under ${selectedCategory.ageMax + 1}`
+            : selectedCategory.ageMin !== null
+              ? `18 and above`
+              : 'eligible';
+        if (ageError) ageError.textContent = `Selected category requires ${range}. Your age (${age}) does not qualify.`;
+        isValid = false;
+        if (ageInput) ageInput.focus();
+      } else {
+        if (ageError) ageError.textContent = '';
+      }
+    }
+
+    if (selectedCategory.requiresGender && !gender) {
+      showToast(`Gender is required for the ${selectedCategory.label} category.`, 'error');
+      isValid = false;
+    }
+
+    if (age < 18 && (!guardian || !guardianPhone)) {
+      showToast('Please provide a parent/guardian name and phone for participants under 18.', 'error');
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+
+    const payload = {
+      name,
+      email,
+      phone,
+      age,
+      gender: gender || null,
+      county,
+      sub_county: subCounty,
+      ward,
+      guardian: (guardian || null),
+      guardian_phone: guardianPhone || null,
+      interest: 'event-participant',
+      message: message || null,
+      race_categories: [selectedCategory.label],
+      selected_category: selectedCategory.label,
+      race_distance: selectedCategory.distance,
+      event_id: CHEPSAITA_RUN_CONFIG.eventId,
+      event_name: CHEPSAITA_RUN_CONFIG.eventName,
+      event_date: CHEPSAITA_RUN_CONFIG.eventDate,
+      registration_fee: CHEPSAITA_RUN_CONFIG.fee,
+      payment_method: 'mpesa',
+      payment_status: 'pending'
+    };
+
+    const client = getSupabaseClient();
+    if (!client) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Register for The Great Chepsaita Run';
+      showToast('Registration is not connected yet. Please contact us directly.', 'error');
+      return;
+    }
+
+    const { data, error } = await client.from('submissions').insert(payload).select('id').single();
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Register for The Great Chepsaita Run';
+
+    if (error) {
+      console.error(error);
+      showToast('Your registration could not be submitted. Please try again.', 'error');
+      return;
+    }
+
+    const registrationId = 'TNCC-CR-' + data.id.substring(0, 8).toUpperCase();
+
+    const endpoint = window.TNCC_CONFIG?.notificationEndpoint;
+    if (endpoint) {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'contact',
+          payload: {
+            name,
+            email,
+            phone,
+            message: `New registration for The Great Chepsaita Run: ${name} (${selectedCategory.label}, ${selectedCategory.distance}) from ${county}, ${subCounty}, ${ward}. Registration ID: ${registrationId}.`
+          }
+        })
+      }).catch(() => {});
+    }
+
+    if (eventSection) eventSection.hidden = true;
+    if (deadlineBanner) deadlineBanner.hidden = true;
+
+    const confirmName = document.querySelector('[data-confirm-name]');
+    const confirmCategory = document.querySelector('[data-confirm-category]');
+    const confirmDistance = document.querySelector('[data-confirm-distance]');
+    const confirmId = document.querySelector('[data-confirm-id]');
+    if (confirmName) confirmName.textContent = name;
+    if (confirmCategory) confirmCategory.textContent = selectedCategory.label;
+    if (confirmDistance) confirmDistance.textContent = selectedCategory.distance;
+    if (confirmId) confirmId.textContent = registrationId;
+
+    if (confirmationSection) confirmationSection.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+/* ---------- 9. Forms ---------- */
 
 function initContactForm() {
   const form = document.querySelector('[data-contact-form]');
@@ -728,7 +1026,7 @@ function initDonationPage() {
   });
 }
 
-/* ---------- Event registration (register.html) ---------- */
+/* ---------- 10. Event registration (register.html) ---------- */
 
 const KENYA_COUNTIES = ['Baringo', 'Bomet', 'Bungoma', 'Busia', 'Elgeyo-Marakwet', 'Embu', 'Garissa', 'Homa Bay', 'Isiolo', 'Kajiado', 'Kakamega', 'Kericho', 'Kiambu', 'Kilifi', 'Kirinyaga', 'Kisii', 'Kisumu', 'Kitui', 'Kwale', 'Laikipia', 'Lamu', 'Machakos', 'Makueni', 'Mandera', 'Marsabit', 'Meru', 'Migori', 'Mombasa', "Murang'a", 'Nairobi', 'Nakuru', 'Nandi', 'Narok', 'Nyamira', 'Nyandarua', 'Nyeri', 'Samburu', 'Siaya', 'Taita-Taveta', 'Tana River', 'Tharaka-Nithi', 'Trans Nzoia', 'Turkana', 'Uasin Gishu', 'Vihiga', 'Wajir', 'West Pokot'];
 
@@ -904,6 +1202,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initVolunteerForm();
   initRegistrationForm();
+  initGreatChepsaitaRunForm();
   initThemeToggleFallback();
   initYear();
 });
