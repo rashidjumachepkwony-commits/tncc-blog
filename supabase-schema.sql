@@ -47,6 +47,7 @@ alter table public.submissions add column if not exists payment_status text;
 alter table public.submissions add column if not exists mpesa_reference text;
 alter table public.submissions add column if not exists guardian_phone text;
 alter table public.submissions add column if not exists gender text;
+alter table public.submissions add column if not exists bib_number text;
 
 create table if not exists public.volunteers (
   id uuid primary key default gen_random_uuid(),
@@ -214,6 +215,15 @@ on public.comments
 for update to authenticated using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists "Admins delete comments" on public.comments;
-create policy "Admins delete comments"
-on public.comments
+create policy "Admins delete comments" on public.comments
 for delete to authenticated using (public.is_admin());
+
+-- Prevent event registrations after the deadline (server-side enforcement)
+drop policy if exists "Chepsaita Run registration deadline" on public.submissions;
+create policy "Chepsaita Run registration deadline"
+on public.submissions
+for insert
+with check (
+  event_id IS DISTINCT FROM 'great-chepsaita-run'
+  OR created_at <= '2026-11-20T23:59:59+03:00'::timestamptz
+);

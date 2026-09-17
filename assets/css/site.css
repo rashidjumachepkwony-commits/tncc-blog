@@ -909,6 +909,36 @@ footer {
 .admin-text-link span { margin-left: 4px; font-size: 1rem; }
 .admin-section { scroll-margin-top: 100px; margin-top: 48px; }
 .admin-section-heading { align-items: end; margin-bottom: 17px; }
+.admin-heading-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--admin-border);
+  transition: var(--transition);
+}
+.admin-btn-secondary {
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+.admin-btn-secondary:hover {
+  background: rgba(155, 207, 32, 0.06);
+}
+.admin-filter-select {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
 .admin-search { display: flex; align-items: center; gap: 8px; width: 230px; height: 38px; padding: 0 11px; border: 1px solid var(--admin-border); border-radius: 8px; color: var(--admin-muted); background: var(--admin-surface); }
 .admin-search input { min-width: 0; width: 100%; border: 0; outline: 0; color: var(--admin-text); background: transparent; font-size: .75rem; }
 .admin-table-wrap { overflow-x: auto; }

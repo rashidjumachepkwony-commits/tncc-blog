@@ -17,6 +17,39 @@
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#073b2b" />
     <link rel="stylesheet" href="assets/css/site.css" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "The Great Chepsaita Run",
+      "organizer": {
+        "@type": "Organization",
+        "name": "Teso North Cross Country CBO",
+        "abbreviation": "TNCC"
+      },
+      "startDate": "2026-12-05T08:00:00+03:00",
+      "endDate": "2026-12-05T14:00:00+03:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Eldoret, Kenya",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Eldoret",
+          "addressCountry": "KE"
+        }
+      },
+      "description": "The Great Chepsaita Run organised by Teso North Cross Country CBO (TNCC). Free race categories from 500m to 10km for ages 5 to Elite.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KES",
+        "name": "Free registration",
+        "validFrom": "2026-09-01"
+      }
+    }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
     <script src="assets/js/components.js" defer></script>
@@ -90,42 +123,49 @@
                       <span class="race-cat-title">5&ndash;7 years</span>
                       <span class="race-cat-distance">500m</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                     <label class="race-category-card" data-category="8-10-years">
                       <input type="radio" name="race-category" value="8-10-years" data-reg-category required />
                       <span class="race-cat-title">8&ndash;10 years</span>
                       <span class="race-cat-distance">1km</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                     <label class="race-category-card" data-category="11-13-years">
                       <input type="radio" name="race-category" value="11-13-years" data-reg-category required />
                       <span class="race-cat-title">11&ndash;13 years</span>
                       <span class="race-cat-distance">2km</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                     <label class="race-category-card" data-category="14-15-years">
                       <input type="radio" name="race-category" value="14-15-years" data-reg-category required />
                       <span class="race-cat-title">14&ndash;15 years</span>
                       <span class="race-cat-distance">4km</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                     <label class="race-category-card" data-category="u20-women">
                       <input type="radio" name="race-category" value="u20-women" data-reg-category required />
                       <span class="race-cat-title">U20 Women</span>
                       <span class="race-cat-distance">6km</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                     <label class="race-category-card" data-category="u20-men">
                       <input type="radio" name="race-category" value="u20-men" data-reg-category required />
                       <span class="race-cat-title">U20 Men</span>
                       <span class="race-cat-distance">8km</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                     <label class="race-category-card" data-category="elite">
                       <input type="radio" name="race-category" value="elite" data-reg-category required />
                       <span class="race-cat-title">Elite</span>
                       <span class="race-cat-distance">10km</span>
                       <span class="race-cat-fee">FREE</span>
+                      <span class="race-cat-count" style="display:none;font-size:0.7rem;color:var(--muted);"></span>
                     </label>
                   </div>
                   <p class="field-note">All categories are free. Select one category per participant. Age is verified against the selected category.</p>
@@ -280,7 +320,10 @@
             <div class="event-confirm-row"><span>Date</span><strong>5 December 2026</strong></div>
             <div class="event-confirm-row"><span>Location</span><strong>Eldoret, Kenya</strong></div>
             <div class="event-confirm-row"><span>Registration ID</span><strong data-confirm-id></strong></div>
+            <div class="event-confirm-row"><span>Bib number</span><strong data-confirm-bib></strong></div>
           </div>
+
+          <div class="qr-placeholder" data-confirm-qr style="margin-top: 24px; padding: 20px; background: var(--surface-alt); border-radius: 12px; display: inline-block;"></div>
 
           <p style="color: var(--muted); font-size: 0.9rem; margin-top: 24px;">Please keep your registration ID for event day. We will contact you with final race instructions before 5 December 2026.</p>
 

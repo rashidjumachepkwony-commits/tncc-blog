@@ -159,13 +159,42 @@ Deno.serve(async (req) => {
     if (action === "getChepsaitaRunRegistrations") {
       const { data, error } = await adminClient
         .from("submissions")
-        .select("id, event_id, event_name, name, email, phone, age, gender, county, sub_county, ward, guardian, guardian_phone, selected_category, race_distance, registration_fee, payment_method, payment_status, mpesa_reference, status, created_at")
+        .select("id, event_id, event_name, name, email, phone, age, gender, county, sub_county, ward, guardian, guardian_phone, selected_category, race_distance, registration_fee, payment_method, payment_status, mpesa_reference, bib_number, status, created_at")
         .eq("event_id", "great-chepsaita-run")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    if (action === "assignBibNumbers") {
+      const { data: registrations, error: fetchError } = await adminClient
+        .from("submissions")
+        .select("id, bib_number, created_at")
+        .eq("event_id", "great-chepsaita-run")
+        .is("bib_number", null)
+        .order("created_at", { ascending: true });
+
+      if (fetchError) throw fetchError;
+
+      const results: { id: string; bib_number: string }[] = [];
+      for (const reg of registrations || []) {
+        const bib = String(reg.created_at
+          ? new Date(reg.created_at).getTime()
+          : Date.now()
+        ).slice(-4);
+        const { error: updateError } = await adminClient
+          .from("submissions")
+          .update({ bib_number: bib })
+          .eq("id", reg.id);
+        if (updateError) throw updateError;
+        results.push({ id: reg.id, bib_number: bib });
+      }
+
+      return new Response(JSON.stringify({ data: results }), {
         headers: { "Content-Type": "application/json" }
       });
     }

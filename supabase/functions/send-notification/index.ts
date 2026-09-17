@@ -22,6 +22,9 @@ type BuiltEmail = {
   subject: string;
   text: string;
   replyTo?: string;
+  to?: string;
+  cc?: string;
+  eventId?: string;
 };
 
 function buildEmail(type: string, payload: Record<string, unknown>): BuiltEmail | null {
@@ -69,29 +72,66 @@ function buildEmail(type: string, payload: Record<string, unknown>): BuiltEmail 
     };
   }
 
-  if (type === "volunteer") {
-    if (!isValidEmail(userEmail) || !name) return null;
-    return {
-      subject: `New TNCC volunteer application from ${name}`,
-      replyTo: userEmail,
-      text: [
-        "New volunteer application from TNCC website.",
-        "",
-        `Name: ${name}`,
-        `Email: ${userEmail}`,
-        phone ? `Phone: ${phone}` : "",
-        role ? `Role: ${role}` : "",
-        message ? "" : "",
-        message ? "Message:" : "",
-        message,
-      ]
-        .filter(Boolean)
-        .join("\n"),
-    };
-  }
+   if (type === "volunteer") {
+     if (!isValidEmail(userEmail) || !name) return null;
+     return {
+       subject: `New TNCC volunteer application from ${name}`,
+       replyTo: userEmail,
+       text: [
+         "New volunteer application from TNCC website.",
+         "",
+         `Name: ${name}`,
+         `Email: ${userEmail}`,
+         phone ? `Phone: ${phone}` : "",
+         role ? `Role: ${role}` : "",
+         message ? "" : "",
+         message ? "Message:" : "",
+         message,
+       ]
+         .filter(Boolean)
+         .join("\n"),
+     };
+   }
 
-  return null;
-}
+   if (type === "event-registration") {
+     const eventName = String(payload.event_name || "").trim() || "TNCC event";
+     const category = String(payload.selected_category || "").trim();
+     const distance = String(payload.race_distance || "").trim();
+     const regId = String(payload.registration_id || "").trim();
+     const fee = Number(payload.registration_fee || 0);
+     const eventId = String(payload.event_id || "").trim();
+     const to = String(payload.participant_email || userEmail || "").trim();
+     if (!isValidEmail(to) || !name) return null;
+
+     const confirmationBody: string[] = [
+       `Dear ${name},`,
+       "",
+       `Thank you for registering for ${eventName}.`,
+       "",
+       "Registration details:",
+       `  Race category: ${category || "N/A"}`,
+       `  Distance: ${distance || "N/A"}`,
+       `  Registration fee: ${fee > 0 ? `KES ${fee.toLocaleString("en-US")}` : "FREE"}`,
+       regId ? `  Registration ID: ${regId}` : "",
+       "",
+       "Please keep your registration ID for event day. We will contact you with final race instructions before the event.",
+       "",
+       "Best regards,",
+       "Teso North Cross Country CBO (TNCC)",
+     ].filter(Boolean);
+
+     return {
+       subject: `${eventName} - Registration Confirmation (ID: ${regId || "pending"})`,
+       replyTo: adminEmail,
+       text: confirmationBody.join("\n"),
+       to,
+       cc: isValidEmail(userEmail) && userEmail !== to ? userEmail : undefined,
+       eventId,
+     };
+   }
+
+    return null;
+  }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -108,7 +148,7 @@ Deno.serve(async (req) => {
       return json(
         {
           error:
-            "A valid type (registration | contact | volunteer) with name/email/message is required",
+            "A valid type (registration | contact | volunteer | event-registration) with required fields is needed",
         },
         400,
       );
@@ -116,11 +156,12 @@ Deno.serve(async (req) => {
 
     const resendBody: Record<string, unknown> = {
       from: senderEmail,
-      to: [adminEmail],
+      to: built.to ? [built.to] : [adminEmail],
       subject: built.subject,
       text: built.text,
     };
     if (built.replyTo) resendBody.reply_to = built.replyTo;
+    if (built.cc && isValidEmail(built.cc)) resendBody.cc = [built.cc];
 
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",

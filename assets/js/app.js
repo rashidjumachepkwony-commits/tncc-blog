@@ -7,8 +7,10 @@
    5. Story article page (share, related, comments)
    6. Gallery page (filters + lightbox)
    7. Homepage previews + impact counters
-   8. Event registration (Great Chepsaita Run)
-   9. Forms (contact, volunteer, registration, donation)
+   8. Event registration (great-chepsaita-run.html)
+   9. Registration lookup (lookup.html)
+   10. Event registration (register.html)
+   11. Forms (contact, volunteer, registration, donation)
    ============================================================ */
 
 /* ---------- 1. Utilities ---------- */
@@ -667,6 +669,36 @@ async function initGreatChepsaitaRunForm() {
   const mpesaDetails = form.querySelector('[data-reg-mpesa-details]');
   const submitBtn = form.querySelector('[data-reg-submit-btn]');
   const categoryInputs = form.querySelectorAll('[data-reg-category]');
+  const categoryCountSpans = {};
+
+  async function loadCategoryCounts() {
+    const client = getSupabaseClient();
+    if (!client) return;
+    try {
+      categoryInputs.forEach(input => {
+        const categoryValue = input.value;
+        const countSpan = input.closest('.race-category-card').querySelector('.race-cat-count');
+        if (countSpan) categoryCountSpans[categoryValue] = countSpan;
+      });
+      const { data, error } = await client
+        .from('submissions')
+        .select('selected_category', { count: 'exact' })
+        .eq('event_id', CHEPSAITA_RUN_CONFIG.eventId)
+        .not('selected_category', 'is', null);
+      if (error) return;
+      const countsByCategory = {};
+      data.forEach(row => {
+        const cat = CHEPSAITA_RUN_CATEGORIES.find(c => c.label === row.selected_category);
+        if (cat) countsByCategory[cat.value] = (countsByCategory[cat.value] || 0) + 1;
+      });
+      Object.entries(countsByCategory).forEach(([catValue, count]) => {
+        if (categoryCountSpans[catValue]) {
+          categoryCountSpans[catValue].textContent = `${count} registered`;
+          categoryCountSpans[catValue].style.display = 'inline-block';
+        }
+      });
+    } catch (error) { /* silent fail */ }
+  }
 
   let locations = {};
 
@@ -722,6 +754,7 @@ async function initGreatChepsaitaRunForm() {
     if (status) status.textContent = 'Select your county, sub-county and ward. Busia locations are available offline.';
   }
   populateSubCounties();
+  loadCategoryCounts();
 
   categoryInputs.forEach(input => {
     input.addEventListener('change', () => {
@@ -877,12 +910,16 @@ async function initGreatChepsaitaRunForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'contact',
+          type: 'event-registration',
           payload: {
             name,
-            email,
-            phone,
-            message: `New registration for The Great Chepsaita Run: ${name} (${selectedCategory.label}, ${selectedCategory.distance}) from ${county}, ${subCounty}, ${ward}. Registration ID: ${registrationId}.`
+            participant_email: email,
+            event_name: CHEPSAITA_RUN_CONFIG.eventName,
+            event_id: CHEPSAITA_RUN_CONFIG.eventId,
+            selected_category: selectedCategory.label,
+            race_distance: selectedCategory.distance,
+            registration_fee: CHEPSAITA_RUN_CONFIG.fee,
+            registration_id: registrationId
           }
         })
       }).catch(() => {});
@@ -899,14 +936,160 @@ async function initGreatChepsaitaRunForm() {
     if (confirmCategory) confirmCategory.textContent = selectedCategory.label;
     if (confirmDistance) confirmDistance.textContent = selectedCategory.distance;
     if (confirmId) confirmId.textContent = registrationId;
+    const provisionalBib = String(Number(data.id.substring(0, 8).replace(/[^0-9]/g, '') || Date.now())).slice(-4);
+    const confirmBib = document.querySelector('[data-confirm-bib]');
+    if (confirmBib) confirmBib.textContent = provisionalBib;
+
+    const qrContainer = document.querySelector('[data-confirm-qr]');
+    if (qrContainer) {
+      qrContainer.innerHTML = '';
+      const canvas = document.createElement('canvas');
+      canvas.width = 160;
+      canvas.height = 160;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 160, 160);
+        ctx.strokeStyle = '#073b2b';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, 160, 160);
+        ctx.fillStyle = '#073b2b';
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(registrationId, 80, 14);
+        ctx.font = 'bold 10px monospace';
+        ctx.fillText('TNCC', 80, 156);
+      }
+      qrContainer.appendChild(canvas);
+    }
 
     if (confirmationSection) confirmationSection.hidden = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
-/* ---------- 9. Forms ---------- */
+/* ---------- 11. Registration lookup (lookup.html) ---------- */
 
+async function initLookupForm() {
+  const form = document.querySelector('[data-lookup-form]');
+  if (!form) return;
+  const queryInput = form.querySelector('[data-lookup-query]');
+  const resultSection = document.querySelector('[data-lookup-result]');
+  const notFoundSection = document.querySelector('[data-lookup-not-found]');
+  const fields = {
+    id: document.querySelector('[data-lookup-id]'),
+    name: document.querySelector('[data-lookup-name]'),
+    phone: document.querySelector('[data-lookup-phone]'),
+    email: document.querySelector('[data-lookup-email]'),
+    age: document.querySelector('[data-lookup-age]'),
+    gender: document.querySelector('[data-lookup-gender]'),
+    county: document.querySelector('[data-lookup-county]'),
+    subCounty: document.querySelector('[data-lookup-sub-county]'),
+    ward: document.querySelector('[data-lookup-ward]'),
+    category: document.querySelector('[data-lookup-category]'),
+    distance: document.querySelector('[data-lookup-distance]'),
+    guardian: document.querySelector('[data-lookup-guardian]'),
+    guardianPhone: document.querySelector('[data-lookup-guardian-phone]'),
+    status: document.querySelector('[data-lookup-status]'),
+    date: document.querySelector('[data-lookup-date]')
+  };
+
+  function clearFields() {
+    Object.values(fields).forEach(el => { if (el) el.textContent = ''; });
+  }
+
+  function showResult(item) {
+    const regId = 'TNCC-CR-' + String(item.id || '').substring(0, 8).toUpperCase();
+    if (fields.id) fields.id.textContent = regId;
+    if (fields.name) fields.name.textContent = item.name || '—';
+    if (fields.phone) fields.phone.textContent = item.phone || '—';
+    if (fields.email) fields.email.textContent = item.email || '—';
+    if (fields.age) fields.age.textContent = item.age || '—';
+    if (fields.gender) fields.gender.textContent = item.gender || 'Prefer not to say';
+    if (fields.county) fields.county.textContent = item.county || '—';
+    if (fields.subCounty) fields.subCounty.textContent = item.sub_county || '—';
+    if (fields.ward) fields.ward.textContent = item.ward || '—';
+    if (fields.category) fields.category.textContent = item.selected_category || '—';
+    if (fields.distance) fields.distance.textContent = item.race_distance || '—';
+    if (fields.guardian) fields.guardian.textContent = item.guardian || '—';
+    if (fields.guardianPhone) fields.guardianPhone.textContent = item.guardian_phone || '—';
+    if (fields.status) fields.status.textContent = item.status || 'pending';
+    if (fields.date) fields.date.textContent = item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+    clearFields();
+  }
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const query = queryInput?.value?.trim() || '';
+    if (!query) {
+      showToast('Please enter a registration ID, email, or phone number.', 'error');
+      return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    resultSection.hidden = true;
+    notFoundSection.hidden = true;
+    clearFields();
+
+    const client = getSupabaseClient();
+    if (!client) {
+      if (submitBtn) submitBtn.disabled = false;
+      showToast('Search is not connected yet. Please contact us directly.', 'error');
+      return;
+    }
+
+    try {
+      let data = null;
+      let error = null;
+
+      if (query.toUpperCase().startsWith('TNCC-CR-')) {
+        const shortId = query.replace('TNCC-CR-', '').substring(0, 8).toLowerCase();
+        const { data: result, error: err } = await client
+          .from('submissions')
+          .select('*')
+          .eq('event_id', 'great-chepsaita-run')
+          .limit(1);
+        if (err) { error = err; }
+        else {
+          data = result.find(row => String(row.id).substring(0, 8).toLowerCase() === shortId) || null;
+        }
+      } else if (query.includes('@')) {
+        const { data: result, error: err } = await client
+          .from('submissions')
+          .select('*')
+          .eq('event_id', 'great-chepsaita-run')
+          .eq('email', query);
+        if (err) { error = err; }
+        else { data = result?.[0] || null; }
+      } else {
+        const { data: result, error: err } = await client
+          .from('submissions')
+          .select('*')
+          .eq('event_id', 'great-chepsaita-run')
+          .eq('phone', query);
+        if (err) { error = err; }
+        else { data = result?.[0] || null; }
+      }
+
+      if (error) {
+        console.error(error);
+        showToast('Could not look up registration. Please try again.', 'error');
+      } else if (data) {
+        showResult(data);
+        resultSection.hidden = false;
+        window.scrollTo({ top: resultSection.offsetTop - 80, behavior: 'smooth' });
+      } else {
+        notFoundSection.hidden = false;
+      }
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+}
+
+/* ---------- 12. Forms ---------- */
 function initContactForm() {
   const form = document.querySelector('[data-contact-form]');
   if (!form) return;
@@ -1203,8 +1386,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initDonationPage();
   initContactForm();
   initVolunteerForm();
-  initRegistrationForm();
-  initGreatChepsaitaRunForm();
-  initThemeToggleFallback();
-  initYear();
-});
+   initRegistrationForm();
+   initGreatChepsaitaRunForm();
+   initLookupForm();
+   initThemeToggleFallback();
+   initYear();
+ });

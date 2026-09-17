@@ -8,7 +8,8 @@ const TNCC_NAVIGATION = [
   ['Get Involved', 'get-involved.html'],
   ['Great Chepsaita Run', 'great-chepsaita-run.html'],
   ['Donate', 'donate.html'],
-  ['Contact', 'contact.html']
+  ['Contact', 'contact.html'],
+  ['Registration lookup', 'lookup.html']
 ];
 
 /* Pages that should highlight a parent nav item (e.g. story pages highlight Stories). */

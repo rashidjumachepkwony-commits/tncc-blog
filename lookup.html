@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration lookup | Teso North Cross Country CBO</title>
+    <meta name="description" content="Look up your Great Chepsaita Run registration by ID, email, or phone number." />
+    <link rel="canonical" href="https://rashidjumachepkwony-commits.github.io/tncc-blog/lookup.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Teso North Cross Country CBO" />
+    <meta property="og:title" content="Registration lookup | Teso North Cross Country CBO" />
+    <meta property="og:description" content="Look up your Great Chepsaita Run registration by ID, email, or phone number." />
+    <meta property="og:url" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/lookup.html" />
+    <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#073b2b" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
+    <div data-site-header></div>
+
+    <main id="main-content">
+      <section class="page-hero">
+        <div class="container page-hero-inner">
+          <div>
+            <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Registration lookup</span></nav>
+            <span class="eyebrow">Registration lookup</span>
+            <h1>Find your Chepsaita Run registration</h1>
+            <p>Enter your registration ID, email, or phone number to view your entry details for The Great Chepsaita Run.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-sm">
+        <div class="container" style="max-width: 560px; margin: 0 auto;">
+          <div class="card reveal" style="padding: 30px;">
+            <div class="section-heading" style="margin-bottom: 24px;">
+              <span class="eyebrow">Lookup</span>
+              <h2>Registration details</h2>
+            </div>
+
+            <form data-lookup-form class="form-grid">
+              <div class="field">
+                <label for="lookup-query">Registration ID, email, or phone *</label>
+                <input id="lookup-query" data-lookup-query type="text" placeholder="TNCC-CR-XXXXXXXX or name@email.com or 0712345678" required />
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Find registration</button>
+                <a class="btn btn-ghost" href="great-chepsaita-run.html">Register instead</a>
+              </div>
+            </form>
+
+            <div class="lookup-result" data-lookup-result hidden style="margin-top: 24px;">
+              <div class="event-confirm-icon" aria-hidden="true">&#9889;</div>
+              <div class="event-confirm-details" style="margin-top: 18px;">
+                <div class="event-confirm-row"><span>ID</span><strong data-lookup-id></strong></div>
+                <div class="event-confirm-row"><span>Name</span><strong data-lookup-name></strong></div>
+                <div class="event-confirm-row"><span>Phone</span><strong data-lookup-phone></strong></div>
+                <div class="event-confirm-row"><span>Email</span><strong data-lookup-email></strong></div>
+                <div class="event-confirm-row"><span>Age</span><strong data-lookup-age></strong></div>
+                <div class="event-confirm-row"><span>Gender</span><strong data-lookup-gender></strong></div>
+                <div class="event-confirm-row"><span>County</span><strong data-lookup-county></strong></div>
+                <div class="event-confirm-row"><span>Sub-county</span><strong data-lookup-sub-county></strong></div>
+                <div class="event-confirm-row"><span>Ward</span><strong data-lookup-ward></strong></div>
+                <div class="event-confirm-row"><span>Race</span><strong data-lookup-category></strong></div>
+                <div class="event-confirm-row"><span>Distance</span><strong data-lookup-distance></strong></div>
+                <div class="event-confirm-row"><span>Guardian</span><strong data-lookup-guardian></strong></div>
+                <div class="event-confirm-row"><span>Guardian phone</span><strong data-lookup-guardian-phone></strong></div>
+                <div class="event-confirm-row"><span>Status</span><strong data-lookup-status></strong></div>
+                <div class="event-confirm-row"><span>Registered</span><strong data-lookup-date></strong></div>
+              </div>
+            </div>
+
+            <div class="lookup-not-found" data-lookup-not-found hidden style="margin-top: 24px;">
+              <p style="color: var(--muted); text-align: center;">No registration found matching that reference. Please check your details or contact us.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer data-site-footer></footer>
+    <div class="toast" aria-live="polite"></div>
+  </body>
+</html>
