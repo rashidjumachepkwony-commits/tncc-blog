@@ -44,14 +44,16 @@ function tnccHeaderMarkup() {
         <span class="brand-copy"><strong>Teso North</strong><small>Cross Country CBO</small></span>
       </a>
       <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="menu-icon" aria-hidden="true"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
       </button>
       <nav class="site-nav" id="primary-navigation" aria-label="Main navigation">${links}
         <a class="btn btn-secondary btn-small login-link" href="login.html">Login</a>
       </nav>
       <div class="nav-actions">
         <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
-          <span aria-hidden="true" data-theme-icon>◐</span>
+          <span aria-hidden="true" data-theme-icon>🌙</span>
         </button>
         <a class="btn btn-primary btn-small header-cta" href="donate.html">Donate</a>
       </div>
@@ -112,7 +114,7 @@ function tnccSetTheme(theme) {
   document.querySelectorAll('[data-theme-toggle]').forEach(button => {
     button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
     const icon = button.querySelector('[data-theme-icon]');
-    if (icon) icon.textContent = dark ? '☾' : '◐';
+    if (icon) icon.textContent = dark ? '☀' : '🌙';
   });
 }
 

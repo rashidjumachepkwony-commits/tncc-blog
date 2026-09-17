@@ -203,12 +203,18 @@ body.dark .site-header {
 .mobile-toggle {
   display: none;
 }
-.menu-icon::before {
-  content: "☰";
+.menu-bar {
   display: block;
-  font-size: 1.5rem;
-  font-weight: normal;
-  line-height: 1;
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+  margin: 4px 0;
+  transition: var(--transition);
+}
+[data-theme-toggle] [data-theme-icon] {
+  font-size: 1.25rem;
+  display: inline-block;
 }
 .hero {
   position: relative;

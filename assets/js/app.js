@@ -1183,7 +1183,9 @@ function initThemeToggleFallback() {
       const dark = !document.body.classList.contains('dark');
       document.body.classList.toggle('dark', dark);
       try { localStorage.setItem('tncc-theme', dark ? 'dark' : 'light'); } catch (error) { /* ignore */ }
-      button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+       button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      const icon = button.querySelector('[data-theme-icon]');
+      if (icon) icon.textContent = dark ? '☀' : '🌙';
     });
   });
 }
