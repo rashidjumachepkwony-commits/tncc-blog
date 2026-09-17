@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Registration | Teso North Cross Country CBO</title>
+  <meta name="description" content="Register for the next TNCC cross-country event. Races for elite runners, schools, youth, veterans and a fun run &mdash; open to everyone in the community." />
+  <link rel="canonical" href="https://rashidjumachepkwony-commits.github.io/tncc-blog/register.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Teso North Cross Country CBO" />
+  <meta property="og:title" content="Event Registration | Teso North Cross Country CBO" />
+  <meta property="og:description" content="Register for the next TNCC cross-country event. Open to everyone in the community." />
+  <meta property="og:url" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/register.html" />
+  <meta property="og:image" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/runners%20(1).jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#073b2b" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
+  <div data-site-header></div>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container page-hero-inner">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="get-involved.html">Get involved</a><span aria-hidden="true">/</span><span aria-current="page">Register</span></nav>
+          <span class="eyebrow">Event registration</span>
+          <h1>Join the next cross-country event.</h1>
+          <p>Participation is open to everyone &mdash; every age, every ability. Choose your race category and register below.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container donation-grid">
+        <div class="card reveal" style="padding: 22px;">
+          <div class="section-heading" style="margin-bottom: 20px;">
+            <span class="eyebrow">Registration form</span>
+            <h2>Tell us about you.</h2>
+          </div>
+          <form data-registration-form class="form-grid" novalidate>
+            <div class="form-grid two">
+              <div class="field">
+                <label for="reg-name">Full name *</label>
+                <input id="reg-name" data-reg-name type="text" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="reg-email">Email *</label>
+                <input id="reg-email" data-reg-email type="email" autocomplete="email" required />
+              </div>
+            </div>
+            <div class="form-grid two">
+              <div class="field">
+                <label for="reg-phone">Phone number *</label>
+                <input id="reg-phone" data-reg-phone type="tel" placeholder="e.g. 0712 345 678" required />
+              </div>
+              <div class="field">
+                <label for="reg-age">Age *</label>
+                <input id="reg-age" data-reg-age type="number" min="5" max="120" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label" id="raceLabel">Running competition race(s) *</span>
+              <div class="race-options" role="group" aria-labelledby="raceLabel">
+                <label class="race-option"><input type="checkbox" data-reg-race value="Elite Race" /><span aria-hidden="true">&#127942;</span><span>Elite Race</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="Open Race" /><span aria-hidden="true">&#127939;</span><span>Open Race</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="Schools Category" /><span aria-hidden="true">&#127891;</span><span>Schools Category</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="Youth Category" /><span aria-hidden="true">&#9889;</span><span>Youth Category</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="Veterans Category" /><span aria-hidden="true">&#127942;</span><span>Veterans Category</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="Fun Run" /><span aria-hidden="true">&#127881;</span><span>Fun Run</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="PWD Category" /><span aria-hidden="true">&#9855;</span><span>PWD Category</span></label>
+                <label class="race-option"><input type="checkbox" data-reg-race value="VIP Challenge Race" /><span aria-hidden="true">&#11088;</span><span>VIP Challenge Race</span></label>
+              </div>
+              <p class="field-note">Choose one or more race categories. Participation is free.</p>
+            </div>
+
+            <div class="field">
+              <label for="reg-interest">I am registering as *</label>
+              <select id="reg-interest" data-reg-interest required>
+                <option value="">Select an option</option>
+                <option value="event-participant">Event participant (runner)</option>
+                <option value="volunteer">Volunteer</option>
+                <option value="member">Become a member</option>
+                <option value="partner">Partnership / sponsorship</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-grid two">
+              <div class="field">
+                <label for="reg-county">County *</label>
+                <select id="reg-county" data-reg-county required><option value="">Loading counties…</option></select>
+              </div>
+              <div class="field">
+                <label for="reg-sub-county">Sub-county *</label>
+                <select id="reg-sub-county" data-reg-sub-county required disabled><option value="">Select county first</option></select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="reg-ward">Ward *</label>
+              <select id="reg-ward" data-reg-ward required disabled><option value="">Select sub-county first</option></select>
+              <p class="location-status" data-reg-location-status>Loading Kenya counties, sub-counties and wards…</p>
+            </div>
+
+            <div class="form-grid two">
+              <div class="field">
+                <label for="reg-guardian">Guardian</label>
+                <input id="reg-guardian" data-reg-guardian type="text" placeholder="Parent or guardian name (for minors)" />
+              </div>
+              <div class="field">
+                <label for="reg-education">Level of education</label>
+                <select id="reg-education" data-reg-education>
+                  <option value="">Select level</option>
+                  <option>Primary</option>
+                  <option>Secondary</option>
+                  <option>College / TVET</option>
+                  <option>University</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="reg-message">Anything else we should know?</label>
+              <textarea id="reg-message" data-reg-message rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Submit registration</button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="sidebar-panel reveal">
+          <h3>Registration information</h3>
+          <ul class="list-check">
+            <li>Participation is free and open to all ages and abilities.</li>
+            <li>Categories for elite, open, schools, youth, veterans, PWD and fun run.</li>
+            <li>Minors should include a parent or guardian name.</li>
+            <li>We will contact you with event details after your registration.</li>
+          </ul>
+          <h3 style="margin-top: 22px;">Questions?</h3>
+          <p style="color: var(--muted); font-size: 0.92rem;">Call <strong>0182 095 270</strong> or email <a href="mailto:info@tesonorthcrosscountry.org">info@tesonorthcrosscountry.org</a>.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer data-site-footer></footer>
+  <div class="toast" aria-live="polite"></div>
+</body>
+</html>

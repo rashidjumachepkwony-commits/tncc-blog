@@ -1,73 +1,64 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Story | Teso North Cross Country CBO</title>
-    <meta name="description" content="Read the full story from Teso North Cross Country CBO." />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="assets/css/site.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="supabase-config.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container navbar">
-        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="programs.html">Programs</a>
-          <a href="impact.html">Impact</a>
-          <a href="stories.html" class="active">Stories</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="get-involved.html">Get Involved</a>
-          <a href="donate.html">Donate</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
-          <a class="btn btn-secondary btn-small" href="login.html">Login</a>
-          <a class="btn btn-primary btn-small header-cta" href="donate.html">Support</a>
-          <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Toggle menu">☰</button>
-        </div>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story | Teso North Cross Country CBO</title>
+  <meta name="description" content="Read stories and news from Teso North Cross Country CBO." />
+  <link rel="canonical" href="https://rashidjumachepkwony-commits.github.io/tncc-blog/story.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Teso North Cross Country CBO" />
+  <meta property="og:title" content="Story | Teso North Cross Country CBO" />
+  <meta property="og:description" content="Read stories and news from Teso North Cross Country CBO." />
+  <meta property="og:image" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/hero-event.jpg.jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#073b2b" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
+  <div data-site-header></div>
 
-    <main>
-      <section class="section-sm">
-        <div class="container">
-          <div class="story-detail" data-story-detail></div>
-          <section class="story-comments-card" data-story-comments>
-            <div class="story-comments-head">
-              <h2>Comments</h2>
-              <span class="story-comments-count" data-story-comment-count></span>
+  <main id="main-content">
+    <section class="section-sm">
+      <div class="container">
+        <div class="story-detail" data-story-detail></div>
+
+        <section class="section-sm" aria-labelledby="related-heading" data-related-section>
+          <div class="section-heading">
+            <span class="eyebrow">Keep reading</span>
+            <h2 id="related-heading">Related stories</h2>
+          </div>
+          <div class="related-grid" data-related-list></div>
+        </section>
+
+        <section class="story-comments-card" data-story-comments>
+          <div class="story-comments-head">
+            <h2>Comments</h2>
+            <span class="story-comments-count" data-story-comment-count></span>
+          </div>
+          <div class="story-comments-list" data-story-comment-list></div>
+          <div class="story-comment-form">
+            <label class="sr-only" for="comment-input" hidden>Write a comment</label>
+            <textarea id="comment-input" data-story-comment-input rows="3" placeholder="Share a thought..."></textarea>
+            <div class="story-comment-form-row">
+              <button class="btn btn-primary btn-small" type="button" data-story-comment-submit>Post comment</button>
+              <a class="btn btn-secondary btn-small" href="login.html" data-story-comment-login>Sign in to comment</a>
             </div>
-            <div class="story-comments-list" data-story-comment-list></div>
-            <div class="story-comment-form">
-              <textarea data-story-comment-input rows="3" placeholder="Share a thought..."></textarea>
-              <div class="story-comment-form-row">
-                <button class="btn btn-primary btn-small" type="button" data-story-comment-submit>Post comment</button>
-                <a class="btn btn-secondary btn-small" href="login.html" data-story-comment-login>Sign in to comment</a>
-              </div>
-              <p class="story-comments-hint" data-story-comment-hint></p>
-            </div>
-          </section>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="container footer-grid">
-        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>Stories of participation, purpose, and local transformation.</p></div>
-        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
-        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
-        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
+            <p class="story-comments-hint" data-story-comment-hint></p>
+          </div>
+        </section>
       </div>
-      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
-    </footer>
+    </section>
+  </main>
 
-    <div class="toast" aria-live="polite"></div>
-  </body>
+  <footer data-site-footer></footer>
+  <div class="toast" aria-live="polite"></div>
+</body>
 </html>

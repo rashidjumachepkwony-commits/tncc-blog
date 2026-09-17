@@ -1,172 +1,128 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Programs | Teso North Cross Country CBO</title>
-    <meta name="description" content="Explore TNCC programs, community initiatives, and opportunities for participation, volunteerism, and social impact." />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="assets/css/site.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="supabase-config.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container navbar">
-        <a class="brand" href="index.html">
-          <span class="brand-mark">TN</span>
-          <span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span>
-        </a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="programs.html" class="active">Programs</a>
-          <a href="impact.html">Impact</a>
-          <a href="stories.html">Stories</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="get-involved.html">Get Involved</a>
-          <a href="donate.html">Donate</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
-          <a class="btn btn-secondary btn-small" href="login.html">Login</a>
-          <a class="btn btn-primary btn-small header-cta" href="donate.html">Support</a>
-          <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Toggle menu">☰</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Programs | Teso North Cross Country CBO</title>
+  <meta name="description" content="Explore TNCC programs: cross-country running events, youth leadership, community dialogue and awareness campaigns against gender-based violence in Teso North, Kenya." />
+  <link rel="canonical" href="https://rashidjumachepkwony-commits.github.io/tncc-blog/programs.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Teso North Cross Country CBO" />
+  <meta property="og:title" content="Our Programs | Teso North Cross Country CBO" />
+  <meta property="og:description" content="Practical, people-centered initiatives built around participation, wellbeing and growth." />
+  <meta property="og:url" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/programs.html" />
+  <meta property="og:image" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/runners.jpg.jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Our Programs | Teso North Cross Country CBO" />
+  <meta name="twitter:description" content="Practical, people-centered initiatives built around participation, wellbeing and growth." />
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#073b2b" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
+  <div data-site-header></div>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container page-hero-inner">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Programs</span></nav>
+          <span class="eyebrow">Programs</span>
+          <h1>Initiatives built for participation, wellbeing and growth.</h1>
+          <p>Every TNCC program is designed with the community, delivered with local partners, and open to everyone.</p>
         </div>
       </div>
-    </header>
+    </section>
 
-    <main>
-      <section class="page-hero">
-        <div class="container page-hero-inner">
-          <div>
-            <span class="eyebrow">Programs</span>
-            <h1>Initiatives built for participation, wellbeing, and growth.</h1>
+    <section class="section-sm">
+      <div class="container grid-2">
+        <article class="card reveal">
+          <div class="card-body">
+            <span class="card-tag">Sport</span>
+            <h3>Cross-country &amp; wellness</h3>
+            <p>Inclusive running events, fitness sessions and community rallies that bring people together in a positive, supportive environment.</p>
+            <ul class="list-check">
+              <li>Races for every age and ability</li>
+              <li>Community training sessions</li>
+              <li>Health and fitness awareness</li>
+            </ul>
           </div>
-        </div>
-      </section>
-
-      <section class="section-sm">
-        <div class="container grid-3">
-          <article class="card reveal">
-            <div class="card-body">
-              <span class="card-tag">Sport</span>
-              <h3>Cross-country & wellness</h3>
-              <p>Inclusive running events, fitness sessions, and community rallies that bring people together in a positive environment.</p>
-              <ul class="list-check">
-                <li>Healthy participation</li>
-                <li>Community training</li>
-                <li>Local awareness</li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="card reveal">
-            <div class="card-body">
-              <span class="card-tag">Youth</span>
-              <h3>Youth leadership</h3>
-              <p>Programs that create room for young people to participate, learn, lead, and take part in community action.</p>
-              <ul class="list-check">
-                <li>Mentorship</li>
-                <li>Confidence building</li>
-                <li>Skill development</li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="card reveal">
-            <div class="card-body">
-              <span class="card-tag">Dialogue</span>
-              <h3>Community conversations</h3>
-              <p>Structured discussions that help residents explore issues, remove barriers, and build stronger local systems.</p>
-              <ul class="list-check">
-                <li>Listening sessions</li>
-                <li>Awareness campaigns</li>
-                <li>Shared problem-solving</li>
-              </ul>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section-sm" style="background: var(--surface-alt);">
-        <div class="container">
-          <div class="section-heading reveal">
-            <span class="eyebrow">How we work</span>
-            <h2>Our program approach is simple and people-centered.</h2>
+        </article>
+        <article class="card reveal">
+          <div class="card-body">
+            <span class="card-tag">Youth</span>
+            <h3>Youth leadership</h3>
+            <p>Programs that create room for young people to participate, learn, lead and take part in community action.</p>
+            <ul class="list-check">
+              <li>Mentorship and coaching</li>
+              <li>Confidence building</li>
+              <li>Skills and talent development</li>
+            </ul>
           </div>
-          <div class="grid-3">
-            <div class="card reveal">
-              <div class="card-body">
-                <h3>1. Listen</h3>
-                <p>We learn from community voices and understand local realities before shaping action.</p>
-              </div>
-            </div>
-            <div class="card reveal">
-              <div class="card-body">
-                <h3>2. Act</h3>
-                <p>We organize practical events, opportunities, and support systems for participation and growth.</p>
-              </div>
-            </div>
-            <div class="card reveal">
-              <div class="card-body">
-                <h3>3. Measure</h3>
-                <p>We evaluate engagement and the impact of each initiative to improve and expand reach.</p>
-              </div>
-            </div>
+        </article>
+        <article class="card reveal">
+          <div class="card-body">
+            <span class="card-tag">Dialogue</span>
+            <h3>Community conversation</h3>
+            <p>Listening sessions and open forums where community members surface challenges and shape practical responses together.</p>
+            <ul class="list-check">
+              <li>Community listening sessions</li>
+              <li>Shared problem-solving</li>
+              <li>Local leader engagement</li>
+            </ul>
           </div>
-        </div>
-      </section>
-
-      <section class="section-sm">
-        <div class="container">
-          <div class="card reveal" style="padding: 24px;">
-            <div class="grid-2">
-              <div>
-                <span class="eyebrow">Getting involved</span>
-                <h2 style="margin: 16px 0 12px; color: var(--primary);">Support the next chapter of local impact.</h2>
-                <p style="margin: 0; color: var(--muted);">Whether through volunteering, donations, or partnerships, you can help build stronger opportunities for people across Teso North.</p>
-              </div>
-              <div class="button-row" style="justify-content: flex-end; align-items: center;">
-                <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
-                <a class="btn btn-primary" href="donate.html">Donate</a>
-              </div>
-            </div>
+        </article>
+        <article class="card reveal">
+          <div class="card-body">
+            <span class="card-tag">Equality</span>
+            <h3>Gender-based violence awareness</h3>
+            <p>We use the platform of sport to raise awareness, challenge harmful norms and stand with survivors &mdash; building safer communities for women and girls.</p>
+            <ul class="list-check">
+              <li>Awareness campaigns at every event</li>
+              <li>Community pledges and education</li>
+              <li>Partnerships for safer environments</li>
+            </ul>
           </div>
-        </div>
-      </section>
-    </main>
+        </article>
+      </div>
+    </section>
 
-    <footer>
-      <div class="container footer-grid">
-        <div class="footer-brand">
-          <h3>Teso North Cross Country CBO</h3>
-          <p>Helping communities grow through participation, wellness, and collective action.</p>
+    <section class="section-sm" style="background: var(--surface-alt);">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">How we work</span>
+          <h2>Our program approach is simple and people-centered.</h2>
         </div>
-        <div class="footer-links">
-          <h4>Explore</h4>
-          <a href="about.html">About</a>
-          <a href="programs.html">Programs</a>
-          <a href="stories.html">Stories</a>
-          <a href="gallery.html">Gallery</a>
-        </div>
-        <div class="footer-links">
-          <h4>Get involved</h4>
-          <a href="get-involved.html">Volunteer</a>
-          <a href="donate.html">Donate</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <div class="footer-meta">
-          <h4>Contact</h4>
-          <a href="mailto:hello@tncc.org">hello@tncc.org</a>
-          <span>Teso North, Kenya</span>
+        <div class="grid-3">
+          <div class="card reveal"><div class="card-body"><h3>1. Listen</h3><p>We learn from community voices and understand local realities before shaping action.</p></div></div>
+          <div class="card reveal"><div class="card-body"><h3>2. Act</h3><p>We organize practical events, opportunities and support systems for participation and growth.</p></div></div>
+          <div class="card reveal"><div class="card-body"><h3>3. Measure</h3><p>We evaluate engagement and the impact of each initiative to improve and expand reach.</p></div></div>
         </div>
       </div>
-      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
-    </footer>
+    </section>
 
-    <div class="toast" aria-live="polite"></div>
-  </body>
+    <section class="section-sm">
+      <div class="container">
+        <div class="cta-band reveal">
+          <h2>Support the next chapter of local impact.</h2>
+          <p>Whether through registering for an event, volunteering, donating or partnering, you can help build stronger opportunities for people across Teso North.</p>
+          <div class="button-row">
+            <a class="btn btn-primary" href="register.html">Register for an event</a>
+            <a class="btn btn-ghost" href="get-involved.html">Volunteer</a>
+            <a class="btn btn-ghost" href="donate.html">Donate</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer data-site-footer></footer>
+  <div class="toast" aria-live="polite"></div>
+</body>
 </html>

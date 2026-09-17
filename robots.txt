@@ -1,7 +1,7 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
-Disallow: /admin
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /auth-callback.html
 
-# The site has no custom domain yet, so no sitemap is advertised.
-# Once you have a domain, restore the line below with your real URL:
-# Sitemap: https://www.yourdomain.com/sitemap.xml
+Sitemap: https://rashidjumachepkwony-commits.github.io/tncc-blog/sitemap.xml

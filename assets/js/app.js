@@ -1,441 +1,32 @@
-const TNCC_STORIES = [
-  {
-    id: 1,
-    tag: 'Community',
-    title: 'Running for a stronger, safer community',
-    image: '../../hero-event.jpg.jpeg',
-    date: 'May 12, 2026',
-    author: 'TNCC Team',
-    excerpt: 'Every stride brings people together around health, dignity, and shared responsibility for safer communities.',
-    body: [
-      'Across Teso North, community sport is becoming a powerful platform for connection, participation, and practical action. Each event creates a space where families, youth, leaders, and partners can come together around a common goal.',
-      'This work is not just about running. It is about creating safer spaces, strengthening relationships, and proving that collective responsibility can drive positive change. That is why each training session and community gathering brings renewed momentum to local action.',
-      'The TNCC story is rooted in the belief that shared effort matters. When communities show up for one another, normal routines can shift and long-term opportunities grow.'
-    ]
-  },
-  {
-    id: 2,
-    tag: 'Dialogue',
-    title: 'Let us talk, listen and act',
-    image: '../../community-talk.jpg.jpeg',
-    date: 'April 08, 2026',
-    author: 'TNCC Team',
-    excerpt: 'Listening sessions help communities surface challenges, build trust, and shape practical responses together.',
-    body: [
-      'Open conversations help people see the issues affecting daily life more clearly. They also help people understand that progress is often built through listening, reflection, and steady action.',
-      'TNCC creates spaces where community members can speak honestly about challenges, share experiences, and identify where support is most needed. These conversations inform the way the movement responds and grows.',
-      'When communities learn to listen to one another with respect and courage, they become better equipped to act together.'
-    ]
-  },
-  {
-    id: 3,
-    tag: 'Sport',
-    title: 'Every step counts',
-    image: '../../runners.jpg.jpeg',
-    date: 'March 19, 2026',
-    author: 'TNCC Team',
-    excerpt: 'Participation is not only about event-day energy; it is about building healthy routines and community confidence.',
-    body: [
-      'On course, people discover more than physical endurance. They build consistency, confidence, and a stronger sense of belonging. Community events give people an opportunity to work together toward something positive.',
-      'Every step counts because participation matters. It creates momentum, motivates others, and reminds the community that progress is possible when people are supported and encouraged.',
-      'That is why TNCC continues to center sport as a practical pathway for wellness, unity, and local transformation.'
-    ]
-  },
-  {
-    id: 4,
-    tag: 'Youth',
-    title: 'Making room for the next generation',
-    image: '../../community.jpg.jpeg',
-    date: 'February 26, 2026',
-    author: 'TNCC Team',
-    excerpt: 'Young people bring energy and ideas and deserve meaningful opportunities to contribute and lead.',
-    body: [
-      'The future of strong communities is shaped by the next generation. Youth engagement is at the center of TNCC because young people carry ideas, courage, and possibility.',
-      'When mentorship, leadership, and participation are available, youth are more likely to become active contributors to local change. This creates ripple effects across families and wider community systems.',
-      'Building those pathways requires intentional support, trusted relationship-building, and opportunities to participate without barriers.'
-    ]
-  },
-  {
-    id: 5,
-    tag: 'Partnerships',
-    title: 'When local partners move together',
-    image: '../../partners2.jpg.jpeg',
-    date: 'January 15, 2026',
-    author: 'TNCC Team',
-    excerpt: 'Partnerships help turn local energy into sustainable, community-led action.',
-    body: [
-      'Community impact grows when people and institutions work together. Local partnerships strengthen planning, broaden reach, and ensure that initiatives remain grounded in community needs.',
-      'TNCC values collaboration with families, leaders, and organizations who can contribute time, expertise, and practical support. These relationships create better outcomes for everyone involved.',
-      'Working together is not only helpful; it is necessary when the goal is lasting social change.'
-    ]
-  }
-];
+/* ============================================================
+   TNCC front-end application
+   1. Utilities
+   2. Seed content (stories + gallery)
+   3. Content loading (Supabase content_items + seed fallback)
+   4. Stories page
+   5. Story article page (share, related, comments)
+   6. Gallery page (filters + lightbox)
+   7. Homepage previews + impact counters
+   8. Forms (contact, volunteer, event registration, donation)
+   ============================================================ */
 
-const TNCC_GALLERY = [
-  { image: '../../hero-event.jpg.jpeg', caption: 'Community gathers for the event' },
-  { image: '../../community-talk.jpg.jpeg', caption: 'After the talk, the action begins' },
-  { image: '../../runners.jpg.jpeg', caption: 'On the course together' },
-  { image: '../../runners (1).jpeg', caption: 'Ready at the starting line' },
-  { image: '../../runners (2).jpeg', caption: 'Running towards a shared goal' },
-  { image: '../../runners (3).jpeg', caption: 'Community in motion' },
-  { image: '../../runners (4).jpeg', caption: 'Race day energy' },
-  { image: '../../runners (5).jpeg', caption: 'Focus, purpose and courage' },
-  { image: '../../runners (6).jpeg', caption: 'Strength in participation' },
-  { image: '../../runners (7).jpeg', caption: 'Young runners leading the way' },
-  { image: '../../runners (8).jpeg', caption: 'Together on the course' },
-  { image: '../../runners (9).jpeg', caption: 'A shared finish line' }
-];
-
-function getSupabaseClient() {
-  if (window.tnccSupabase) return window.tnccSupabase;
-  if (window.TNCC_CONFIG?.supabaseUrl && window.TNCC_CONFIG?.supabaseAnonKey && window.supabase) {
-    window.tnccSupabase = window.supabase.createClient(window.TNCC_CONFIG.supabaseUrl, window.TNCC_CONFIG.supabaseAnonKey);
-    return window.tnccSupabase;
-  }
-  return null;
-}
-
-function setPageTheme() {
-  const saved = localStorage.getItem('tncc-theme');
-  if (saved === 'dark') {
-    document.body.classList.add('dark');
-  }
-}
-
-function updateActiveNav() {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  const current = path === '' ? 'index.html' : path;
-  document.querySelectorAll('.site-nav a').forEach(link => {
-    const href = link.getAttribute('href');
-    const match = href && (href === current || href === '/' && current === 'index.html');
-    if (match) link.classList.add('active');
-  });
-}
-
-function initMobileMenu() {
-  const toggle = document.querySelector('[data-nav-toggle]');
-  const nav = document.querySelector('.site-nav');
-  if (!toggle || !nav) return;
-  toggle.addEventListener('click', () => nav.classList.toggle('open'));
-  nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
-}
-
-function initThemeToggle() {
-  const toggle = document.querySelector('[data-theme-toggle]');
-  if (!toggle) return;
-
-  const apply = () => {
-    const dark = document.body.classList.contains('dark');
-    toggle.textContent = dark ? '☀️' : '🌙';
-    toggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-  };
-
-  toggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    localStorage.setItem('tncc-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    apply();
-  });
-
-  apply();
-}
-
-function initReveal() {
-  const revealItems = document.querySelectorAll('.reveal');
-  if (!revealItems.length) return;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  revealItems.forEach(item => observer.observe(item));
-}
+/* ---------- 1. Utilities ---------- */
 
 function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-let currentStoryId = null;
-
-async function initStoryPage() {
-  const storyList = document.querySelector('[data-story-list]');
-  const storyFilter = document.querySelector('[data-story-filter]');
-  const storySearch = document.querySelector('[data-story-search]');
-  const storyDetail = document.querySelector('[data-story-detail]');
-  let stories = TNCC_STORIES;
-
-  const client = getSupabaseClient();
-  if (client) {
-    const { data: contentItems } = await client.from('content_items').select('*').eq('published', true).order('created_at', { ascending: false });
-    if (contentItems?.length) {
-      stories = contentItems.map(item => ({
-        id: item.id,
-        tag: item.category,
-        title: item.title,
-        image: item.image_url || 'hero-event.jpg.jpeg',
-        date: new Date(item.created_at).toLocaleDateString(),
-        author: 'TNCC Team',
-        excerpt: item.excerpt,
-        body: item.body.split('\n').filter(Boolean)
-      }));
-    }
-  }
-
-  if (storyList) {
-    const filterValue = storyFilter ? storyFilter.value : 'all';
-    const query = storySearch ? storySearch.value.trim().toLowerCase() : '';
-    const filtered = stories.filter(story => {
-      const matchFilter = filterValue === 'all' || story.tag === filterValue;
-      const matchText = !query || `${story.title} ${story.excerpt}`.toLowerCase().includes(query);
-      return matchFilter && matchText;
-    });
-
-    storyList.innerHTML = filtered.map(story => `
-      <article class="story-card reveal">
-        <img src="${story.image}" alt="${story.title}" loading="lazy" />
-        <div class="content">
-          <div class="story-meta">
-            <span class="card-tag">${story.tag}</span>
-            <span>${story.date}</span>
-          </div>
-          <h3>${story.title}</h3>
-          <p>${story.excerpt}</p>
-          <div class="button-row">
-            <a class="btn btn-primary btn-small" href="story.html?id=${story.id}">Read story</a>
-          </div>
-        </div>
-      </article>
-    `).join('') || '<p class="section-heading"><strong>No stories match your search.</strong></p>';
-
-    initReveal();
-  }
-
-  if (storySearch && storyList) {
-    storySearch.addEventListener('input', () => initStoryPage());
-  }
-
-  if (storyFilter && storyList) {
-    storyFilter.addEventListener('change', () => initStoryPage());
-  }
-
-  if (storyDetail) {
-    const params = new URLSearchParams(window.location.search);
-    const storyId = params.get('id') || '1';
-    const story = stories.find(item => String(item.id) === String(storyId)) || stories[0];
-    currentStoryId = String(story.id);
-
-    storyDetail.innerHTML = `
-      <img src="${story.image}" alt="${story.title}" />
-      <div class="story-detail-body">
-        <div class="story-meta">
-          <span class="card-tag">${story.tag}</span>
-          <span>${story.date} • ${story.author}</span>
-        </div>
-        <h1>${story.title}</h1>
-        <div class="article">
-          ${story.body.map(paragraph => `<p>${paragraph}</p>`).join('')}
-        </div>
-        <div class="share-row">
-          <a class="share-link" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noreferrer">Share on Facebook</a>
-          <a class="share-link" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(story.title)}&url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noreferrer">Share on Twitter</a>
-        </div>
-        <div class="button-row">
-          <a class="btn btn-secondary" href="stories.html">← Back to stories</a>
-        </div>
-      </div>
-    `;
-
-    await renderStoryComments(currentStoryId);
-    wireStoryCommentForm(currentStoryId);
-  }
+function getSupabaseClient() {
+  return window.tnccSupabase || null;
 }
 
-async function renderStoryComments(storyId) {
-  const list = document.querySelector('[data-story-comment-list]');
-  const countNode = document.querySelector('[data-story-comment-count]');
-  if (!list) return;
-  const client = getSupabaseClient();
-  if (!client) { list.innerHTML = '<p class="story-comments-empty">Comments are available when the site is connected to Supabase.</p>'; return; }
-  try {
-    const { data, error } = await client.from('comments').select('*').eq('article_id', String(storyId)).eq('approved', true).order('created_at', { ascending: false });
-    if (error) throw error;
-    const comments = data || [];
-    if (countNode) countNode.textContent = `${comments.length} comment${comments.length === 1 ? '' : 's'}`;
-    const formatCommentDate = value => { if (!value) return ''; const date = new Date(value); return isNaN(date) ? '' : date.toLocaleDateString(); };
-    list.innerHTML = comments.length
-      ? comments.map(comment => `<div class="story-comment"><div class="story-comment-meta"><strong>${escapeHtml(comment.author_name)}</strong><small>${escapeHtml(formatCommentDate(comment.created_at))}</small></div><p>${escapeHtml(comment.body)}</p></div>`).join('')
-      : '<p class="story-comments-empty">No comments yet. Be the first to share a thought.</p>';
-  } catch (error) {
-    console.error(error);
-    list.innerHTML = '<p class="story-comments-empty">Comments could not be loaded.</p>';
-  }
-}
-
-function wireStoryCommentForm(storyId) {
-  const input = document.querySelector('[data-story-comment-input]');
-  const button = document.querySelector('[data-story-comment-submit]');
-  const hint = document.querySelector('[data-story-comment-hint]');
-  const loginLink = document.querySelector('[data-story-comment-login]');
-  const client = getSupabaseClient();
-  const list = document.querySelector('[data-story-comment-list]');
-  if (!input || !button || !client) return;
-
-  const refreshSignedInState = async () => {
-    const { data: { user } } = await client.auth.getUser();
-    const signedIn = Boolean(user);
-    if (loginLink) loginLink.hidden = signedIn;
-    button.hidden = !signedIn;
-    input.disabled = !signedIn;
-    if (signedIn && hint) hint.textContent = '';
-  };
-
-  refreshSignedInState();
-
-  button.addEventListener('click', async () => {
-    const text = input.value.trim();
-    if (!text) { if (hint) hint.textContent = 'Please write a comment first.'; return; }
-    const { data: { user } } = await client.auth.getUser();
-    if (!user) { if (hint) hint.textContent = 'Sign in to post a comment.'; return; }
-    button.disabled = true;
-    const { error } = await client.from('comments').insert({ article_id: String(storyId), user_id: user.id, author_name: user.user_metadata?.full_name || user.email, body: text });
-    button.disabled = false;
-    if (error) { console.error(error); if (hint) hint.textContent = 'Your comment could not be posted.'; return; }
-    input.value = '';
-    if (hint) hint.textContent = 'Thanks! Your comment has been submitted for review.';
-    if (list) list.insertAdjacentHTML('beforeend', `<div class="story-comment"><div class="story-comment-meta"><strong>${escapeHtml(user.user_metadata?.full_name || user.email)}</strong><small>awaiting approval</small></div><p>${escapeHtml(text)}</p></div>`);
-  });
-
-  input.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); button.click(); } });
-}
-
-function initGalleryPage() {
-  const galleryRoot = document.querySelector('[data-gallery-grid]');
-  const modal = document.querySelector('[data-gallery-modal]');
-  if (!galleryRoot) return;
-
-  galleryRoot.innerHTML = TNCC_GALLERY.map((item, index) => `
-    <button class="gallery-item" type="button" data-gallery-index="${index}" aria-label="Open gallery image: ${item.caption}">
-      <img src="${item.image}" alt="${item.caption}" loading="lazy" />
-      <div class="gallery-caption">${item.caption}</div>
-    </button>
-  `).join('');
-
-  const buttons = galleryRoot.querySelectorAll('.gallery-item');
-  let currentIndex = 0;
-
-  const openModal = (index) => {
-    currentIndex = index;
-    const item = TNCC_GALLERY[currentIndex];
-    const modalImage = modal.querySelector('img');
-    const modalCaption = modal.querySelector('[data-gallery-caption]');
-    modalImage.src = item.image;
-    modalImage.alt = item.caption;
-    modalCaption.textContent = `${item.caption} (${currentIndex + 1} of ${TNCC_GALLERY.length})`;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-  };
-
-  buttons.forEach(button => {
-    button.addEventListener('click', () => openModal(Number(button.dataset.galleryIndex)));
-  });
-
-  modal.querySelector('[data-gallery-close]').addEventListener('click', closeModal);
-  modal.querySelector('[data-gallery-prev]').addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + TNCC_GALLERY.length) % TNCC_GALLERY.length;
-    openModal(currentIndex);
-  });
-  modal.querySelector('[data-gallery-next]').addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % TNCC_GALLERY.length;
-    openModal(currentIndex);
-  });
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) closeModal();
-  });
-  document.addEventListener('keydown', (event) => {
-    if (!modal.classList.contains('open')) return;
-    if (event.key === 'Escape') closeModal();
-    if (event.key === 'ArrowLeft') {
-      currentIndex = (currentIndex - 1 + TNCC_GALLERY.length) % TNCC_GALLERY.length;
-      openModal(currentIndex);
-    }
-    if (event.key === 'ArrowRight') {
-      currentIndex = (currentIndex + 1) % TNCC_GALLERY.length;
-      openModal(currentIndex);
-    }
-  });
-}
-
-function initDonationPage() {
-  const amountButtons = document.querySelectorAll('[data-amount]');
-  const customInput = document.querySelector('[data-custom-amount]');
-  const donationForm = document.querySelector('[data-donation-form]');
-
-  if (!amountButtons.length) return;
-
-  amountButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      amountButtons.forEach(btn => btn.classList.remove('selected'));
-      button.classList.add('selected');
-      customInput.value = '';
-    });
-  });
-
-  donationForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const selected = document.querySelector('[data-amount].selected');
-    const customValue = Number(customInput.value);
-    const total = customValue > 0 ? customValue : selected ? Number(selected.dataset.amount) : 0;
-
-    if (!total || total <= 0) {
-      showToast('Please select or enter a valid donation amount.', 'error');
-      return;
-    }
-
-    const name = document.querySelector('[data-donor-name]')?.value || 'Anonymous donor';
-    const email = document.querySelector('[data-donor-email]')?.value || 'supporter@example.com';
-    const payload = { amount: total, name, email };
-    const client = getSupabaseClient();
-    let donationId = null;
-
-    if (client) {
-      const { data, error } = await client.from('donations').insert({ donor_name: name, email, amount_kes: total, status: 'pending' }).select('id').single();
-      if (error) {
-        console.error(error);
-        showToast('We could not record your donation. Please try again.', 'error');
-        return;
-      }
-      donationId = data?.id || null;
-    }
-
-    const endpoint = window.TNCC_CONFIG?.stripeCheckoutEndpoint || '';
-    if (endpoint) {
-      fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amountKes: total, donorName: name, donorEmail: email, donationId })
-      }).then(async response => {
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || !data.url) throw new Error(data.error || 'Checkout unavailable');
-        window.location.href = data.url;
-      }).catch(error => {
-        console.error(error);
-        showToast('Checkout is currently unavailable. Please try again shortly.', 'error');
-      });
-      return;
-    }
-
-    console.log('Donation payload:', payload);
-    showToast(`Thank you, ${name}. Your pledge of KES ${total} has been noted.`, 'success');
-    donationForm.reset();
-    amountButtons.forEach(btn => btn.classList.remove('selected'));
-  });
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function showToast(message, type = 'success') {
@@ -452,27 +43,608 @@ function showToast(message, type = 'success') {
   showToast.timeoutId = setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
+function formatStoryDate(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (isNaN(date)) return String(value);
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/* ---------- 2. Seed content ---------- */
+
+const TNCC_STORIES = [
+  {
+    id: 1,
+    tag: 'Community',
+    title: 'Running for a stronger, safer community',
+    image: 'hero-event.jpg.jpeg',
+    date: '2026-05-12',
+    author: 'TNCC Team',
+    excerpt: 'Every stride brings people together around health, dignity, and shared responsibility for safer communities.',
+    body: [
+      'Across Teso North, community sport is becoming a powerful platform for connection, participation, and practical action. Each event creates a space where families, youth, leaders, and partners can come together around a common goal.',
+      'This work is not just about running. It is about creating safer spaces, strengthening relationships, and proving that collective responsibility can drive positive change. That is why each training session and community gathering brings renewed momentum to local action.',
+      'The TNCC story is rooted in the belief that shared effort matters. When communities show up for one another, normal routines can shift and long-term opportunities grow.'
+    ]
+  },
+  {
+    id: 2,
+    tag: 'Dialogue',
+    title: 'Let us talk, listen and act',
+    image: 'community-talk.jpg.jpeg',
+    date: '2026-04-08',
+    author: 'TNCC Team',
+    excerpt: 'Listening sessions help communities surface challenges, build trust, and shape practical responses together.',
+    body: [
+      'Open conversations help people see the issues affecting daily life more clearly. They also help people understand that progress is often built through listening, reflection, and steady action.',
+      'TNCC creates spaces where community members can speak honestly about challenges, share experiences, and identify where support is most needed. These conversations inform the way the movement responds and grows.',
+      'When communities learn to listen to one another with respect and courage, they become better equipped to act together.'
+    ]
+  },
+  {
+    id: 3,
+    tag: 'Sport',
+    title: 'Every step counts',
+    image: 'runners.jpg.jpeg',
+    date: '2026-03-19',
+    author: 'TNCC Team',
+    excerpt: 'Participation is not only about event-day energy; it is about building healthy routines and community confidence.',
+    body: [
+      'On course, people discover more than physical endurance. They build consistency, confidence, and a stronger sense of belonging. Community events give people an opportunity to work together toward something positive.',
+      'Every step counts because participation matters. It creates momentum, motivates others, and reminds the community that progress is possible when people are supported and encouraged.',
+      'That is why TNCC continues to center sport as a practical pathway for wellness, unity, and local transformation.'
+    ]
+  },
+  {
+    id: 4,
+    tag: 'Youth',
+    title: 'Making room for the next generation',
+    image: 'community.jpg.jpeg',
+    date: '2026-02-26',
+    author: 'TNCC Team',
+    excerpt: 'Young people bring energy and ideas and deserve meaningful opportunities to contribute and lead.',
+    body: [
+      'The future of strong communities is shaped by the next generation. Youth engagement is at the center of TNCC because young people carry ideas, courage, and possibility.',
+      'When mentorship, leadership, and participation are available, youth are more likely to become active contributors to local change. This creates ripple effects across families and wider community systems.',
+      'Building those pathways requires intentional support, trusted relationship-building, and opportunities to participate without barriers.'
+    ]
+  },
+  {
+    id: 5,
+    tag: 'Partnerships',
+    title: 'When local partners move together',
+    image: 'partners2.jpg.jpeg',
+    date: '2026-01-15',
+    author: 'TNCC Team',
+    excerpt: 'Strong community events are built through shared responsibility between partners, leaders, and volunteers.',
+    body: [
+      'Strong community events are built through shared responsibility. Partners contribute time, resources, and local knowledge to make participation possible for everyone.',
+      'TNCC works alongside local leaders, community organizations, and supporters who believe that healthier, safer communities are worth investing in.',
+      'When local partners move together, the impact reaches further than any single event: trust grows, opportunities multiply, and the movement becomes part of everyday community life.'
+    ]
+  }
+];
+
+const TNCC_GALLERY = [
+  { image: 'hero-event.jpg.jpeg', caption: 'Community gathers for the event', category: 'Events' },
+  { image: 'community-talk.jpg.jpeg', caption: 'Let us talk', category: 'Community' },
+  { image: 'runners.jpg.jpeg', caption: 'On the course', category: 'Events' },
+  { image: 'runners (1).jpeg', caption: 'Ready for the starting line', category: 'Events' },
+  { image: 'runners (2).jpeg', caption: 'Running together', category: 'Events' },
+  { image: 'runners (3).jpeg', caption: 'Community in motion', category: 'Community' },
+  { image: 'runners (4).jpeg', caption: 'Race day energy', category: 'Events' },
+  { image: 'runners (5).jpeg', caption: 'Every step counts', category: 'Events' },
+  { image: 'runners (6).jpeg', caption: 'Strength in participation', category: 'Events' },
+  { image: 'runners (7).jpeg', caption: 'Young runners leading the way', category: 'Youth' },
+  { image: 'runners (8).jpeg', caption: 'Together on the course', category: 'Events' },
+  { image: 'runners (9).jpeg', caption: 'A shared finish line', category: 'Events' },
+  { image: 'runners (10).jpeg', caption: 'Celebrating the movement', category: 'Community' },
+  { image: 'runners (11).jpeg', caption: 'The joy of running', category: 'Youth' },
+  { image: 'runners (12).jpeg', caption: 'Focused and fearless', category: 'Events' },
+  { image: 'runners (13).jpeg', caption: 'Support & solidarity', category: 'Community' },
+  { image: 'run.jpg.jpeg', caption: 'Run. Unite. Transform.', category: 'Events' },
+  { image: 'running.jpg.jpeg', caption: 'On the road together', category: 'Events' },
+  { image: 'community.jpg.jpeg', caption: 'Building community through sport', category: 'Community' },
+  { image: 'partners.jpg.jpeg', caption: 'Partners making it possible', category: 'Partnerships' },
+  { image: 'partners2.jpg.jpeg', caption: 'Working together for impact', category: 'Partnerships' },
+  { image: 'images.jpg.jpeg', caption: 'Moments that connect us', category: 'Community' },
+  { image: 'images2.jpg.jpeg', caption: 'Participation for everyone', category: 'Community' },
+  { image: 'images3.jpg.jpeg', caption: 'A movement with purpose', category: 'Events' }
+];
+
+/* ---------- 3. Content loading ---------- */
+
+function normalizeContentItem(row) {
+  const bodyText = String(row.body || '').trim();
+  return {
+    id: 'db-' + row.id,
+    tag: row.category || 'Community',
+    title: row.title || 'Untitled story',
+    image: row.image_url || 'hero-event.jpg.jpeg',
+    date: row.created_at || row.updated_at || null,
+    author: 'TNCC Team',
+    excerpt: row.excerpt || (bodyText ? bodyText.slice(0, 180) : ''),
+    body: bodyText ? bodyText.split(/\n+/).map(p => p.trim()).filter(Boolean) : []
+  };
+}
+
+let contentStoriesPromise = null;
+
+function loadContentStories() {
+  if (contentStoriesPromise) return contentStoriesPromise;
+  contentStoriesPromise = (async () => {
+    let remote = [];
+    const client = getSupabaseClient();
+    if (client) {
+      try {
+        const { data, error } = await client
+          .from('content_items')
+          .select('id, slug, title, category, excerpt, body, image_url, created_at, updated_at')
+          .eq('published', true)
+          .order('created_at', { ascending: false })
+          .limit(24);
+        if (!error && Array.isArray(data)) remote = data.map(normalizeContentItem);
+        else if (error) console.warn('Story loading failed, using seed content.', error.message);
+      } catch (error) {
+        console.warn('Story loading failed, using seed content.', error);
+      }
+    }
+    const seen = new Set(remote.map(story => story.title.trim().toLowerCase()));
+    const seeds = TNCC_STORIES.filter(story => !seen.has(story.title.trim().toLowerCase()));
+    return remote.concat(seeds);
+  })();
+  return contentStoriesPromise;
+}
+
+function storyHref(story) {
+  return 'story.html?id=' + encodeURIComponent(story.id);
+}
+
+function storyMatchesQuery(story, query, category) {
+  const haystack = ((story.title || '') + ' ' + (story.excerpt || '') + ' ' + (story.body || []).join(' ')).toLowerCase();
+  const matchesQuery = !query || haystack.includes(query);
+  const matchesCategory = category === 'all' || story.tag === category;
+  return matchesQuery && matchesCategory;
+}
+
+function storyCard(story) {
+  const image = escapeHtml(story.image || 'hero-event.jpg.jpeg');
+  return `<article class="story-card">
+    <img src="${image}" alt="${escapeHtml(story.title)}" loading="lazy" width="400" height="250" />
+    <div class="content">
+      <div class="story-meta">
+        <span class="card-tag">${escapeHtml(story.tag || 'Community')}</span>
+        <span>${escapeHtml(formatStoryDate(story.date))}</span>
+      </div>
+      <h3>${escapeHtml(story.title)}</h3>
+      <p>${escapeHtml(story.excerpt || '')}</p>
+      <a class="btn btn-secondary btn-small" href="${storyHref(story)}">Read story</a>
+    </div>
+  </article>`;
+}
+
+/* ---------- 4. Stories page ---------- */
+
+async function initStoryPage() {
+  const storyList = document.querySelector('[data-story-list]');
+  if (!storyList) return;
+  const search = document.querySelector('[data-story-search]');
+  const filter = document.querySelector('[data-story-filter]');
+  const featuredWrap = document.querySelector('[data-story-featured]');
+  const countNode = document.querySelector('[data-story-count]');
+  const loadMoreWrap = document.querySelector('[data-load-more]');
+
+  const stories = await loadContentStories();
+  const PAGE_SIZE = 6;
+  let visibleCount = PAGE_SIZE;
+
+  if (filter) {
+    const categories = [...new Set(stories.map(story => story.tag).filter(Boolean))];
+    filter.innerHTML = '<option value="all">All categories</option>' +
+      categories.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join('');
+  }
+
+  function featuredMarkup(story) {
+    return `<article class="story-featured reveal visible">
+      <img src="${escapeHtml(story.image || 'hero-event.jpg.jpeg')}" alt="${escapeHtml(story.title)}" width="640" height="420" />
+      <div class="content">
+        <div class="story-meta">
+          <span class="card-tag">${escapeHtml(story.tag || 'Community')}</span>
+          <span>${escapeHtml(formatStoryDate(story.date))}</span>
+        </div>
+        <h2>${escapeHtml(story.title)}</h2>
+        <p>${escapeHtml(story.excerpt || '')}</p>
+        <div class="button-row">
+          <a class="btn btn-primary" href="${storyHref(story)}">Read featured story</a>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function render() {
+    const query = (search?.value || '').trim().toLowerCase();
+    const category = filter?.value || 'all';
+    const filtered = stories.filter(story => storyMatchesQuery(story, query, category));
+
+    if (!filtered.length) {
+      if (featuredWrap) featuredWrap.innerHTML = '';
+      storyList.innerHTML = '<div class="story-empty"><strong>No stories match your search.</strong><br />Try a different keyword or category.</div>';
+      if (countNode) countNode.textContent = '';
+      if (loadMoreWrap) loadMoreWrap.hidden = true;
+      return;
+    }
+
+    const withFeatured = featuredWrap && !query && category === 'all';
+    const remainder = withFeatured ? filtered.slice(1) : filtered;
+    const visible = remainder.slice(0, visibleCount);
+
+    if (featuredWrap) featuredWrap.innerHTML = withFeatured ? featuredMarkup(filtered[0]) : '';
+    storyList.innerHTML = visible.map(storyCard).join('');
+    if (countNode) countNode.textContent = `Showing ${remainder.length ? visible.length : 0} of ${remainder.length} stories`;
+
+    if (loadMoreWrap) {
+      loadMoreWrap.hidden = remainder.length <= visibleCount;
+      const button = loadMoreWrap.querySelector('button');
+      if (button) button.textContent = `Load more stories (${remainder.length - visible.length} remaining)`;
+    }
+  }
+
+  search?.addEventListener('input', () => { visibleCount = PAGE_SIZE; render(); });
+  filter?.addEventListener('change', () => { visibleCount = PAGE_SIZE; render(); });
+  loadMoreWrap?.querySelector('button')?.addEventListener('click', () => { visibleCount += PAGE_SIZE; render(); });
+
+  render();
+}
+
+/* ---------- 5. Story article page ---------- */
+
+async function initStoryArticle() {
+  const detail = document.querySelector('[data-story-detail]');
+  if (!detail) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const stories = await loadContentStories();
+  const story = stories.find(entry => String(entry.id) === String(id)) || stories[0];
+
+  if (!story) {
+    detail.innerHTML = '<div class="story-empty"><strong>Story not found.</strong><br /><a href="stories.html">Back to all stories</a></div>';
+    return;
+  }
+
+  document.title = `${story.title} | Teso North Cross Country CBO`;
+  const descriptionMeta = document.querySelector('meta[name="description"]');
+  if (descriptionMeta && story.excerpt) descriptionMeta.setAttribute('content', story.excerpt);
+
+  const bodyParagraphs = (story.body && story.body.length)
+    ? story.body.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')
+    : `<p>${escapeHtml(story.excerpt || '')}</p>`;
+
+  detail.innerHTML = `
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span aria-hidden="true">/</span>
+      <a href="stories.html">Stories</a><span aria-hidden="true">/</span>
+      <span aria-current="page">${escapeHtml(story.title)}</span>
+    </nav>
+    <img src="${escapeHtml(story.image || 'hero-event.jpg.jpeg')}" alt="${escapeHtml(story.title)}" width="1080" height="560" />
+    <div class="story-detail-body">
+      <div class="story-meta">
+        <span class="card-tag">${escapeHtml(story.tag || 'Community')}</span>
+        <span>${escapeHtml(formatStoryDate(story.date))}</span>
+        <span>${escapeHtml(story.author || 'TNCC Team')}</span>
+      </div>
+      <h1>${escapeHtml(story.title)}</h1>
+      <div class="article">${bodyParagraphs}</div>
+      <div class="share-row">
+        <span>Share this story</span>
+        <a class="share-btn" data-share="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="share-btn" data-share="facebook" href="#" target="_blank" rel="noopener">Facebook</a>
+        <a class="share-btn" data-share="x" href="#" target="_blank" rel="noopener">X</a>
+        <button class="share-btn" type="button" data-share="copy">Copy link</button>
+      </div>
+    </div>`;
+
+  const pageUrl = window.location.href;
+  const encodedUrl = encodeURIComponent(pageUrl);
+  const encodedTitle = encodeURIComponent(story.title);
+  const shareLinks = {
+    whatsapp: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    x: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`
+  };
+  detail.querySelectorAll('[data-share]').forEach(node => {
+    const key = node.dataset.share;
+    if (key === 'copy') {
+      node.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(pageUrl);
+          showToast('Link copied to clipboard.');
+        } catch (error) {
+          showToast('Could not copy the link.', 'error');
+        }
+      });
+    } else if (shareLinks[key]) {
+      node.setAttribute('href', shareLinks[key]);
+    }
+  });
+
+  const jsonld = document.createElement('script');
+  jsonld.type = 'application/ld+json';
+  jsonld.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: story.title,
+    description: story.excerpt || '',
+    image: new URL(story.image || 'hero-event.jpg.jpeg', window.location.href).toString(),
+    datePublished: story.date || undefined,
+    author: { '@type': 'Organization', name: 'Teso North Cross Country CBO' },
+    publisher: { '@type': 'Organization', name: 'Teso North Cross Country CBO' }
+  });
+  document.head.appendChild(jsonld);
+
+  const related = stories.filter(entry => entry !== story && entry.tag === story.tag).slice(0, 3);
+  const relatedWrap = document.querySelector('[data-related-list]');
+  if (relatedWrap) {
+    if (related.length) {
+      relatedWrap.innerHTML = related.map(storyCard).join('');
+      relatedWrap.previousElementSibling?.removeAttribute('hidden');
+    } else {
+      relatedWrap.closest('section')?.setAttribute('hidden', '');
+    }
+  }
+
+  initStoryComments(story);
+}
+
+async function initStoryComments(story) {
+  const section = document.querySelector('[data-story-comments]');
+  if (!section) return;
+  const list = section.querySelector('[data-story-comment-list]');
+  const countNode = section.querySelector('[data-story-comment-count]');
+  const input = section.querySelector('[data-story-comment-input]');
+  const submit = section.querySelector('[data-story-comment-submit]');
+  const loginLink = section.querySelector('[data-story-comment-login]');
+  const hint = section.querySelector('[data-story-comment-hint]');
+  const client = getSupabaseClient();
+
+  async function loadComments() {
+    if (!client) {
+      if (hint) hint.textContent = 'Comments are unavailable right now.';
+      return;
+    }
+    const { data, error } = await client
+      .from('comments')
+      .select('id, author_name, body, created_at')
+      .eq('article_id', String(story.id))
+      .eq('approved', true)
+      .order('created_at', { ascending: false });
+    if (error) { console.warn(error); return; }
+    const comments = data || [];
+    if (countNode) countNode.textContent = comments.length ? `${comments.length} comment${comments.length === 1 ? '' : 's'}` : '';
+    list.innerHTML = comments.length
+      ? comments.map(comment => `
+        <div class="story-comment">
+          <strong>${escapeHtml(comment.author_name || 'Community member')}</strong>
+          <time datetime="${escapeHtml(comment.created_at)}">${escapeHtml(formatStoryDate(comment.created_at))}</time>
+          <p>${escapeHtml(comment.body)}</p>
+        </div>`).join('')
+      : '<p class="story-comments-empty">No comments yet. Be the first to share a thought.</p>';
+  }
+
+  let user = null;
+  if (client) {
+    try {
+      const result = await client.auth.getUser();
+      user = result?.data?.user || null;
+    } catch (error) {
+      console.warn('Auth check failed.', error);
+    }
+  }
+  if (loginLink && user) loginLink.hidden = true;
+  if (!user && hint) hint.textContent = 'Sign in with your TNCC account to post a comment. Comments appear after moderation.';
+
+  submit?.addEventListener('click', async () => {
+    if (!client || !user) { window.location.href = 'login.html'; return; }
+    const body = (input?.value || '').trim();
+    if (!body) { showToast('Write a comment first.', 'error'); return; }
+    submit.disabled = true;
+    const authorName = user.user_metadata?.full_name || user.email || 'Community member';
+    const { error } = await client.from('comments').insert({
+      article_id: String(story.id),
+      user_id: user.id,
+      author_name: authorName,
+      body: body.slice(0, 2000)
+    });
+    submit.disabled = false;
+    if (error) { console.error(error); showToast('Your comment could not be posted.', 'error'); return; }
+    if (input) input.value = '';
+    if (hint) hint.textContent = 'Thank you! Your comment will appear once it has been approved.';
+    showToast('Comment submitted for review.');
+  });
+
+  await loadComments();
+}
+
+/* ---------- 6. Gallery page ---------- */
+
+function initGalleryPage() {
+  const grid = document.querySelector('[data-gallery-grid]');
+  if (!grid) return;
+  const filtersWrap = document.querySelector('[data-gallery-filters]');
+  const modal = document.querySelector('[data-gallery-modal]');
+  const modalImage = modal?.querySelector('img');
+  const modalCaption = modal?.querySelector('[data-gallery-caption]');
+  const closeButton = modal?.querySelector('[data-gallery-close]');
+  const prevButton = modal?.querySelector('[data-gallery-prev]');
+  const nextButton = modal?.querySelector('[data-gallery-next]');
+  let activeItems = TNCC_GALLERY.slice();
+  let currentIndex = 0;
+  let lastFocused = null;
+
+  function renderGrid() {
+    grid.innerHTML = activeItems.map((item, index) => `
+      <button class="gallery-item" type="button" data-index="${index}" aria-label="Open photo: ${escapeHtml(item.caption)}">
+        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.caption)}" loading="lazy" width="400" height="300" />
+        <div class="gallery-caption">${escapeHtml(item.caption)}</div>
+      </button>`).join('');
+  }
+
+  function openModal(index) {
+    if (!modal || !activeItems.length) return;
+    currentIndex = (index + activeItems.length) % activeItems.length;
+    const item = activeItems[currentIndex];
+    if (modalImage) {
+      modalImage.src = item.image;
+      modalImage.alt = item.caption;
+    }
+    if (modalCaption) modalCaption.textContent = item.caption;
+    lastFocused = document.activeElement;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    closeButton?.focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lastFocused?.focus?.();
+  }
+
+  function step(direction) {
+    openModal(currentIndex + direction);
+  }
+
+  grid.addEventListener('click', event => {
+    const item = event.target.closest('.gallery-item');
+    if (!item) return;
+    openModal(Number(item.dataset.index));
+  });
+
+  filtersWrap?.addEventListener('click', event => {
+    const chip = event.target.closest('.chip');
+    if (!chip) return;
+    filtersWrap.querySelectorAll('.chip').forEach(node => node.classList.remove('active'));
+    chip.classList.add('active');
+    const category = chip.dataset.category;
+    activeItems = category === 'all' ? TNCC_GALLERY.slice() : TNCC_GALLERY.filter(item => item.category === category);
+    renderGrid();
+  });
+
+  closeButton?.addEventListener('click', closeModal);
+  prevButton?.addEventListener('click', () => step(-1));
+  nextButton?.addEventListener('click', () => step(1));
+  modal?.addEventListener('click', event => { if (event.target === modal) closeModal(); });
+  document.addEventListener('keydown', event => {
+    if (!modal?.classList.contains('open')) return;
+    if (event.key === 'Escape') closeModal();
+    if (event.key === 'ArrowLeft') step(-1);
+    if (event.key === 'ArrowRight') step(1);
+  });
+
+  if (filtersWrap) {
+    const categories = ['all', ...new Set(TNCC_GALLERY.map(item => item.category))];
+    filtersWrap.innerHTML = categories.map((category, index) => `
+      <button class="chip${index === 0 ? ' active' : ''}" type="button" data-category="${escapeHtml(category)}">
+        ${category === 'all' ? 'All photos' : escapeHtml(category)}
+      </button>`).join('');
+  }
+
+  renderGrid();
+}
+
+/* ---------- 7. Homepage previews + impact counters ---------- */
+
+async function initHomePreviews() {
+  const previewList = document.querySelector('[data-home-stories]');
+  if (previewList) {
+    const stories = await loadContentStories();
+    previewList.innerHTML = stories.slice(0, 3).map(storyCard).join('');
+  }
+
+  const galleryStrip = document.querySelector('[data-home-gallery]');
+  if (galleryStrip) {
+    galleryStrip.innerHTML = TNCC_GALLERY.slice(0, 6).map(item => `
+      <a href="gallery.html" aria-label="View gallery photo: ${escapeHtml(item.caption)}">
+        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.caption)}" loading="lazy" width="300" height="300" />
+      </a>`).join('');
+  }
+}
+
+function initCounters() {
+  const counters = document.querySelectorAll('[data-counter]');
+  if (!counters.length) return;
+
+  const animate = node => {
+    const target = Number(node.dataset.counter || '0');
+    const prefix = node.dataset.prefix || '';
+    const suffix = node.dataset.suffix || '';
+    if (prefersReducedMotion() || !window.IntersectionObserver) {
+      node.textContent = prefix + target.toLocaleString('en-US') + suffix;
+      return;
+    }
+    const duration = 1200;
+    const start = performance.now();
+    const frame = now => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      node.textContent = prefix + Math.round(target * eased).toLocaleString('en-US') + suffix;
+      if (progress < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      animate(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.4 });
+
+  counters.forEach(node => observer.observe(node));
+}
+
+/* ---------- 8. Forms ---------- */
+
 function initContactForm() {
   const form = document.querySelector('[data-contact-form]');
   if (!form) return;
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    const name = document.querySelector('[data-contact-name]')?.value || 'Guest';
-    const email = form.querySelector('input[type="email"]')?.value.trim() || '';
-    const message = form.querySelector('textarea')?.value.trim() || '';
+    const name = form.querySelector('[data-contact-name]')?.value.trim() || 'Guest';
+    const email = form.querySelector('[data-contact-email]')?.value.trim() || '';
+    const phone = form.querySelector('[data-contact-phone]')?.value.trim() || null;
+    const subject = form.querySelector('[data-contact-subject]')?.value.trim() || null;
+    const message = form.querySelector('[data-contact-message]')?.value.trim() || '';
+    const submit = form.querySelector('button[type="submit"]');
     const client = getSupabaseClient();
-    if (!client) {
-      showToast('Supabase is not configured yet.', 'error');
-      return;
+    if (!client) { showToast('Messaging is not connected yet. Please email us directly.', 'error'); return; }
+
+    submit?.setAttribute('disabled', '');
+    const submitLabel = submit?.textContent;
+    if (submit) submit.textContent = 'Sending…';
+
+    const { error } = await client.from('contact_messages').insert({ name, email, phone, subject, message });
+    let insertError = error;
+    if (insertError) {
+      // Older schema without phone/subject columns: retry with the core fields.
+      const retry = await client.from('contact_messages').insert({ name, email, message });
+      insertError = retry.error;
     }
-    const { error } = await client.from('contact_messages').insert({ name, email, message });
-    if (error) {
-      console.error(error);
+
+    submit?.removeAttribute('disabled');
+    if (submit && submitLabel) submit.textContent = submitLabel;
+
+    if (insertError) {
+      console.error(insertError);
       showToast('Your message could not be sent. Please try again.', 'error');
       return;
     }
-    showToast(`Thank you, ${name}. Your message has been received.`, 'success');
+    showToast(`Thank you, ${name}. Your message has been received.`);
     form.reset();
   });
 }
@@ -481,44 +653,257 @@ function initVolunteerForm() {
   const form = document.querySelector('[data-volunteer-form]');
   if (!form) return;
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    const name = document.querySelector('[data-volunteer-name]')?.value || 'Volunteer';
+    const name = form.querySelector('[data-volunteer-name]')?.value.trim() || 'Volunteer';
     const email = form.querySelector('input[type="email"]')?.value.trim() || '';
     const phone = form.querySelector('input[type="tel"]')?.value.trim() || null;
     const role = form.querySelector('select')?.value || 'Other';
     const message = form.querySelector('textarea')?.value.trim() || null;
     const client = getSupabaseClient();
-    if (!client) {
-      showToast('Supabase is not configured yet.', 'error');
-      return;
-    }
+    if (!client) { showToast('Volunteer sign-up is not connected yet. Please contact us directly.', 'error'); return; }
+
     const { error } = await client.from('volunteers').insert({ name, email, phone, role, message });
     if (error) {
       console.error(error);
       showToast('Your volunteer interest could not be sent. Please try again.', 'error');
       return;
     }
-    showToast(`Thanks, ${name}. Your volunteer interest has been registered.`, 'success');
+    const endpoint = window.TNCC_CONFIG?.notificationEndpoint;
+    if (endpoint) {
+      fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'volunteer', payload: { name, email, phone, role, message } }) }).catch(() => {});
+    }
+    showToast(`Thanks, ${name}. Your volunteer interest has been registered.`);
     form.reset();
   });
 }
 
+function initDonationPage() {
+  const donationForm = document.querySelector('[data-donation-form]');
+  if (!donationForm) return;
+
+  const amountButtons = [...donationForm.querySelectorAll('.donation-amount')];
+  let selectedAmount = null;
+
+  amountButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      amountButtons.forEach(node => node.classList.remove('selected'));
+      button.classList.add('selected');
+      selectedAmount = Number(button.dataset.amount);
+      const custom = donationForm.querySelector('[data-custom-amount]');
+      if (custom) custom.value = '';
+    });
+  });
+
+  donationForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const customInput = donationForm.querySelector('[data-custom-amount]');
+    const customAmount = Number(customInput?.value || 0);
+    const total = customAmount > 0 ? customAmount : selectedAmount;
+    const name = donationForm.querySelector('[data-donor-name]')?.value.trim() || '';
+    const email = donationForm.querySelector('[data-donor-email]')?.value.trim() || '';
+
+    if (!total || total < 100) { showToast('Please choose or enter an amount of at least KES 100.', 'error'); return; }
+
+    const endpoint = window.TNCC_CONFIG?.stripeCheckoutEndpoint;
+    const hasRealEndpoint = endpoint && !endpoint.includes('YOUR-');
+    if (hasRealEndpoint) {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: total, currency: 'kes', name, email })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.url) throw new Error(data.error || 'Checkout unavailable');
+        window.location.href = data.url;
+        return;
+      } catch (error) {
+        console.error(error);
+        showToast('Card checkout is currently unavailable. Please use the M-Pesa details instead.', 'error');
+        return;
+      }
+    }
+    showToast(`Thank you${name ? ', ' + name : ''}. Please complete your KES ${total.toLocaleString('en-US')} gift via M-Pesa using the details on this page.`, 'success');
+  });
+}
+
+/* ---------- Event registration (register.html) ---------- */
+
+const KENYA_COUNTIES = ['Baringo', 'Bomet', 'Bungoma', 'Busia', 'Elgeyo-Marakwet', 'Embu', 'Garissa', 'Homa Bay', 'Isiolo', 'Kajiado', 'Kakamega', 'Kericho', 'Kiambu', 'Kilifi', 'Kirinyaga', 'Kisii', 'Kisumu', 'Kitui', 'Kwale', 'Laikipia', 'Lamu', 'Machakos', 'Makueni', 'Mandera', 'Marsabit', 'Meru', 'Migori', 'Mombasa', "Murang'a", 'Nairobi', 'Nakuru', 'Nandi', 'Narok', 'Nyamira', 'Nyandarua', 'Nyeri', 'Samburu', 'Siaya', 'Taita-Taveta', 'Tana River', 'Tharaka-Nithi', 'Trans Nzoia', 'Turkana', 'Uasin Gishu', 'Vihiga', 'Wajir', 'West Pokot'];
+
+const KENYA_FALLBACK_LOCATIONS = {
+  Busia: {
+    Constituencies: {
+      'Teso North': { Ward: ['Malaba Central', 'Malaba North', 'Malaba South', 'Angurai North', 'Angurai South', 'Angurai East'] },
+      'Teso South': { Ward: ['Amukura Central', 'Amukura East', 'Amukura West', 'Angorom', 'Chakol North', 'Chakol South'] },
+      'Matayos': { Ward: ['Bukhayo West', 'Mayenje', 'Matayos South', 'Busibwabo'] },
+      'Nambale': { Ward: ['Nambale Township', 'Bukhayo North/Waltsi', 'Bukhayo Central', 'Bukhayo East'] },
+      'Butula': { Ward: ['Marachi West', 'Kingandole', 'Marachi Central', 'Marachi East', 'Elugulu'] },
+      'Funyula': { Ward: ['Bwiri', 'Namboboto Namboboto', 'Nangina', "Ageng'a Nanguba"] },
+      'Budalangi': { Ward: ['Bunyala Central', 'Bunyala North', 'Bunyala West', 'Bunyala South'] }
+    }
+  }
+};
+
+function setSelectOptions(select, options, placeholder, disabled) {
+  select.innerHTML = `<option value="">${escapeHtml(placeholder)}</option>` +
+    options.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join('');
+  select.disabled = disabled;
+}
+
+async function initRegistrationForm() {
+  const form = document.querySelector('[data-registration-form]');
+  if (!form) return;
+
+  const countySelect = form.querySelector('[data-reg-county]');
+  const subCountySelect = form.querySelector('[data-reg-sub-county]');
+  const wardSelect = form.querySelector('[data-reg-ward]');
+  const status = form.querySelector('[data-reg-location-status]');
+  let locations = {};
+
+  setSelectOptions(countySelect, KENYA_COUNTIES.slice().sort((a, b) => a.localeCompare(b)), 'Select county', false);
+
+  function populateSubCounties() {
+    const county = countySelect.value;
+    const subCounties = Object.keys(locations[county]?.Constituencies || {});
+    setSelectOptions(subCountySelect, subCounties, county ? 'Select sub-county' : 'Select county first', !county || !subCounties.length);
+    setSelectOptions(wardSelect, [], 'Select sub-county first', true);
+  }
+
+  function populateWards() {
+    const county = countySelect.value;
+    const subCounty = subCountySelect.value;
+    const wards = locations[county]?.Constituencies?.[subCounty]?.Ward || [];
+    setSelectOptions(wardSelect, wards, subCounty ? 'Select ward' : 'Select sub-county first', !subCounty || !wards.length);
+  }
+
+  countySelect.addEventListener('change', populateSubCounties);
+  subCountySelect.addEventListener('change', populateWards);
+
+  try {
+    const urls = [
+      'https://cdn.jsdelivr.net/gh/mbithuka/Counties@main/restructured_data.json',
+      'https://raw.githubusercontent.com/mbithuka/Counties/main/restructured_data.json'
+    ];
+    let response = null;
+    for (const url of urls) {
+      try {
+        const candidate = await fetch(url);
+        if (candidate.ok) { response = candidate; break; }
+      } catch (error) { /* try next */ }
+    }
+    if (!response) throw new Error('Location data unavailable');
+    locations = await response.json();
+    const remoteCounties = Object.keys(locations);
+    if (remoteCounties.length) {
+      setSelectOptions(countySelect, remoteCounties.sort((a, b) => a.localeCompare(b)), 'Select county', false);
+    }
+    if (status) status.textContent = 'Select your county, then sub-county and ward.';
+  } catch (error) {
+    locations = KENYA_FALLBACK_LOCATIONS;
+    if (status) status.textContent = 'Select your county, sub-county and ward. Busia locations are available offline.';
+  }
+  populateSubCounties();
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const value = name => form.querySelector(`[data-reg-${name}]`)?.value.trim() || '';
+    const name = value('name');
+    const email = value('email');
+    const phone = value('phone');
+    const interest = value('interest');
+    const county = countySelect.value;
+    const subCounty = subCountySelect.value;
+    const ward = wardSelect.value;
+    const guardian = value('guardian');
+    const education = value('education');
+    const age = Number(value('age'));
+    const raceCategories = [...form.querySelectorAll('[data-reg-race]:checked')].map(input => input.value);
+    const message = form.querySelector('[data-reg-message]')?.value.trim() || '';
+
+    if (!name || !email || !phone || !interest || !county || !subCounty || !ward || !age || !raceCategories.length) {
+      showToast('Please complete all required fields, including at least one race.', 'error');
+      return;
+    }
+    if (age < 5 || age > 120) { showToast('Please enter a valid age between 5 and 120.', 'error'); return; }
+
+    const submit = form.querySelector('button[type="submit"]');
+    const submitLabel = submit?.textContent;
+    submit?.setAttribute('disabled', '');
+    if (submit) submit.textContent = 'Submitting…';
+
+    const payload = {
+      name, email, phone, interest, message,
+      county, sub_county: subCounty, ward,
+      guardian: guardian || null,
+      education: education || null,
+      age,
+      race_categories: raceCategories
+    };
+
+    const client = getSupabaseClient();
+    if (!client) {
+      submit?.removeAttribute('disabled');
+      if (submit && submitLabel) submit.textContent = submitLabel;
+      showToast('Registration is not connected yet. Please contact us directly.', 'error');
+      return;
+    }
+
+    const { error } = await client.from('submissions').insert(payload);
+    submit?.removeAttribute('disabled');
+    if (submit && submitLabel) submit.textContent = submitLabel;
+
+    if (error) {
+      console.error(error);
+      showToast('Your registration could not be submitted. Please try again.', 'error');
+      return;
+    }
+
+    const endpoint = window.TNCC_CONFIG?.notificationEndpoint;
+    if (endpoint) {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'contact', payload: { name, email, phone, message: `New event registration: ${name} (${raceCategories.join(', ')}) from ${county}, ${subCounty}, ${ward}.` } })
+      }).catch(() => {});
+    }
+
+    form.reset();
+    populateSubCounties();
+    showToast(`Thank you, ${name}! Your registration has been received. We will contact you soon.`);
+  });
+}
+
+/* ---------- Bootstrap ---------- */
+
+function initThemeToggleFallback() {
+  document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+    if (button.dataset.tnccThemeBound) return;
+    button.dataset.tnccThemeBound = '1';
+    button.addEventListener('click', () => {
+      const dark = !document.body.classList.contains('dark');
+      document.body.classList.toggle('dark', dark);
+      try { localStorage.setItem('tncc-theme', dark ? 'dark' : 'light'); } catch (error) { /* ignore */ }
+      button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    });
+  });
+}
+
 function initYear() {
-  const yearNode = document.querySelector('[data-year]');
-  if (yearNode) yearNode.textContent = new Date().getFullYear();
+  document.querySelectorAll('[data-year]').forEach(node => { node.textContent = String(new Date().getFullYear()); });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  setPageTheme();
-  updateActiveNav();
-  initMobileMenu();
-  initThemeToggle();
-  initReveal();
   initStoryPage();
+  initStoryArticle();
   initGalleryPage();
+  initHomePreviews();
+  initCounters();
   initDonationPage();
   initContactForm();
   initVolunteerForm();
+  initRegistrationForm();
+  initThemeToggleFallback();
   initYear();
 });

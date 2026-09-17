@@ -10,20 +10,32 @@ const TNCC_NAVIGATION = [
   ['Contact', 'contact.html']
 ];
 
+/* Pages that should highlight a parent nav item (e.g. story pages highlight Stories). */
+const TNCC_ACTIVE_OVERRIDES = {
+  'story.html': 'stories.html',
+  'register.html': 'get-involved.html'
+};
+
 function tnccCurrentPage() {
   const path = window.location.pathname.split('/').pop() || 'index.html';
   return path;
 }
 
-function tnccHeaderMarkup() {
+function tnccActiveHref() {
   const currentPage = tnccCurrentPage();
+  return TNCC_ACTIVE_OVERRIDES[currentPage] || currentPage;
+}
+
+function tnccHeaderMarkup() {
+  const activeHref = tnccActiveHref();
   const links = TNCC_NAVIGATION.map(([label, href]) => {
-    const isActive = currentPage === href || (currentPage === 'story.html' && href === 'stories.html');
+    const isActive = activeHref === href;
     const donate = href === 'donate.html' ? ' tn-nav-donate' : '';
     return `<a href="${href}"${isActive ? ` class="active${donate}" aria-current="page"` : donate}>${label}</a>`;
   }).join('');
 
   return `
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
     <div class="container navbar">
       <a class="brand" href="index.html" aria-label="Teso North Cross Country CBO home">
@@ -43,7 +55,8 @@ function tnccHeaderMarkup() {
         <a class="btn btn-primary btn-small header-cta" href="donate.html">Donate</a>
       </div>
     </div>
-    </header>`;
+    </header>
+    <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress-bar></span></div>`;
 }
 
 function tnccFooterMarkup() {
@@ -51,14 +64,14 @@ function tnccFooterMarkup() {
     <div class="container footer-grid">
       <div class="footer-brand">
         <a class="footer-logo-link" href="index.html" aria-label="TNCC home">
-          <img src="logo.jpeg" alt="TNCC logo" width="52" height="52" />
+          <img src="logo.jpeg" alt="TNCC logo" width="52" height="52" loading="lazy" />
         </a>
         <div>
           <h3>Teso North Cross Country CBO</h3>
-          <p>Run. Unite. Transform. A community movement using sport, participation and collective action to build healthier, safer and more connected communities.</p>
+          <p>Run. Unite. Transform. A community movement using sport, participation and collective action to build healthier, safer and more connected communities in Teso North, Kenya.</p>
         </div>
       </div>
-      <div class="footer-column">
+      <div class="footer-column footer-links">
         <h4>Explore</h4>
         <a href="about.html">About TNCC</a>
         <a href="programs.html">Programs</a>
@@ -66,43 +79,49 @@ function tnccFooterMarkup() {
         <a href="stories.html">Stories &amp; news</a>
         <a href="gallery.html">Gallery</a>
       </div>
-      <div class="footer-column">
+      <div class="footer-column footer-links">
         <h4>Take action</h4>
+        <a href="register.html">Register for an event</a>
         <a href="get-involved.html">Get involved</a>
         <a href="donate.html">Donate</a>
         <a href="contact.html">Contact us</a>
-        <a href="login.html">Staff login</a>
       </div>
-      <div class="footer-column footer-contact">
+      <div class="footer-column footer-contact footer-meta">
         <h4>Connect</h4>
-        <a href="mailto:hello@tncc.org">hello@tncc.org</a>
-        <a href="tel:+254182095270">+254 182 095 270</a>
-        <p>Teso North, Kenya</p>
+        <a href="mailto:info@tesonorthcrosscountry.org">info@tesonorthcrosscountry.org</a>
+        <a href="tel:+254182095270">0182 095 270</a>
+        <p>Teso North, Busia County, Kenya</p>
         <p class="footer-tagline">Community through sport.</p>
       </div>
     </div>
     <div class="container footer-bottom">
-      <span>© <span data-year>2026</span> Teso North Cross Country CBO. All rights reserved.</span>
-      <span>Run. Unite. Transform.</span>
+      <span>© <span data-year>2026</span> Teso North Cross Country CBO</span>
+      <span class="footer-legal">
+        <span aria-hidden="true">Run. Unite. Transform.</span>
+        <a href="privacy.html">Privacy</a>
+        <a href="privacy.html#terms">Terms</a>
+      </span>
     </div>`;
 }
 
 function tnccSetTheme(theme) {
   const dark = theme === 'dark';
   document.body.classList.toggle('dark', dark);
-  localStorage.setItem('tncc-theme', dark ? 'dark' : 'light');
+  try { localStorage.setItem('tncc-theme', dark ? 'dark' : 'light'); } catch (error) { /* storage unavailable */ }
   document.querySelectorAll('[data-theme-toggle]').forEach(button => {
     button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
     const icon = button.querySelector('[data-theme-icon]');
-    if (icon) icon.textContent = dark ? '☀' : '◐';
+    if (icon) icon.textContent = dark ? '☾' : '◐';
   });
 }
 
 function tnccInitTheme() {
-  const saved = localStorage.getItem('tncc-theme');
+  let saved = null;
+  try { saved = localStorage.getItem('tncc-theme'); } catch (error) { /* ignore */ }
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   tnccSetTheme(saved || (prefersDark ? 'dark' : 'light'));
   document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+    button.dataset.tnccThemeBound = '1';
     button.addEventListener('click', () => tnccSetTheme(document.body.classList.contains('dark') ? 'light' : 'dark'));
   });
 }
@@ -168,6 +187,38 @@ function tnccInitYear() {
   document.querySelectorAll('[data-year]').forEach(node => { node.textContent = String(new Date().getFullYear()); });
 }
 
+function tnccInitScrollWidgets() {
+  const bar = document.querySelector('[data-scroll-progress-bar]');
+  let topButton = document.querySelector('.back-to-top');
+  if (!topButton) {
+    topButton = document.createElement('button');
+    topButton.className = 'back-to-top';
+    topButton.type = 'button';
+    topButton.setAttribute('aria-label', 'Back to top');
+    topButton.textContent = '↑';
+    document.body.appendChild(topButton);
+  }
+  topButton.addEventListener('click', () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    topButton.blur();
+  });
+
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
+    if (bar) bar.style.width = (ratio * 100).toFixed(2) + '%';
+    topButton.classList.toggle('visible', y > 600);
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+}
+
 function tnccInitServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   window.addEventListener('load', () => {
@@ -182,6 +233,7 @@ function tnccInitSharedComponents() {
   tnccInitNavigation();
   tnccInitReveal();
   tnccInitYear();
+  tnccInitScrollWidgets();
   tnccInitServiceWorker();
 }
 

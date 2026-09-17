@@ -1,101 +1,100 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact | Teso North Cross Country CBO</title>
-    <meta name="description" content="Contact TNCC to learn more about programs, partnerships, volunteering, or community support." />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="assets/css/site.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="supabase-config.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container navbar">
-        <a class="brand" href="index.html"><span class="brand-mark">TN</span><span class="brand-copy"><span>Teso North</span><small>Cross Country</small></span></a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="programs.html">Programs</a>
-          <a href="impact.html">Impact</a>
-          <a href="stories.html">Stories</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="get-involved.html">Get Involved</a>
-          <a href="donate.html">Donate</a>
-          <a href="contact.html" class="active">Contact</a>
-        </nav>
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">🌙</button>
-          <a class="btn btn-secondary btn-small" href="login.html">Login</a>
-          <a class="btn btn-primary btn-small header-cta" href="donate.html">Support</a>
-          <button class="icon-btn mobile-toggle" type="button" data-nav-toggle aria-label="Toggle menu">☰</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Teso North Cross Country CBO</title>
+  <meta name="description" content="Contact TNCC: email info@tesonorthcrosscountry.org, call 0182 095 270 or send a message to learn about programs, partnerships, volunteering and community support in Teso North, Kenya." />
+  <link rel="canonical" href="https://rashidjumachepkwony-commits.github.io/tncc-blog/contact.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Teso North Cross Country CBO" />
+  <meta property="og:title" content="Contact Us | Teso North Cross Country CBO" />
+  <meta property="og:description" content="We would love to hear from you &mdash; programs, partnerships, volunteering and community support." />
+  <meta property="og:url" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/contact.html" />
+  <meta property="og:image" content="https://rashidjumachepkwony-commits.github.io/tncc-blog/community-talk.jpg.jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#073b2b" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
+  <div data-site-header></div>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container page-hero-inner">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Contact</span></nav>
+          <span class="eyebrow">Contact</span>
+          <h1>Let&apos;s connect.</h1>
+          <p>We are here to listen, answer questions and build partnerships that move the community forward.</p>
         </div>
       </div>
-    </header>
+    </section>
 
-    <main>
-      <section class="page-hero">
-        <div class="container page-hero-inner">
-          <div>
-            <span class="eyebrow">Contact</span>
-            <h1>We would love to hear from you.</h1>
+    <section class="section-sm">
+      <div class="container donation-grid">
+        <div class="card reveal" style="padding: 22px;">
+          <div class="section-heading" style="margin-bottom: 20px;">
+            <span class="eyebrow">Send a message</span>
+            <h2>Get in touch</h2>
           </div>
-        </div>
-      </section>
-
-      <section class="section-sm">
-        <div class="container donation-grid">
-          <div class="card reveal" style="padding: 22px;">
-            <div class="section-heading" style="margin-bottom: 20px;">
-              <span class="eyebrow">Send a message</span>
-              <h2>Get in touch</h2>
-            </div>
-            <form data-contact-form class="form-grid">
-              <div class="form-grid two">
-                <div class="field">
-                  <label for="contact-name">Name</label>
-                  <input id="contact-name" data-contact-name type="text" required />
-                </div>
-                <div class="field">
-                  <label for="contact-email">Email</label>
-                  <input id="contact-email" type="email" required />
-                </div>
+          <form data-contact-form class="form-grid">
+            <div class="form-grid two">
+              <div class="field">
+                <label for="contact-name">Name *</label>
+                <input id="contact-name" data-contact-name type="text" autocomplete="name" required />
               </div>
               <div class="field">
-                <label for="contact-message">Message</label>
-                <textarea id="contact-message" required></textarea>
+                <label for="contact-email">Email *</label>
+                <input id="contact-email" data-contact-email type="email" autocomplete="email" required />
               </div>
-              <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Send message</button>
+            </div>
+            <div class="form-grid two">
+              <div class="field">
+                <label for="contact-phone">Phone</label>
+                <input id="contact-phone" data-contact-phone type="tel" autocomplete="tel" />
               </div>
-            </form>
-          </div>
-
-          <aside class="sidebar-panel reveal">
-            <h3>Contact details</h3>
-            <ul class="list-check">
-              <li>Email: hello@tncc.org</li>
-              <li>Phone: +254 700 000 000</li>
-              <li>Location: Teso North, Kenya</li>
-              <li>Partnerships and volunteering</li>
-            </ul>
-          </aside>
+              <div class="field">
+                <label for="contact-subject">Subject</label>
+                <input id="contact-subject" data-contact-subject type="text" placeholder="What is your message about?" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="contact-message">Message *</label>
+              <textarea id="contact-message" data-contact-message rows="5" required></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Send message</button>
+            </div>
+          </form>
         </div>
-      </section>
-    </main>
 
-    <footer>
-      <div class="container footer-grid">
-        <div class="footer-brand"><h3>Teso North Cross Country CBO</h3><p>We are here to connect, listen, and act together.</p></div>
-        <div class="footer-links"><h4>Explore</h4><a href="about.html">About</a><a href="programs.html">Programs</a><a href="stories.html">Stories</a><a href="gallery.html">Gallery</a></div>
-        <div class="footer-links"><h4>Get involved</h4><a href="get-involved.html">Volunteer</a><a href="donate.html">Donate</a><a href="contact.html">Contact</a></div>
-        <div class="footer-meta"><h4>Contact</h4><a href="mailto:hello@tncc.org">hello@tncc.org</a><span>Teso North, Kenya</span></div>
+        <aside class="sidebar-panel reveal">
+          <h3>Contact details</h3>
+          <ul class="list-check">
+            <li>Email: <a href="mailto:info@tesonorthcrosscountry.org">info@tesonorthcrosscountry.org</a></li>
+            <li>Phone: <a href="tel:+254182095270">0182 095 270</a></li>
+            <li>Location: Teso North, Busia County, Kenya</li>
+          </ul>
+          <h3 style="margin-top: 22px;">Quick links</h3>
+          <ul class="list-check">
+            <li><a href="register.html">Register for an event</a></li>
+            <li><a href="get-involved.html">Volunteer or partner</a></li>
+            <li><a href="donate.html">Support our work</a></li>
+          </ul>
+        </aside>
       </div>
-      <div class="container footer-bottom"><span>© <span data-year></span> TNCC</span><span>Run. Unite. Transform.</span></div>
-    </footer>
+    </section>
+  </main>
 
-    <div class="toast" aria-live="polite"></div>
-  </body>
+  <footer data-site-footer></footer>
+  <div class="toast" aria-live="polite"></div>
+</body>
 </html>
