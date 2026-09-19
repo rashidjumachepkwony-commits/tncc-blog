@@ -4,4 +4,4 @@ Disallow: /admin.html
 Disallow: /login.html
 Disallow: /auth-callback.html
 
-Sitemap: https://rashidjumachepkwony-commits.github.io/tncc-blog/sitemap.xml
+Sitemap: https://tesonorthcrosscountry.co.ke/sitemap.xml
