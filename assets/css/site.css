@@ -1209,9 +1209,11 @@ footer {
 
 @media (max-width: 980px) {
   .race-categories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .race-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .race-categories { grid-template-columns: 1fr; }
+  .race-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .event-info-item { flex-direction: column; align-items: flex-start; gap: 4px; }
   .payment-summary-row,
   .event-confirm-row { flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -1221,12 +1223,16 @@ footer {
   .section { padding: 56px 0; }
   .page-hero h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); }
   .page-hero p { font-size: 0.96rem; }
-  .field input, .field textarea, .field select { padding: 14px 16px; font-size: 0.92rem; }
+  /* 16px minimum prevents iOS Safari auto-zoom on focus */
+  .field input, .field textarea, .field select { padding: 14px 16px; font-size: 1rem; }
   .field label { font-size: 0.8rem; }
+  .form-actions { flex-direction: column; align-items: stretch; }
+  .form-actions .btn { width: 100%; text-align: center; }
 }
 @media (max-width: 360px) {
   .page-hero h1 { font-size: clamp(1.5rem, 7vw, 2rem); }
   .race-category-card { padding: 22px 12px; }
+  .race-options { grid-template-columns: 1fr; }
   .container { width: calc(100% - 24px); }
 }
 
@@ -1463,3 +1469,72 @@ footer {
   margin-bottom: 14px;
 }
 .breadcrumb a { color: var(--primary); font-weight: 600; }
+
+/* Homepage hero: The Great Chepsaita Run promo */
+.hero-event-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 580px;
+  margin: 18px 0 22px;
+  padding: 13px 16px;
+  border: 1px solid rgba(155, 207, 32, 0.5);
+  border-left: 4px solid var(--accent);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.hero-event-banner:hover,
+.hero-event-banner:focus-visible {
+  border-color: rgba(155, 207, 32, 0.9);
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25);
+}
+.hero-event-flag { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+.hero-event-text { display: grid; gap: 2px; flex: 1; min-width: 0; text-align: left; }
+.hero-event-text strong { color: var(--white); font-size: 0.98rem; letter-spacing: -0.01em; }
+.hero-event-text span:last-child { color: rgba(255, 255, 255, 0.75); font-size: 0.78rem; }
+.hero-event-cta { flex-shrink: 0; font-size: 0.78rem; font-weight: 800; color: var(--accent); white-space: nowrap; }
+
+.hero-event-card {
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(155, 207, 32, 0.45);
+  border-radius: 16px;
+  background: rgba(155, 207, 32, 0.08);
+  text-align: left;
+}
+.hero-event-kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.hero-event-card h3 { margin: 0 0 12px; color: var(--white); font-size: 1.15rem; }
+.hero-event-details { display: grid; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
+.hero-event-details li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+.hero-event-details li span { color: rgba(255, 255, 255, 0.68); }
+.hero-event-details li strong { color: var(--white); font-weight: 700; text-align: right; }
+.hero-event-card .btn { width: 100%; text-align: center; }
+
+@media (max-width: 560px) {
+  .hero-event-banner { gap: 10px; padding: 12px; margin-top: 14px; margin-bottom: 18px; }
+  .hero-event-flag { font-size: 1.3rem; }
+  .hero-event-cta { display: none; }
+  .hero-event-details li { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .hero-event-details li strong { text-align: left; }
+}
+
