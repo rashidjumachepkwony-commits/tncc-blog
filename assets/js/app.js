@@ -913,7 +913,9 @@ async function initGreatChepsaitaRunForm() {
           type: 'event-registration',
           payload: {
             name,
-            participant_email: email,
+             participant_email: email,
+             email,
+             phone,
             event_name: CHEPSAITA_RUN_CONFIG.eventName,
             event_id: CHEPSAITA_RUN_CONFIG.eventId,
             selected_category: selectedCategory.label,

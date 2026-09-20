@@ -120,14 +120,14 @@ function buildEmail(type: string, payload: Record<string, unknown>): BuiltEmail 
        "Teso North Cross Country CBO (TNCC)",
      ].filter(Boolean);
 
-     return {
-       subject: `${eventName} - Registration Confirmation (ID: ${regId || "pending"})`,
-       replyTo: adminEmail,
-       text: confirmationBody.join("\n"),
-       to,
-       cc: isValidEmail(userEmail) && userEmail !== to ? userEmail : undefined,
-       eventId,
-     };
+      return {
+        subject: `${eventName} - Registration Confirmation (ID: ${regId || "pending"})`,
+        replyTo: adminEmail,
+        text: confirmationBody.join("\n"),
+        to,
+        cc: isValidEmail(adminEmail) ? adminEmail : undefined,
+        eventId,
+      };
    }
 
     return null;
