@@ -789,12 +789,14 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
-.reveal {
+/* Reveal animation: elements are only hidden when JS is actually running
+   (html.js is set by components.js). If JS never loads, everything stays visible. */
+html.js .reveal {
   opacity: 0;
   transform: translateY(18px);
   transition: 560ms ease;
 }
-.reveal.visible {
+html.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }

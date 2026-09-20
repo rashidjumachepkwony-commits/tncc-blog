@@ -1,3 +1,7 @@
+/* Marks that JS is running: CSS only hides .reveal elements when this is set,
+   so content is always visible if scripts fail to load. */
+document.documentElement.classList.add('js');
+
 const TNCC_NAVIGATION = [
   ['Home', 'index.html'],
   ['About', 'about.html'],
@@ -185,6 +189,12 @@ function tnccInitReveal() {
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -24px' });
   items.forEach(item => observer.observe(item));
+  // Safety net: never leave content hidden if the observer misfires
+  // (slow devices, buried lazy frames, or an interrupted load).
+  setTimeout(() => {
+    items.forEach(item => item.classList.add('visible'));
+    observer.disconnect();
+  }, 2500);
 }
 
 function tnccInitYear() {
@@ -233,12 +243,9 @@ function tnccInitServiceWorker() {
 function tnccInitSharedComponents() {
   document.querySelectorAll('[data-site-header]').forEach(node => { node.innerHTML = tnccHeaderMarkup(); });
   document.querySelectorAll('[data-site-footer]').forEach(node => { node.innerHTML = tnccFooterMarkup(); });
-  tnccInitTheme();
-  tnccInitNavigation();
-  tnccInitReveal();
-  tnccInitYear();
-  tnccInitScrollWidgets();
-  tnccInitServiceWorker();
+  [tnccInitTheme, tnccInitNavigation, tnccInitReveal, tnccInitYear, tnccInitScrollWidgets, tnccInitServiceWorker].forEach(init => {
+    try { init(); } catch (error) { console.error('TNCC init failure:', error); }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', tnccInitSharedComponents);
