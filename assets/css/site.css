@@ -1263,6 +1263,14 @@ body.dark .contact-row-icon { background: rgba(155, 207, 32, 0.2); }
   border-radius: 999px;
   padding: 3px 10px;
 }
+.race-cat-count {
+  font-size: 0.7rem;
+  color: var(--accent);
+  font-weight: 700;
+  background: rgba(155, 207, 32, 0.12);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
 
 .payment-summary {
   display: grid;
