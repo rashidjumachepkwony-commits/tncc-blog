@@ -1,5 +1,5 @@
-// Audit every image the LIVE index.html actually references
-const BASE = 'https://rashidjumachepkwony-commits.github.io/tncc-blog/';
+﻿// Audit every image the LIVE index.html actually references
+const BASE = 'https://tesonorthcrosscountry.co.ke/';
 (async () => {
   const html = await (await fetch(BASE, { cache: 'no-store' })).text();
 
