@@ -681,20 +681,37 @@ body.dark .donation-amount {
   margin-bottom: 18px;
 }
 .donation-amount {
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 72px;
-  border: 1px solid var(--border);
+  padding: 10px 12px;
+  border: 2px solid var(--border);
   border-radius: 14px;
   background: var(--white);
   color: var(--primary);
   font-weight: 800;
+  font-size: 1.02rem;
   cursor: pointer;
   transition: var(--transition);
 }
+.donation-amount:hover {
+  border-color: rgba(155,207,32,0.6);
+  transform: translateY(-1px);
+}
 .donation-amount.selected {
-  background: rgba(155,207,32,0.16);
   border-color: rgba(155,207,32,0.66);
+  background: rgba(155,207,32,0.16);
+  box-shadow: 0 10px 24px rgba(7,59,43,0.12);
+}
+.donation-amount.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--accent);
 }
 .notice-card {
   border-radius: 18px;
@@ -819,7 +836,9 @@ footer {
   .nav-actions .btn:not(.header-cta) { display: none; }
   .section { padding: 72px 0; }
   .hero-inner { min-height: 540px; }
-  .story-list, .gallery-grid, .grid-2, .grid-3, .grid-4, .amount-row, .form-grid.two, .footer-grid, .media-stack { grid-template-columns: 1fr; }
+  .story-list, .gallery-grid, .grid-2, .grid-3, .grid-4, .form-grid.two, .footer-grid, .media-stack { grid-template-columns: 1fr; }
+  .amount-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-donation-form] .button-row .btn { width: 100%; text-align: center; }
   .page-hero-inner { align-items: flex-start; }
   .hero-actions { flex-direction: column; align-items: stretch; }
   main .btn { width: 100%; }
@@ -1054,6 +1073,31 @@ footer {
 }
 .mpesa-details strong { color: var(--primary); font-size: 1.05rem; }
 .donation-note { margin-top: 18px; font-size: 0.85rem; color: var(--muted); }
+.mpesa-details strong a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(7, 59, 43, 0.35);
+}
+
+/* Donation summary strip */
+.donation-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(155, 207, 32, 0.6);
+  border-radius: 12px;
+  background: rgba(155, 207, 32, 0.08);
+  font-size: 0.92rem;
+}
+.donation-summary span { color: var(--muted); }
+.donation-summary strong { color: var(--primary); font-size: 1.1rem; font-weight: 800; }
+.donation-summary[hidden] { display: none; }
+@media (max-width: 760px) {
+  .donation-summary { margin-top: 16px; }
+}
 
 /* Registration form */
 .race-options {

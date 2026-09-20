@@ -66,6 +66,10 @@
               <label for="custom-amount">Custom amount (KES)</label>
               <input id="custom-amount" data-custom-amount type="number" min="100" step="100" placeholder="Enter your amount" />
             </div>
+            <div class="donation-summary" data-donation-summary hidden>
+              <span>You're giving</span>
+              <strong data-donation-summary-amount>KES 0</strong>
+            </div>
             <div class="button-row" style="margin-top: 18px;">
               <button class="btn btn-primary" type="submit">Continue to secure checkout</button>
             </div>
@@ -80,7 +84,7 @@
             <div class="mpesa-details">
               <div><span>M-Pesa Paybill</span><strong>522522</strong></div>
               <div><span>Till Number</span><strong>8130580</strong></div>
-              <div><span>Phone</span><strong>0182 095 270</strong></div>
+              <div><span>Phone</span><strong><a href="tel:+254182095270">0182 095 270</a></strong></div>
             </div>
             <p class="donation-note">Bank transfer available on request &mdash; <a href="contact.html">contact us</a> for details. In-kind support (equipment, supplies, services) is also welcome.</p>
           </div>

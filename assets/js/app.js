@@ -1164,21 +1164,44 @@ function initDonationPage() {
   if (!donationForm) return;
 
   const amountButtons = [...donationForm.querySelectorAll('.donation-amount')];
+  const customInput = donationForm.querySelector('[data-custom-amount]');
+  const summary = donationForm.querySelector('[data-donation-summary]');
+  const summaryAmount = donationForm.querySelector('[data-donation-summary-amount]');
   let selectedAmount = null;
+
+  function updateSummary(amount) {
+    if (!summary || !summaryAmount) return;
+    if (amount > 0) {
+      summary.hidden = false;
+      summaryAmount.textContent = 'KES ' + Number(amount).toLocaleString('en-US');
+    } else {
+      summary.hidden = true;
+    }
+  }
 
   amountButtons.forEach(button => {
     button.addEventListener('click', () => {
       amountButtons.forEach(node => node.classList.remove('selected'));
       button.classList.add('selected');
       selectedAmount = Number(button.dataset.amount);
-      const custom = donationForm.querySelector('[data-custom-amount]');
-      if (custom) custom.value = '';
+      if (customInput) customInput.value = '';
+      updateSummary(selectedAmount);
     });
+  });
+
+  customInput?.addEventListener('input', () => {
+    const value = Number(customInput.value || 0);
+    if (value > 0) {
+      amountButtons.forEach(node => node.classList.remove('selected'));
+      selectedAmount = null;
+      updateSummary(value);
+    } else {
+      updateSummary(0);
+    }
   });
 
   donationForm.addEventListener('submit', async event => {
     event.preventDefault();
-    const customInput = donationForm.querySelector('[data-custom-amount]');
     const customAmount = Number(customInput?.value || 0);
     const total = customAmount > 0 ? customAmount : selectedAmount;
     const name = donationForm.querySelector('[data-donor-name]')?.value.trim() || '';
