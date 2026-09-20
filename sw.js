@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'tncc-v8';
+﻿const CACHE_NAME = 'tncc-v9';
 const APP_SHELL = ['./', './index.html', './404.html', './lookup.html', './great-chepsaita-run.html', './manifest.json', './logo.jpeg', './assets/css/site.css', './assets/js/app.js', './assets/js/components.js'];
 
 self.addEventListener('install', event => {
