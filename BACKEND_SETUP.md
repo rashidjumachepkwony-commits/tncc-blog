@@ -10,7 +10,13 @@ The browser app remains deployable as static HTML, while production services are
 4. Put the project URL and public anon key in `supabase-config.js`.
 5. Set the production site URL and OAuth redirect URL to the deployed site. The site must be reachable over HTTPS (OAuth is blocked over `file://` and plain HTTP).
 6. Under Authentication > URL Configuration > Redirect URLs, add the exact deployed callback page, e.g. `https://your-site.com/auth-callback.html`. Google (and every OAuth) sign-in routes through `auth-callback.html`, which shows the sign-in result on screen.
-7. Promote the first admin by changing that user's `profiles.role` to `admin` in the dashboard.
+7. Promote the first admin by changing that user's `profiles.role` to `admin` in the dashboard, or run in SQL Editor:
+
+```sql
+update public.profiles set role = 'admin' where id = (
+  select id from auth.users where email = 'tesonorthcrosscountrycbo@gmail.com'
+);
+```
 
 ### Admin and user access
 
@@ -59,14 +65,14 @@ The payment endpoint should create a Checkout Session in KES, insert a pending d
 
 ### Access request email
 
-The `send-notification` Edge Function sends new registration notices to `rashidjumachepkwony@gmail.com` by default. Configure the Supabase secrets and deploy it:
+The `send-notification` Edge Function sends new registration notices to `tesonorthcrosscountrycbo@gmail.com` by default. Configure the Supabase secrets and deploy it:
 
 ```bash
-supabase secrets set RESEND_API_KEY=your-resend-api-key TNCC_ADMIN_EMAIL=rashidjumachepkwony@gmail.com TNCC_SENDER_EMAIL="TNCC website <no-reply@your-verified-domain.com>"
+supabase secrets set RESEND_API_KEY=your-resend-api-key TNCC_ADMIN_EMAIL=tesonorthcrosscountrycbo@gmail.com TNCC_SENDER_EMAIL="TNCC website <no-reply@your-verified-domain.com>"
 supabase functions deploy send-notification
 ```
 
-After receiving a request, confirm the user in Supabase Authentication and change that user's `profiles.role` from `reader` to `admin`. The public homepage does not expose an Admin button; only approved users can enter `admin.html`.
+After receiving a request, confirm the user in Supabase Authentication and change that user's `profiles.role` from `reader` to `admin`. The admin at `tesonorthcrosscountrycbo@gmail.com` will receive these notifications. The public homepage does not expose an Admin button; only approved users can enter `admin.html`.
 
 ## Comments
 

@@ -227,3 +227,15 @@ with check (
   event_id IS DISTINCT FROM 'great-chepsaita-run'
   OR created_at <= '2026-11-20T23:59:59+03:00'::timestamptz
 );
+
+-- Promote the first admin.
+-- Step 1: Create the auth user via Supabase Dashboard > Authentication > Users
+--         (email: tesonorthcrosscountrycbo@gmail.com, or invite via email)
+-- Step 2: Promote to admin:
+update public.profiles
+set role = 'admin'
+where id = (select id from auth.users where email = 'tesonorthcrosscountrycbo@gmail.com');
+
+-- Admin password is set through the Supabase Dashboard (Authentication > Users >
+-- tesonorthcrosscountrycbo@gmail.com > "Set password") or via the invite email flow.
+-- The first admin registers normally on login.html with email/password, then is promoted.

@@ -17,7 +17,7 @@ Option A — Dashboard (recommended on Windows, CLI npm wrapper is broken for wi
 1. Go to Supabase Dashboard > your project `eadrlxpgxcgdhftkqwqa` > Project Settings > Edge Functions > Secrets (or Vault / Functions > Secrets).
 2. Add:
    - `RESEND_API_KEY` = `<paste-your-Resend-key-here>`
-   - `TNCC_ADMIN_EMAIL` = `rashidjumachepkwony@gmail.com`
+    - `TNCC_ADMIN_EMAIL` = `tesonorthcrosscountrycbo@gmail.com`
    - `TNCC_SENDER_EMAIL` = `TNCC website <onboarding@resend.dev>`
 3. Save. Redeploy the function (step 2).
 
@@ -25,7 +25,7 @@ Option B — CLI (macOS/Linux or working CLI):
 ```bash
 supabase login
 supabase link --project-ref eadrlxpgxcgdhftkqwqa
-supabase secrets set RESEND_API_KEY=your-resend-api-key TNCC_ADMIN_EMAIL=rashidjumachepkwony@gmail.com "TNCC_SENDER_EMAIL=TNCC website <onboarding@resend.dev>"
+supabase secrets set RESEND_API_KEY=your-resend-api-key TNCC_ADMIN_EMAIL=tesonorthcrosscountrycbo@gmail.com "TNCC_SENDER_EMAIL=TNCC website <onboarding@resend.dev>"
 supabase secrets list
 ```
 

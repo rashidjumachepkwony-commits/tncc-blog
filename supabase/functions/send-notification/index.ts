@@ -3,7 +3,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const adminEmail = Deno.env.get("TNCC_ADMIN_EMAIL") || "rashidjumachepkwony@gmail.com";
+const adminEmail = Deno.env.get("TNCC_ADMIN_EMAIL") || "tesonorthcrosscountrycbo@gmail.com";
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const senderEmail = Deno.env.get("TNCC_SENDER_EMAIL") || "TNCC website <onboarding@resend.dev>";
 
