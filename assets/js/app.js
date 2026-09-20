@@ -623,10 +623,10 @@ const CHEPSAITA_RUN_CATEGORIES = [
 ];
 
 const CHEPSAITA_RUN_CONFIG = {
-  eventName: 'The Great Chepsaita Run',
+  eventName: 'Teso North Cross Country Run',
   organizer: 'Teso North Cross Country CBO',
-  location: 'Eldoret, Kenya',
-  eventDate: '2026-12-05',
+  location: 'Chelelemuk grounds',
+  eventDate: '2026-11-21',
   deadline: new Date('2026-11-20T23:59:59+03:00'),
   eventId: 'great-chepsaita-run',
   fee: 0,
@@ -886,21 +886,51 @@ async function initGreatChepsaitaRunForm() {
     const client = getSupabaseClient();
     if (!client) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Register for The Great Chepsaita Run';
+      submitBtn.textContent = 'Register for the event';
       showToast('Registration is not connected yet. Please contact us directly.', 'error');
       return;
     }
 
-    const { data, error } = await client.from('submissions').insert(payload).select('id').single();
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Register for The Great Chepsaita Run';
+    let data = null;
+    let error = null;
+    const { data: insertData, error: insertError } = await client.from('submissions').insert(payload).select('id').single();
+    data = insertData;
+    error = insertError;
 
     if (error) {
       console.error(error);
-      showToast('Your registration could not be submitted. Please try again.', 'error');
-      return;
+      // Retry with core columns only if the schema hasn't been fully migrated
+      const corePayload = {
+        name,
+        email,
+        phone,
+        age,
+        gender: gender || null,
+        county,
+        sub_county: subCounty,
+        ward,
+        guardian: (guardian || null),
+        guardian_phone: guardianPhone || null,
+        interest: 'event-participant',
+        message: message || null,
+        race_categories: [selectedCategory.label],
+        event_id: CHEPSAITA_RUN_CONFIG.eventId,
+        event_name: CHEPSAITA_RUN_CONFIG.eventName,
+        selected_category: selectedCategory.label,
+        race_distance: selectedCategory.distance
+      };
+      const retry = await client.from('submissions').insert(corePayload).select('id').single();
+      if (retry.error) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Register for the event';
+        showToast('Your registration could not be submitted. Please try again.', 'error');
+        return;
+      }
+      data = retry.data;
     }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Register for the event';
 
     const registrationId = 'TNCC-CR-' + data.id.substring(0, 8).toUpperCase();
 
@@ -912,10 +942,9 @@ async function initGreatChepsaitaRunForm() {
         body: JSON.stringify({
           type: 'event-registration',
           payload: {
-            name,
-             participant_email: email,
-             email,
-             phone,
+           name,
+           participant_email: email,
+           phone,
             event_name: CHEPSAITA_RUN_CONFIG.eventName,
             event_id: CHEPSAITA_RUN_CONFIG.eventId,
             selected_category: selectedCategory.label,
