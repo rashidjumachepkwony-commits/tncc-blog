@@ -627,7 +627,7 @@ const CHEPSAITA_RUN_CONFIG = {
   organizer: 'Teso North Cross Country CBO',
   location: 'Eldoret, Kenya',
   eventDate: '2026-12-05',
-  deadline: new Date('2026-11-20T23:59:59+03:00'),
+  deadline: new Date('2026-11-15T23:59:59+03:00'),
   eventId: 'great-chepsaita-run',
   fee: 0,
   currency: 'KES'
@@ -794,7 +794,7 @@ async function initGreatChepsaitaRunForm() {
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!isRegistrationOpen()) {
-      showToast('Registration is closed. The deadline was 20 November 2026 at 23:59 Kenya time.', 'error');
+      showToast('Registration is closed. The deadline was 15 November 2026 at 23:59 Kenya time.', 'error');
       return;
     }
 

@@ -627,7 +627,7 @@ const CHEPSAITA_RUN_CONFIG = {
   organizer: 'Teso North Cross Country CBO',
   location: 'Chelelemuk grounds',
   eventDate: '2026-11-21',
-  deadline: new Date('2026-11-20T23:59:59+03:00'),
+  deadline: new Date('2026-11-15T23:59:59+03:00'),
   eventId: 'great-chepsaita-run',
   fee: 0,
   currency: 'KES'
@@ -794,7 +794,7 @@ async function initGreatChepsaitaRunForm() {
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!isRegistrationOpen()) {
-      showToast('Registration is closed. The deadline was 20 November 2026 at 23:59 Kenya time.', 'error');
+      showToast('Registration is closed. The deadline was 15 November 2026 at 23:59 Kenya time.', 'error');
       return;
     }
 
@@ -859,7 +859,16 @@ async function initGreatChepsaitaRunForm() {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting…';
 
+    const registrationUuid = (window.crypto && typeof window.crypto.randomUUID === 'function')
+      ? window.crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, char => {
+          const r = Math.random() * 16 | 0;
+          const v = char === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+
     const payload = {
+      id: registrationUuid,
       name,
       email,
       phone,
@@ -891,16 +900,16 @@ async function initGreatChepsaitaRunForm() {
       return;
     }
 
-    let data = null;
+    let data = { id: registrationUuid };
     let error = null;
-    const { data: insertData, error: insertError } = await client.from('submissions').insert(payload).select('id').single();
-    data = insertData;
+    const { error: insertError } = await client.from('submissions').insert(payload);
     error = insertError;
 
     if (error) {
       console.error(error);
       // Retry with core columns only if the schema hasn't been fully migrated
       const corePayload = {
+        id: registrationUuid,
         name,
         email,
         phone,
@@ -919,14 +928,14 @@ async function initGreatChepsaitaRunForm() {
         selected_category: selectedCategory.label,
         race_distance: selectedCategory.distance
       };
-      const retry = await client.from('submissions').insert(corePayload).select('id').single();
+      const retry = await client.from('submissions').insert(corePayload);
       if (retry.error) {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Register for the event';
         showToast('Your registration could not be submitted. Please try again.', 'error');
         return;
       }
-      data = retry.data;
+      data = { id: registrationUuid };
     }
 
     submitBtn.disabled = false;
