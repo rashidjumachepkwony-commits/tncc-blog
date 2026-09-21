@@ -52,6 +52,43 @@ function buildEmail(type: string, payload: Record<string, unknown>): BuiltEmail 
     };
   }
 
+  if (type === "registration-submission") {
+    if (!isValidEmail(userEmail) || !name) return null;
+
+    const raceCategories = Array.isArray(payload.race_categories)
+      ? payload.race_categories.map(String).join(", ")
+      : String(payload.race_categories || "").trim();
+    const county = String(payload.county || "").trim();
+    const subCounty = String(payload.sub_county || "").trim();
+    const ward = String(payload.ward || "").trim();
+    const age = String(payload.age || "").trim();
+    const guardian = String(payload.guardian || "").trim();
+    const education = String(payload.education || "").trim();
+    const interest = String(payload.interest || "").trim();
+
+    return {
+      subject: `New TNCC registration from ${name}`,
+      replyTo: userEmail,
+      text: [
+        "New community registration submitted through the TNCC website.",
+        "",
+        `Name: ${name}`,
+        `Email: ${userEmail}`,
+        phone ? `Phone: ${phone}` : "",
+        age ? `Age: ${age}` : "",
+        interest ? `Interest: ${interest}` : "",
+        raceCategories ? `Race categories: ${raceCategories}` : "",
+        county ? `County: ${county}` : "",
+        subCounty ? `Sub-county: ${subCounty}` : "",
+        ward ? `Ward: ${ward}` : "",
+        guardian ? `Guardian: ${guardian}` : "",
+        education ? `Education: ${education}` : "",
+        message ? "Additional message:" : "",
+        message,
+      ].filter(Boolean).join("\n"),
+    };
+  }
+
   if (type === "contact") {
     if (!isValidEmail(userEmail) || !name || !message) return null;
     return {
@@ -113,6 +150,14 @@ function buildEmail(type: string, payload: Record<string, unknown>): BuiltEmail 
        `  Distance: ${distance || "N/A"}`,
        `  Registration fee: ${fee > 0 ? `KES ${fee.toLocaleString("en-US")}` : "FREE"}`,
        regId ? `  Registration ID: ${regId}` : "",
+       payload.age ? `  Age: ${String(payload.age)}` : "",
+       payload.gender ? `  Gender: ${String(payload.gender)}` : "",
+       payload.county ? `  County: ${String(payload.county)}` : "",
+       payload.sub_county ? `  Sub-county: ${String(payload.sub_county)}` : "",
+       payload.ward ? `  Ward: ${String(payload.ward)}` : "",
+       payload.guardian ? `  Guardian: ${String(payload.guardian)}` : "",
+       payload.guardian_phone ? `  Guardian phone: ${String(payload.guardian_phone)}` : "",
+       payload.message ? `  Additional message: ${String(payload.message)}` : "",
        "",
        "Please keep your registration ID for event day. We will contact you with final race instructions before the event.",
        "",
@@ -148,7 +193,7 @@ Deno.serve(async (req) => {
       return json(
         {
           error:
-            "A valid type (registration | contact | volunteer | event-registration) with required fields is needed",
+            "A valid type (registration | registration-submission | contact | volunteer | event-registration) with required fields is needed",
         },
         400,
       );

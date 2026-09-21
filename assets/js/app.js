@@ -950,7 +950,15 @@ async function initGreatChepsaitaRunForm() {
             selected_category: selectedCategory.label,
             race_distance: selectedCategory.distance,
             registration_fee: CHEPSAITA_RUN_CONFIG.fee,
-            registration_id: registrationId
+            registration_id: registrationId,
+            age,
+            gender: gender || '',
+            county,
+            sub_county: subCounty,
+            ward,
+            guardian: guardian || '',
+            guardian_phone: guardianPhone || '',
+            message: message || ''
           }
         })
       }).catch(() => {});
@@ -1400,8 +1408,24 @@ async function initRegistrationForm() {
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'contact', payload: { name, email, phone, message: `New event registration: ${name} (${raceCategories.join(', ')}) from ${county}, ${subCounty}, ${ward}.` } })
-      }).catch(() => {});
+        body: JSON.stringify({
+          type: 'registration-submission',
+          payload: {
+            name,
+            email,
+            phone,
+            age,
+            county,
+            sub_county: subCounty,
+            ward,
+            guardian: guardian || '',
+            education: education || '',
+            interest,
+            race_categories: raceCategories,
+            message
+          }
+        })
+      }).catch(error => console.error('Registration notification failed:', error));
     }
 
     form.reset();
