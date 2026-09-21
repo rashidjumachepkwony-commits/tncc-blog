@@ -8,13 +8,23 @@ if (!supabaseUrl || !supabaseAnonKey || !serviceRoleKey) {
   throw new Error("Missing Supabase environment variables");
 }
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Missing Authorization token" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -31,7 +41,7 @@ Deno.serve(async (req) => {
     if (userError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -45,7 +55,7 @@ Deno.serve(async (req) => {
     if (profileError || !profile || profile.role !== "admin") {
       return new Response(JSON.stringify({ error: "Admin access required" }), {
         status: 403,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -71,7 +81,7 @@ Deno.serve(async (req) => {
       }));
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -80,14 +90,14 @@ Deno.serve(async (req) => {
       if (!id || !["reader", "admin"].includes(role)) {
         return new Response(JSON.stringify({ error: "Missing id or valid role" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
       if (id === user.id && role !== "admin") {
         return new Response(JSON.stringify({ error: "You cannot remove your own admin access" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -100,7 +110,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -113,7 +123,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -126,7 +136,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -139,7 +149,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -152,7 +162,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -166,7 +176,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -195,7 +205,7 @@ Deno.serve(async (req) => {
       }
 
       return new Response(JSON.stringify({ data: results }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -204,7 +214,7 @@ Deno.serve(async (req) => {
       if (!id || !status) {
         return new Response(JSON.stringify({ error: "Missing id or status" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -217,7 +227,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -226,7 +236,7 @@ Deno.serve(async (req) => {
       if (!id) {
         return new Response(JSON.stringify({ error: "Missing id" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -244,7 +254,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -253,7 +263,7 @@ Deno.serve(async (req) => {
       if (!id || typeof published !== "boolean") {
         return new Response(JSON.stringify({ error: "Missing id or published boolean" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -266,7 +276,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -275,7 +285,7 @@ Deno.serve(async (req) => {
       if (!title || typeof title !== "string" || !title.trim()) {
         return new Response(JSON.stringify({ error: "Title is required" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -302,7 +312,7 @@ Deno.serve(async (req) => {
       if (result.error) throw result.error;
 
       return new Response(JSON.stringify({ data: result.data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -311,7 +321,7 @@ Deno.serve(async (req) => {
       if (!id) {
         return new Response(JSON.stringify({ error: "Missing content id" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -332,7 +342,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -341,7 +351,7 @@ Deno.serve(async (req) => {
       if (!id) {
         return new Response(JSON.stringify({ error: "Missing content id" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" }
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
 
@@ -349,19 +359,19 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       return new Response(JSON.stringify({ data: { id } }), {
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400,
-      headers: { "Content-Type": "application/json" }
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   }
 });
