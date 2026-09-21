@@ -160,7 +160,7 @@ Deno.serve(async (req) => {
       const { data, error } = await adminClient
         .from("submissions")
         .select("id, event_id, event_name, name, email, phone, age, gender, county, sub_county, ward, guardian, guardian_phone, selected_category, race_distance, registration_fee, payment_method, payment_status, mpesa_reference, bib_number, status, created_at")
-        .eq("event_id", "great-chepsaita-run")
+        .eq("event_id", "teso-north-cross-country")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -174,7 +174,7 @@ Deno.serve(async (req) => {
       const { data: registrations, error: fetchError } = await adminClient
         .from("submissions")
         .select("id, bib_number, created_at")
-        .eq("event_id", "great-chepsaita-run")
+        .eq("event_id", "teso-north-cross-country")
         .is("bib_number", null)
         .order("created_at", { ascending: true });
 

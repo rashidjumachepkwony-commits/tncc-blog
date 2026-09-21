@@ -628,7 +628,7 @@ const CHEPSAITA_RUN_CONFIG = {
   location: 'Chelelemuk grounds',
   eventDate: '2026-11-21',
   deadline: new Date('2026-11-15T23:59:59+03:00'),
-  eventId: 'great-chepsaita-run',
+  eventId: 'teso-north-cross-country',
   fee: 0,
   currency: 'KES'
 };
@@ -682,14 +682,16 @@ async function initGreatChepsaitaRunForm() {
       });
       const { data, error } = await client
         .from('submissions')
-        .select('selected_category', { count: 'exact' })
-        .eq('event_id', CHEPSAITA_RUN_CONFIG.eventId)
-        .not('selected_category', 'is', null);
-      if (error) return;
+        .select('race_categories')
+        .eq('event_id', CHEPSAITA_RUN_CONFIG.eventId);
+      if (error || !Array.isArray(data)) return;
       const countsByCategory = {};
       data.forEach(row => {
-        const cat = CHEPSAITA_RUN_CATEGORIES.find(c => c.label === row.selected_category);
-        if (cat) countsByCategory[cat.value] = (countsByCategory[cat.value] || 0) + 1;
+        const labels = Array.isArray(row.race_categories) ? row.race_categories : [];
+        labels.forEach(label => {
+          const cat = CHEPSAITA_RUN_CATEGORIES.find(c => c.label === label);
+          if (cat) countsByCategory[cat.value] = (countsByCategory[cat.value] || 0) + 1;
+        });
       });
       Object.entries(countsByCategory).forEach(([catValue, count]) => {
         if (categoryCountSpans[catValue]) {
@@ -930,10 +932,38 @@ async function initGreatChepsaitaRunForm() {
       };
       const retry = await client.from('submissions').insert(corePayload);
       if (retry.error) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Register for the event';
-        showToast('Your registration could not be submitted. Please try again.', 'error');
-        return;
+        // Final compatibility fallback for older Supabase schemas that do not yet
+        // have the newer event/category columns. The registration is still saved
+        // using the original submissions columns, while event details remain in
+        // race_categories/message for admin review.
+        const legacyPayload = {
+          id: registrationUuid,
+          name,
+          email,
+          phone,
+          age,
+          county,
+          sub_county: subCounty,
+          ward,
+          guardian: guardian || null,
+          interest: 'event-participant',
+          message: [
+            message || '',
+            `Event: ${CHEPSAITA_RUN_CONFIG.eventName}`,
+            `Date: ${CHEPSAITA_RUN_CONFIG.eventDate}`,
+            `Category: ${selectedCategory.label}`,
+            `Distance: ${selectedCategory.distance}`
+          ].filter(Boolean).join('\n'),
+          race_categories: [selectedCategory.label]
+        };
+        const legacyRetry = await client.from('submissions').insert(legacyPayload);
+        if (legacyRetry.error) {
+          console.error('Event registration failed:', legacyRetry.error);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Register for the event';
+          showToast('Your registration could not be submitted. Please try again.', 'error');
+          return;
+        }
       }
       data = { id: registrationUuid };
     }
@@ -1097,7 +1127,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'great-chepsaita-run')
+          .eq('event_id', 'teso-north-cross-country')
           .limit(1);
         if (err) { error = err; }
         else {
@@ -1107,7 +1137,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'great-chepsaita-run')
+          .eq('event_id', 'teso-north-cross-country')
           .eq('email', query);
         if (err) { error = err; }
         else { data = result?.[0] || null; }
@@ -1115,7 +1145,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'great-chepsaita-run')
+          .eq('event_id', 'teso-north-cross-country')
           .eq('phone', query);
         if (err) { error = err; }
         else { data = result?.[0] || null; }
