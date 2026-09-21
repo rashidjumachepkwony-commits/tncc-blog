@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+﻿import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (action === "getChepsaitaRunRegistrations") {
+    if (action === "getEventRegistrations") {
       const { data, error } = await adminClient
         .from("submissions")
         .select("id, event_id, event_name, name, email, phone, age, gender, county, sub_county, ward, guardian, guardian_phone, selected_category, race_distance, registration_fee, payment_method, payment_status, mpesa_reference, bib_number, status, created_at")
@@ -221,7 +221,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (action === "updateChepsaitaRegistration") {
+    if (action === "updateEventRegistration") {
       const { id, payment_status, mpesa_reference, status } = body;
       if (!id) {
         return new Response(JSON.stringify({ error: "Missing id" }), {

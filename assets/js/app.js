@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    TNCC front-end application
    1. Utilities
    2. Seed content (stories + gallery)
@@ -7,7 +7,7 @@
    5. Story article page (share, related, comments)
    6. Gallery page (filters + lightbox)
    7. Homepage previews + impact counters
-   8. Event registration (great-chepsaita-run.html)
+   8. Event registration (teso-north-cross-country.html)
    9. Registration lookup (lookup.html)
    10. Event registration (register.html)
    11. Forms (contact, volunteer, registration, donation)
@@ -610,9 +610,9 @@ function initCounters() {
   counters.forEach(node => observer.observe(node));
 }
 
-/* ---------- 8. Event registration (great-chepsaita-run.html) ---------- */
+/* ---------- 8. Event registration (teso-north-cross-country.html) ---------- */
 
-const CHEPSAITA_RUN_CATEGORIES = [
+const TNCC_RUN_CATEGORIES = [
   { value: '5-7-years', label: '5–7 years', distance: '500m', fee: 0, ageMin: 5, ageMax: 7, requiresGender: false },
   { value: '8-10-years', label: '8–10 years', distance: '1km', fee: 0, ageMin: 8, ageMax: 10, requiresGender: false },
   { value: '11-13-years', label: '11–13 years', distance: '2km', fee: 0, ageMin: 11, ageMax: 13, requiresGender: false },
@@ -622,7 +622,7 @@ const CHEPSAITA_RUN_CATEGORIES = [
   { value: 'elite', label: 'Elite', distance: '10km', fee: 0, ageMin: null, ageMax: null, requiresGender: false }
 ];
 
-const CHEPSAITA_RUN_CONFIG = {
+const TNCC_RUN_CONFIG = {
   eventName: 'Teso North Cross Country Run',
   organizer: 'Teso North Cross Country CBO',
   location: 'Chelelemuk grounds',
@@ -634,11 +634,11 @@ const CHEPSAITA_RUN_CONFIG = {
 };
 
 function isRegistrationOpen() {
-  return new Date() < CHEPSAITA_RUN_CONFIG.deadline;
+  return new Date() < TNCC_RUN_CONFIG.deadline;
 }
 
 function findCategory(value) {
-  return CHEPSAITA_RUN_CATEGORIES.find(category => category.value === value);
+  return TNCC_RUN_CATEGORIES.find(category => category.value === value);
 }
 
 function validateAgeForCategory(age, category) {
@@ -647,8 +647,8 @@ function validateAgeForCategory(age, category) {
   return true;
 }
 
-async function initGreatChepsaitaRunForm() {
-  const form = document.querySelector('[data-great-chepsaita-run-form]');
+async function initTesoNorthCrossCountryForm() {
+  const form = document.querySelector('[data-teso-north-cross-country-form]');
   if (!form) return;
 
   const deadlineBanner = document.getElementById('eventDeadlineBanner');
@@ -661,7 +661,7 @@ async function initGreatChepsaitaRunForm() {
   const ageError = form.querySelector('[data-age-error]');
   const categoryError = form.querySelector('[data-category-error]');
   const genderField = form.querySelector('[data-reg-gender]').closest('.field');
-  const minorFields = document.getElementById('chepsaitaMinorFields');
+  const minorFields = document.getElementById('tnccMinorFields');
   const guardianInput = form.querySelector('[data-reg-guardian]');
   const guardianPhoneInput = form.querySelector('[data-reg-guardian-phone]');
   const feeDisplay = form.querySelector('[data-reg-fee-display]');
@@ -683,13 +683,13 @@ async function initGreatChepsaitaRunForm() {
       const { data, error } = await client
         .from('submissions')
         .select('race_categories')
-        .eq('event_id', CHEPSAITA_RUN_CONFIG.eventId);
+        .eq('event_id', TNCC_RUN_CONFIG.eventId);
       if (error || !Array.isArray(data)) return;
       const countsByCategory = {};
       data.forEach(row => {
         const labels = Array.isArray(row.race_categories) ? row.race_categories : [];
         labels.forEach(label => {
-          const cat = CHEPSAITA_RUN_CATEGORIES.find(c => c.label === label);
+          const cat = TNCC_RUN_CATEGORIES.find(c => c.label === label);
           if (cat) countsByCategory[cat.value] = (countsByCategory[cat.value] || 0) + 1;
         });
       });
@@ -764,7 +764,7 @@ async function initGreatChepsaitaRunForm() {
       if (!selectedCategory) return;
 
       if (feeDisplay) feeDisplay.textContent = selectedCategory.fee > 0
-        ? `${CHEPSAITA_RUN_CONFIG.currency} ${selectedCategory.fee.toLocaleString('en-US')}`
+        ? `${TNCC_RUN_CONFIG.currency} ${selectedCategory.fee.toLocaleString('en-US')}`
         : 'FREE';
 
       const genderRequired = selectedCategory.requiresGender;
@@ -886,10 +886,10 @@ async function initGreatChepsaitaRunForm() {
       race_categories: [selectedCategory.label],
       selected_category: selectedCategory.label,
       race_distance: selectedCategory.distance,
-      event_id: CHEPSAITA_RUN_CONFIG.eventId,
-      event_name: CHEPSAITA_RUN_CONFIG.eventName,
-      event_date: CHEPSAITA_RUN_CONFIG.eventDate,
-      registration_fee: CHEPSAITA_RUN_CONFIG.fee,
+      event_id: TNCC_RUN_CONFIG.eventId,
+      event_name: TNCC_RUN_CONFIG.eventName,
+      event_date: TNCC_RUN_CONFIG.eventDate,
+      registration_fee: TNCC_RUN_CONFIG.fee,
       payment_method: 'mpesa',
       payment_status: 'pending'
     };
@@ -925,8 +925,8 @@ async function initGreatChepsaitaRunForm() {
         interest: 'event-participant',
         message: message || null,
         race_categories: [selectedCategory.label],
-        event_id: CHEPSAITA_RUN_CONFIG.eventId,
-        event_name: CHEPSAITA_RUN_CONFIG.eventName,
+        event_id: TNCC_RUN_CONFIG.eventId,
+        event_name: TNCC_RUN_CONFIG.eventName,
         selected_category: selectedCategory.label,
         race_distance: selectedCategory.distance
       };
@@ -949,8 +949,8 @@ async function initGreatChepsaitaRunForm() {
           interest: 'event-participant',
           message: [
             message || '',
-            `Event: ${CHEPSAITA_RUN_CONFIG.eventName}`,
-            `Date: ${CHEPSAITA_RUN_CONFIG.eventDate}`,
+            `Event: ${TNCC_RUN_CONFIG.eventName}`,
+            `Date: ${TNCC_RUN_CONFIG.eventDate}`,
             `Category: ${selectedCategory.label}`,
             `Distance: ${selectedCategory.distance}`
           ].filter(Boolean).join('\n'),
@@ -984,11 +984,11 @@ async function initGreatChepsaitaRunForm() {
            name,
            participant_email: email,
            phone,
-            event_name: CHEPSAITA_RUN_CONFIG.eventName,
-            event_id: CHEPSAITA_RUN_CONFIG.eventId,
+            event_name: TNCC_RUN_CONFIG.eventName,
+            event_id: TNCC_RUN_CONFIG.eventId,
             selected_category: selectedCategory.label,
             race_distance: selectedCategory.distance,
-            registration_fee: CHEPSAITA_RUN_CONFIG.fee,
+            registration_fee: TNCC_RUN_CONFIG.fee,
             registration_id: registrationId,
             age,
             gender: gender || '',
@@ -1093,7 +1093,6 @@ async function initLookupForm() {
     if (fields.guardianPhone) fields.guardianPhone.textContent = item.guardian_phone || '—';
     if (fields.status) fields.status.textContent = item.status || 'pending';
     if (fields.date) fields.date.textContent = item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
-    clearFields();
   }
 
   form.addEventListener('submit', async event => {
@@ -1127,7 +1126,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'teso-north-cross-country')
+          .eq('event_id', TNCC_RUN_CONFIG.eventId)
           .limit(1);
         if (err) { error = err; }
         else {
@@ -1137,7 +1136,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'teso-north-cross-country')
+          .eq('event_id', TNCC_RUN_CONFIG.eventId)
           .eq('email', query);
         if (err) { error = err; }
         else { data = result?.[0] || null; }
@@ -1145,7 +1144,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'teso-north-cross-country')
+          .eq('event_id', TNCC_RUN_CONFIG.eventId)
           .eq('phone', query);
         if (err) { error = err; }
         else { data = result?.[0] || null; }
@@ -1504,7 +1503,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initVolunteerForm();
    initRegistrationForm();
-   initGreatChepsaitaRunForm();
+   initTesoNorthCrossCountryForm();
    initLookupForm();
    initThemeToggleFallback();
    initYear();

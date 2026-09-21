@@ -1,4 +1,4 @@
-/* Marks that JS is running: CSS only hides .reveal elements when this is set,
+﻿/* Marks that JS is running: CSS only hides .reveal elements when this is set,
    so content is always visible if scripts fail to load. */
 document.documentElement.classList.add('js');
 
@@ -10,7 +10,7 @@ const TNCC_NAVIGATION = [
   ['Stories', 'stories.html'],
   ['Gallery', 'gallery.html'],
   ['Get Involved', 'get-involved.html'],
-  ['Great Chepsaita Run', 'great-chepsaita-run.html'],
+  ['Teso North Cross Country', 'teso-north-cross-country.html'],
   ['Donate', 'donate.html'],
   ['Contact', 'contact.html'],
   ['Registration lookup', 'lookup.html']

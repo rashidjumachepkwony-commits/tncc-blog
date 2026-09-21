@@ -1,4 +1,4 @@
--- TNCC production data model for Supabase.
+﻿-- TNCC production data model for Supabase.
 -- Run this in Supabase SQL Editor, then enable Email and Google providers.
 
 create table if not exists public.profiles (
@@ -219,8 +219,8 @@ create policy "Admins delete comments" on public.comments
 for delete to authenticated using (public.is_admin());
 
 -- Prevent event registrations after the deadline (server-side enforcement)
-drop policy if exists "Chepsaita Run registration deadline" on public.submissions;
-create policy "Chepsaita Run registration deadline"
+drop policy if exists "Teso North Cross Country registration deadline" on public.submissions;
+create policy "Teso North Cross Country registration deadline"
 on public.submissions
 for insert
 with check (
