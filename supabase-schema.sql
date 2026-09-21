@@ -224,7 +224,7 @@ create policy "Chepsaita Run registration deadline"
 on public.submissions
 for insert
 with check (
-  event_id IS DISTINCT FROM 'great-chepsaita-run'
+  event_id IS DISTINCT FROM 'teso-north-cross-country'
   OR created_at <= '2026-11-15T23:59:59+03:00'::timestamptz
 );
 

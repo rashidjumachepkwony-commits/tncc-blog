@@ -623,12 +623,12 @@ const CHEPSAITA_RUN_CATEGORIES = [
 ];
 
 const CHEPSAITA_RUN_CONFIG = {
-  eventName: 'The Great Chepsaita Run',
+  eventName: 'The Teso North Cross Country',
   organizer: 'Teso North Cross Country CBO',
   location: 'Eldoret, Kenya',
-  eventDate: '2026-12-05',
+  eventDate: '2026-11-21',
   deadline: new Date('2026-11-15T23:59:59+03:00'),
-  eventId: 'great-chepsaita-run',
+  eventId: 'teso-north-cross-country',
   fee: 0,
   currency: 'KES'
 };
@@ -886,15 +886,17 @@ async function initGreatChepsaitaRunForm() {
     const client = getSupabaseClient();
     if (!client) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Register for The Great Chepsaita Run';
+      submitBtn.textContent = 'Register for The Teso North Cross Country';
       showToast('Registration is not connected yet. Please contact us directly.', 'error');
       return;
     }
 
-    const { data, error } = await client.from('submissions').insert(payload).select('id').single();
+    const registrationUuid = crypto.randomUUID();
+    payload.id = registrationUuid;
+    const { error } = await client.from('submissions').insert(payload);
 
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Register for The Great Chepsaita Run';
+    submitBtn.textContent = 'Register for The Teso North Cross Country';
 
     if (error) {
       console.error(error);
@@ -902,7 +904,7 @@ async function initGreatChepsaitaRunForm() {
       return;
     }
 
-    const registrationId = 'TNCC-CR-' + data.id.substring(0, 8).toUpperCase();
+    const registrationId = 'TNCC-CR-' + registrationUuid.substring(0, 8).toUpperCase();
 
     const endpoint = window.TNCC_CONFIG?.notificationEndpoint;
     if (endpoint) {
@@ -936,7 +938,7 @@ async function initGreatChepsaitaRunForm() {
     if (confirmCategory) confirmCategory.textContent = selectedCategory.label;
     if (confirmDistance) confirmDistance.textContent = selectedCategory.distance;
     if (confirmId) confirmId.textContent = registrationId;
-    const provisionalBib = String(Number(data.id.substring(0, 8).replace(/[^0-9]/g, '') || Date.now())).slice(-4);
+    const provisionalBib = String(Number(registrationUuid.substring(0, 8).replace(/[^0-9]/g, '') || Date.now())).slice(-4);
     const confirmBib = document.querySelector('[data-confirm-bib]');
     if (confirmBib) confirmBib.textContent = provisionalBib;
 
@@ -1049,7 +1051,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'great-chepsaita-run')
+          .eq('event_id', 'teso-north-cross-country')
           .limit(1);
         if (err) { error = err; }
         else {
@@ -1059,7 +1061,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'great-chepsaita-run')
+          .eq('event_id', 'teso-north-cross-country')
           .eq('email', query);
         if (err) { error = err; }
         else { data = result?.[0] || null; }
@@ -1067,7 +1069,7 @@ async function initLookupForm() {
         const { data: result, error: err } = await client
           .from('submissions')
           .select('*')
-          .eq('event_id', 'great-chepsaita-run')
+          .eq('event_id', 'teso-north-cross-country')
           .eq('phone', query);
         if (err) { error = err; }
         else { data = result?.[0] || null; }
