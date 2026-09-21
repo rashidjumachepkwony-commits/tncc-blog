@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'tncc-v13';
+﻿const CACHE_NAME = 'tncc-v14';
 const APP_SHELL = ['./', './index.html', './404.html', './lookup.html', './teso-north-cross-country.html', './manifest.json', './logo.jpeg', './assets/css/site.css', './assets/js/app.js', './assets/js/components.js'];
 
 self.addEventListener('install', event => {
