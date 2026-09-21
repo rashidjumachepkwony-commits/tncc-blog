@@ -26,6 +26,14 @@
       .admin-modal .admin-primary-button { padding: 10px 18px; border: 0; border-radius: 10px; background: linear-gradient(135deg, #0d503c, #0a392d); color: #fff; font-weight: 800; font-size: .8rem; cursor: pointer; }
       .admin-modal .admin-primary-button:disabled { opacity: .6; cursor: wait; }
       .admin-modal .admin-ghost-button { padding: 10px 18px; border: 1px solid #dbe4d8; border-radius: 10px; background: #fff; color: #41574d; font-weight: 800; font-size: .8rem; cursor: pointer; }
+      .admin-media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+      .admin-media-card { border: 1px solid #dbe4d8; border-radius: 12px; padding: 10px; text-align: center; background: #fbfdfb; }
+      .admin-media-card img, .admin-media-card video { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
+      .admin-media-name { font-size: .68rem; word-break: break-all; margin: 8px 0 6px; color: #41574d; }
+      .admin-media-actions { display: flex; justify-content: center; gap: 6px; }
+      .admin-page-links { display: flex; flex-wrap: wrap; gap: 8px; }
+      .admin-page-link { padding: 8px 12px; border: 1px solid #dbe4d8; border-radius: 10px; background: #fff; color: #2c5c46; font-size: .74rem; font-weight: 800; text-decoration: none; }
+      .admin-page-link:hover { background: #eaf4dc; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
@@ -49,6 +57,7 @@
           <a href="#messages" data-admin-nav="messages"><span class="admin-nav-icon">▱</span>Messages</a>
           <a href="#donations" data-admin-nav="donations"><span class="admin-nav-icon">◈</span>Donations</a>
           <a href="#users" data-admin-nav="users"><span class="admin-nav-icon">◎</span>User access</a>
+          <a href="#media" data-admin-nav="media"><span class="admin-nav-icon">▤</span>Media &amp; editing</a>
         </nav>
         <div class="admin-sidebar-footer">
           <div class="admin-secure-note"><span class="admin-status-dot"></span><span><strong>Secure workspace</strong><small>Admin access verified</small></span></div>
@@ -83,6 +92,8 @@
           <section class="admin-section" id="messages"><div class="admin-section-heading"><div><span class="admin-kicker">Inbox</span><h2>Contact messages</h2><p>Messages submitted through the public contact form.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>From</th><th>Email</th><th>Message</th><th>Received</th></tr></thead><tbody id="messagesTable"></tbody></table></div></div></section>
 
           <section class="admin-section" id="users"><div class="admin-section-heading"><div><span class="admin-kicker">Access control</span><h2>User access</h2><p>Approve trusted users by changing their workspace role. New accounts start as readers.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Created</th><th>Role</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="usersTable"><tr><td colspan="4"><div class="admin-loading"><span></span>Loading users</div></td></tr></tbody></table></div></div></section>
+
+          <section class="admin-section" id="media"><div class="admin-section-heading"><div><span class="admin-kicker">CMS</span><h2>Media &amp; page editing</h2><p>Upload images, audio and video used across the website, and edit any public page visually — exactly as visitors see it.</p></div><div class="admin-heading-actions"><input type="file" id="mediaFileInput" accept="image/*,audio/*,video/*" multiple hidden /><button class="admin-btn admin-btn-secondary" type="button" id="mediaUploadBtn"><span aria-hidden="true">⬆</span> Upload media</button></div></div><div class="admin-panel" style="margin-bottom: 18px;"><h3 style="margin: 0 0 12px; font-size: .9rem;">Open a page in the visual editor</h3><div class="admin-page-links" id="adminPageLinks"></div></div><div class="admin-panel"><div class="admin-media-grid" id="mediaGrid"><div class="admin-loading"><span></span>Loading media</div></div></div></section>
         </main>
         <footer class="admin-footer"><span>TNCC Admin workspace</span><span>© <span data-year></span> Teso North Cross Country CBO</span></footer>
       </div>
@@ -235,6 +246,60 @@
         }
 
         await loadAdminData();
+
+        const adminPages = [['Home', 'index.html'], ['About us', 'about.html'], ['Programs', 'programs.html'], ['Impact', 'impact.html'], ['Gallery', 'gallery.html'], ['Stories', 'stories.html'], ['Event page', 'teso-north-cross-country.html'], ['Register', 'register.html'], ['Get involved', 'get-involved.html'], ['Donate', 'donate.html'], ['Contact', 'contact.html']];
+        document.getElementById('adminPageLinks').innerHTML = adminPages.map(([label, file]) => `<a class="admin-page-link" href="${file}?edit=1" target="_blank" rel="noopener">${label} ✎</a>`).join('');
+
+        async function loadMediaLibrary() {
+          const grid = document.getElementById('mediaGrid');
+          try {
+            const { data, error } = await client.storage.from('media').list('', { limit: 200, sortBy: { column: 'created_at', order: 'descending' } });
+            if (error) throw error;
+            const files = (data || []).filter(f => f.id);
+            if (!files.length) { grid.innerHTML = '<div class="admin-table-empty"><span class="admin-empty-icon">▤</span><strong>No media yet</strong><span>Upload images, audio or video with the button above.</span></div>'; return; }
+            grid.innerHTML = '';
+            files.forEach(file => {
+              const { data: urlData } = client.storage.from('media').getPublicUrl(file.name);
+              const url = urlData.publicUrl;
+              const mime = (file.metadata && file.metadata.mimetype) || '';
+              const kind = mime.indexOf('audio/') === 0 ? 'audio' : mime.indexOf('video/') === 0 ? 'video' : 'image';
+              const card = document.createElement('div');
+              card.className = 'admin-media-card';
+              if (kind === 'image') { const img = document.createElement('img'); img.src = url; img.loading = 'lazy'; img.alt = file.name; card.appendChild(img); }
+              else if (kind === 'audio') { const audio = document.createElement('audio'); audio.controls = true; audio.src = url; card.appendChild(audio); }
+              else { const video = document.createElement('video'); video.src = url; video.muted = true; card.appendChild(video); }
+              const name = document.createElement('div'); name.className = 'admin-media-name'; name.textContent = file.name; card.appendChild(name);
+              const actions = document.createElement('div'); actions.className = 'admin-media-actions';
+              const copy = document.createElement('button'); copy.type = 'button'; copy.className = 'admin-icon-button'; copy.textContent = '⧉'; copy.title = 'Copy URL';
+              copy.addEventListener('click', async () => { try { await navigator.clipboard.writeText(url); showToast('Media URL copied.', 'success'); } catch (error) { window.prompt('Copy this URL:', url); } });
+              const del = document.createElement('button'); del.type = 'button'; del.className = 'admin-icon-button admin-content-delete'; del.textContent = '🗑'; del.title = 'Delete';
+              del.addEventListener('click', async () => {
+                if (!confirm('Delete this media file? Anything using it will lose it.')) return;
+                try { await callAdminEdge('deleteMedia', { path: file.name }); showToast('Media deleted.', 'success'); await loadMediaLibrary(); }
+                catch (error) { showToast(error.message, 'error'); }
+              });
+              actions.appendChild(copy); actions.appendChild(del); card.appendChild(actions);
+              grid.appendChild(card);
+            });
+          } catch (error) { grid.innerHTML = `<div class="admin-table-empty"><strong>${escapeHtml(error.message)}</strong></div>`; }
+        }
+
+        document.getElementById('mediaUploadBtn').addEventListener('click', () => document.getElementById('mediaFileInput').click());
+        document.getElementById('mediaFileInput').addEventListener('change', async event => {
+          const files = Array.from(event.target.files || []);
+          if (!files.length) return;
+          const btn = document.getElementById('mediaUploadBtn'); btn.disabled = true;
+          try {
+            for (const file of files) {
+              const safe = file.name.replace(/[^a-zA-Z0-9._-]+/g, '-').slice(-80);
+              await client.storage.from('media').upload(`${Date.now()}-${safe}`, file, { cacheControl: '3600', upsert: false });
+            }
+            showToast('Media uploaded.', 'success');
+            await loadMediaLibrary();
+          } catch (error) { showToast(error.message || 'Upload failed.', 'error'); }
+          btn.disabled = false; event.target.value = '';
+        });
+        loadMediaLibrary();
 
         document.getElementById('contentAddBtn').addEventListener('click', () => openContentForm());
         document.querySelector('[data-content-close]').addEventListener('click', closeContentForm);

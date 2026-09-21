@@ -1505,6 +1505,389 @@ document.addEventListener('DOMContentLoaded', () => {
    initRegistrationForm();
    initTesoNorthCrossCountryForm();
    initLookupForm();
+   applySiteContent();
+   initInlineEditor();
    initThemeToggleFallback();
    initYear();
  });
+
+/* ---------- 13. Editable site content (CMS) ---------- */
+
+let cmsOriginals = {};
+let cmsOriginalsCaptured = false;
+let cmsPending = {};
+
+function cmsGetKind(el) {
+  if (el.tagName === 'IMG') return 'image';
+  return el.dataset.ceKind || 'text';
+}
+
+function cmsSnapshotOriginals() {
+  if (cmsOriginalsCaptured) return;
+  document.querySelectorAll('[data-ce]').forEach(el => {
+    const kind = cmsGetKind(el);
+    cmsOriginals[el.dataset.ce] = kind === 'image' ? (el.getAttribute('src') || '') : el.innerHTML;
+  });
+  cmsOriginalsCaptured = true;
+}
+
+async function applySiteContent() {
+  if (!document.querySelector('[data-ce]')) return;
+  cmsSnapshotOriginals();
+  const client = getSupabaseClient();
+  if (!client) return;
+  try {
+    const { data, error } = await client.from('site_content').select('id,kind,value');
+    if (error || !Array.isArray(data)) return;
+    data.forEach(row => {
+      const el = document.querySelector(`[data-ce="${row.id}"]`);
+      if (!el) return;
+      if (row.kind === 'image') { if (row.value) el.setAttribute('src', row.value); }
+      else if (row.kind === 'html') { el.innerHTML = row.value || ''; }
+      else if (row.value != null) { el.textContent = row.value; }
+    });
+  } catch (error) { /* silent - fallback content stays */ }
+}
+
+async function cmsCallAdmin(action, payload = {}) {
+  const client = getSupabaseClient();
+  const { data: { session } } = await client.auth.getSession();
+  if (!session) throw new Error('Sign in required');
+  const response = await fetch(`${window.TNCC_CONFIG.supabaseUrl}/functions/v1/admin`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify({ action, ...payload })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || 'Admin request failed');
+  return result;
+}
+
+async function cmsUploadFile(file) {
+  const client = getSupabaseClient();
+  const safe = file.name.replace(/[^a-zA-Z0-9._-]+/g, '-').slice(-80);
+  const path = `${Date.now()}-${safe}`;
+  const { error } = await client.storage.from('media').upload(path, file, { cacheControl: '3600', upsert: false });
+  if (error) throw error;
+  const { data } = client.storage.from('media').getPublicUrl(path);
+  return { path, url: data.publicUrl };
+}
+
+function cmsFileKind(mimetype) {
+  const type = (mimetype || '').toLowerCase();
+  if (type.indexOf('audio/') === 0) return 'audio';
+  if (type.indexOf('video/') === 0) return 'video';
+  return 'image';
+}
+
+function cmsInjectStyles() {
+  if (document.getElementById('cms-editor-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'cms-editor-styles';
+  style.textContent = [
+    'body.cms-editing [data-ce]{outline:2px dashed rgba(7,59,43,.5);outline-offset:3px;border-radius:2px;cursor:pointer;}',
+    'body.cms-editing [data-ce]:hover{outline-color:#0b7a54;background:rgba(11,122,84,.07);}',
+    '.ce-toolbar{position:fixed;z-index:99990;right:16px;bottom:16px;background:#0b2b20;color:#fff;border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 34px rgba(0,0,0,.35);font-family:system-ui,sans-serif;font-size:13px;}',
+    '.ce-toolbar .ce-count{opacity:.85;}',
+    '.ce-toolbar button,.ce-panel button,.ce-media-modal button{cursor:pointer;border:0;border-radius:8px;padding:8px 14px;font:inherit;font-size:13px;}',
+    '.ce-btn-primary{background:#12a06b;color:#fff;}.ce-btn-primary:disabled{opacity:.5;cursor:default;}',
+    '.ce-btn-ghost{background:rgba(255,255,255,.16);color:#fff;}',
+    '.ce-btn-danger{background:#b3261e;color:#fff;}',
+    '.ce-panel{position:fixed;z-index:99991;top:0;right:0;height:100%;width:min(440px,100%);background:#fff;color:#1b1b1b;box-shadow:-12px 0 44px rgba(0,0,0,.28);display:none;flex-direction:column;font-family:system-ui,sans-serif;font-size:14px;}',
+    '.ce-panel.open{display:flex;}',
+    '.ce-panel-head{padding:14px 16px;background:#0b2b20;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px;}',
+    '.ce-panel-head strong{font-size:14px;word-break:break-all;}',
+    '.ce-panel-body{padding:16px;overflow:auto;flex:1;}',
+    '.ce-panel .ce-label{font-weight:600;margin:14px 0 6px;display:block;}',
+    '.ce-panel textarea,.ce-panel input[type=text]{width:100%;min-height:120px;padding:10px;font:inherit;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;}',
+    '.ce-panel input[type=text]{min-height:0;}',
+    '.ce-editor-content{min-height:200px;border:1px solid #ccc;border-radius:8px;padding:12px;overflow:auto;background:#fff;outline:none;}',
+    '.ce-editor-content img,.ce-editor-content video,.ce-editor-content audio{max-width:100%;}',
+    '.ce-panel img.ce-preview{max-width:100%;border-radius:8px;margin-bottom:10px;display:block;}',
+    '.ce-html-toolbar{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}',
+    '.ce-html-toolbar button{background:#eee;color:#111;padding:6px 10px;}',
+    '.ce-hint{color:#666;font-size:12px;margin-top:8px;}',
+    '.ce-panel-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;padding:0 16px 16px;}',
+    '.ce-panel-foot .ce-btn-danger{margin-right:auto;}',
+    '.ce-media-modal{position:fixed;inset:0;z-index:99992;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;font-family:system-ui,sans-serif;}',
+    '.ce-media-modal.open{display:flex;}',
+    '.ce-media-inner{background:#fff;border-radius:14px;padding:18px;width:min(640px,92vw);max-height:86vh;overflow:auto;}',
+    '.ce-media-inner h3{margin:0 0 12px;font-size:16px;}',
+    '.ce-media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px;}',
+    '.ce-media-item{border:1px solid #ddd;border-radius:10px;padding:8px;cursor:pointer;font-size:11px;word-break:break-all;text-align:center;background:#fafafa;}',
+    '.ce-media-item img{width:100%;height:76px;object-fit:cover;border-radius:6px;margin-bottom:6px;}',
+    '.ce-media-item audio,.ce-media-item video{width:100%;margin-bottom:6px;}',
+    '.ce-empty{color:#777;font-size:13px;}'
+  ].join('\n');
+  document.head.appendChild(style);
+}
+
+function cmsBuildToolbar() {
+  const bar = document.createElement('div');
+  bar.className = 'ce-toolbar';
+  bar.innerHTML = '<span>Edit mode</span><span class="ce-count">0 changes</span>';
+  const save = document.createElement('button');
+  save.className = 'ce-btn-primary';
+  save.textContent = 'Save changes';
+  save.disabled = true;
+  save.addEventListener('click', async () => {
+    save.disabled = true;
+    save.textContent = 'Saving...';
+    try {
+      await cmsCallAdmin('saveSiteContent', { items: Object.values(cmsPending) });
+      cmsPending = {};
+      showToast('Changes saved and published.', 'success');
+    } catch (error) {
+      showToast(error.message || 'Could not save changes.', 'error');
+    }
+    save.textContent = 'Save changes';
+    cmsUpdateToolbar();
+  });
+  const exit = document.createElement('button');
+  exit.className = 'ce-btn-ghost';
+  exit.textContent = 'Exit editing';
+  exit.addEventListener('click', () => { window.location.href = window.location.pathname; });
+  bar.appendChild(save);
+  bar.appendChild(exit);
+  document.body.appendChild(bar);
+  return bar;
+}
+
+function cmsUpdateToolbar() {
+  const count = document.querySelector('.ce-toolbar .ce-count');
+  const save = document.querySelector('.ce-toolbar .ce-btn-primary');
+  const n = Object.keys(cmsPending).length;
+  if (count) count.textContent = n === 1 ? '1 change' : `${n} changes`;
+  if (save) save.disabled = n === 0;
+}
+
+function cmsMarkPending(el) {
+  const id = el.dataset.ce;
+  const kind = cmsGetKind(el);
+  const value = kind === 'image' ? (el.getAttribute('src') || '') : el.innerHTML;
+  cmsPending[id] = { id, page: id.split(':')[0], kind, value };
+  cmsUpdateToolbar();
+}
+
+async function cmsOpenMediaModal(onPick) {
+  cmsInjectStyles();
+  let modal = document.querySelector('.ce-media-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'ce-media-modal';
+    modal.innerHTML = '<div class="ce-media-inner"><h3>Media library</h3><button class="ce-btn-primary ce-media-upload-btn" type="button">Upload image / audio / video</button><input type="file" class="ce-media-file" accept="image/*,audio/*,video/*" multiple hidden /><div class="ce-media-grid"><span class="ce-empty">Loading...</span></div><div style="margin-top:12px;text-align:right;"><button class="ce-media-close" type="button" style="background:#eee;color:#111;">Close</button></div></div>';
+    document.body.appendChild(modal);
+    modal.addEventListener('click', event => { if (event.target === modal) modal.classList.remove('open'); });
+    modal.querySelector('.ce-media-close').addEventListener('click', () => modal.classList.remove('open'));
+    const fileInput = modal.querySelector('.ce-media-file');
+    modal.querySelector('.ce-media-upload-btn').addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', async () => {
+      if (!fileInput.files || !fileInput.files.length) return;
+      try {
+        for (const file of Array.from(fileInput.files)) await cmsUploadFile(file);
+        showToast('Upload complete.', 'success');
+        await cmsRefreshMediaGrid(modal);
+      } catch (error) {
+        showToast(error.message || 'Upload failed.', 'error');
+      }
+      fileInput.value = '';
+    });
+  }
+  modal.dataset.pickKind = onPick.kind || 'any';
+  modal.classList.add('open');
+  await cmsRefreshMediaGrid(modal);
+  const grid = modal.querySelector('.ce-media-grid');
+  grid.onclick = event => {
+    const item = event.target.closest('.ce-media-item');
+    if (!item || !item.dataset.url) return;
+    const pickKind = modal.dataset.pickKind;
+    if (pickKind !== 'any' && item.dataset.mediaKind !== pickKind) {
+      showToast(`Pick an ${pickKind} for this block.`, 'error');
+      return;
+    }
+    modal.classList.remove('open');
+    onPick.callback(item.dataset.url, item.dataset.path, item.dataset.mediaKind);
+  };
+}
+
+async function cmsRefreshMediaGrid(modal) {
+  const grid = modal.querySelector('.ce-media-grid');
+  grid.innerHTML = '<span class="ce-empty">Loading...</span>';
+  try {
+    const client = getSupabaseClient();
+    const { data, error } = await client.storage.from('media').list('', { limit: 200, sortBy: { column: 'created_at', order: 'descending' } });
+    if (error) throw error;
+    const files = (data || []).filter(f => f.id);
+    if (!files.length) { grid.innerHTML = '<span class="ce-empty">No media uploaded yet. Use the upload button above.</span>'; return; }
+    grid.innerHTML = '';
+    files.forEach(file => {
+      const { data: urlData } = client.storage.from('media').getPublicUrl(file.name);
+      const url = urlData.publicUrl;
+      const kind = cmsFileKind((file.metadata && file.metadata.mimetype) || '');
+      const div = document.createElement('div');
+      div.className = 'ce-media-item';
+      div.dataset.url = url;
+      div.dataset.path = file.name;
+      div.dataset.mediaKind = kind;
+      if (kind === 'image') {
+        const img = document.createElement('img');
+        img.src = url;
+        img.loading = 'lazy';
+        div.appendChild(img);
+      } else if (kind === 'audio') {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = url;
+        div.appendChild(audio);
+      } else {
+        const video = document.createElement('video');
+        video.src = url;
+        video.muted = true;
+        div.appendChild(video);
+      }
+      const label = document.createElement('div');
+      label.textContent = file.name;
+      div.appendChild(label);
+      grid.appendChild(div);
+    });
+  } catch (error) {
+    grid.innerHTML = `<span class="ce-empty">Could not load media: ${error.message}</span>`;
+  }
+}
+
+function cmsOpenPanel(el) {
+  cmsInjectStyles();
+  let panel = document.querySelector('.ce-panel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.className = 'ce-panel';
+    document.body.appendChild(panel);
+  }
+  const id = el.dataset.ce;
+  const kind = cmsGetKind(el);
+  const original = cmsOriginals[id] || '';
+  panel.innerHTML = `<div class="ce-panel-head"><strong>${id}</strong><button type="button" class="ce-btn-ghost ce-close">Close</button></div><div class="ce-panel-body"></div><div class="ce-panel-foot"><button type="button" class="ce-btn-danger ce-reset">Reset to original</button><button type="button" class="ce-cancel" style="background:#eee;color:#111;">Cancel</button><button type="button" class="ce-btn-primary ce-apply">Apply</button></div>`;
+  const body = panel.querySelector('.ce-panel-body');
+
+  if (kind === 'image') {
+    body.innerHTML = '<label class="ce-label">Current image</label>';
+    const preview = document.createElement('img');
+    preview.className = 'ce-preview';
+    preview.src = el.getAttribute('src') || '';
+    body.appendChild(preview);
+    const urlLabel = document.createElement('label');
+    urlLabel.className = 'ce-label';
+    urlLabel.textContent = 'Image URL';
+    body.appendChild(urlLabel);
+    const urlInput = document.createElement('input');
+    urlInput.type = 'text';
+    urlInput.value = el.getAttribute('src') || '';
+    body.appendChild(urlInput);
+    const pick = document.createElement('button');
+    pick.type = 'button';
+    pick.className = 'ce-btn-primary';
+    pick.style.marginTop = '10px';
+    pick.textContent = 'Choose / upload image';
+    pick.addEventListener('click', () => {
+      cmsOpenMediaModal({ kind: 'image', callback: url => { urlInput.value = url; preview.src = url; } });
+    });
+    body.appendChild(pick);
+    panel.querySelector('.ce-apply').addEventListener('click', () => {
+      el.setAttribute('src', urlInput.value.trim());
+      cmsMarkPending(el);
+      panel.classList.remove('open');
+    });
+  } else if (kind === 'html') {
+    body.innerHTML = '<label class="ce-label">Rich content</label><div class="ce-html-toolbar"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="underline"><u>U</u></button><button type="button" data-cmd="insertUnorderedList">Bullet list</button><button type="button" data-cmd="insertOrderedList">Numbered list</button><button type="button" data-cmd="createLink">Link</button><button type="button" class="ce-insert-media">Insert media</button></div><div class="ce-editor-content" contenteditable="true"></div><p class="ce-hint">Tip: Insert media lets you upload and embed images, audio and video.</p>';
+    const editor = body.querySelector('.ce-editor-content');
+    editor.innerHTML = el.innerHTML;
+    body.querySelectorAll('.ce-html-toolbar button[data-cmd]').forEach(button => {
+      button.addEventListener('mousedown', event => event.preventDefault());
+      button.addEventListener('click', () => {
+        editor.focus();
+        if (button.dataset.cmd === 'createLink') {
+          const url = window.prompt('Link URL:');
+          if (url) document.execCommand('createLink', false, url);
+        } else {
+          document.execCommand(button.dataset.cmd, false, null);
+        }
+      });
+    });
+    body.querySelector('.ce-insert-media').addEventListener('click', () => {
+      cmsOpenMediaModal({
+        kind: 'any',
+        callback: (url, path, mediaKind) => {
+          editor.focus();
+          const tag = mediaKind === 'audio'
+            ? `<audio controls src="${url}"></audio>`
+            : mediaKind === 'video'
+              ? `<video controls src="${url}" style="max-width:100%;"></video>`
+              : `<img src="${url}" style="max-width:100%;" />`;
+          document.execCommand('insertHTML', false, tag);
+        }
+      });
+    });
+    panel.querySelector('.ce-apply').addEventListener('click', () => {
+      el.innerHTML = editor.innerHTML;
+      cmsMarkPending(el);
+      panel.classList.remove('open');
+    });
+  } else {
+    body.innerHTML = '<label class="ce-label">Text</label>';
+    const area = document.createElement('textarea');
+    area.value = el.textContent || '';
+    body.appendChild(area);
+    panel.querySelector('.ce-apply').addEventListener('click', () => {
+      el.textContent = area.value;
+      cmsMarkPending(el);
+      panel.classList.remove('open');
+    });
+  }
+
+  panel.querySelector('.ce-close').addEventListener('click', () => panel.classList.remove('open'));
+  panel.querySelector('.ce-cancel').addEventListener('click', () => panel.classList.remove('open'));
+  panel.querySelector('.ce-reset').addEventListener('click', async () => {
+    try {
+      await cmsCallAdmin('deleteSiteContent', { id });
+      delete cmsPending[id];
+      cmsUpdateToolbar();
+      if (kind === 'image') el.setAttribute('src', original); else el.innerHTML = original;
+      panel.classList.remove('open');
+      showToast('Block reset to the original content.', 'success');
+    } catch (error) {
+      showToast(error.message || 'Could not reset block.', 'error');
+    }
+  });
+  panel.classList.add('open');
+}
+
+async function initInlineEditor() {
+  if (!new URLSearchParams(window.location.search).has('edit')) return;
+  if (!document.querySelector('[data-ce]')) return;
+  const client = getSupabaseClient();
+  if (!client) return;
+  let isAdmin = false;
+  try {
+    const { data: { user } } = await client.auth.getUser();
+    if (user) {
+      const { data: profile } = await client.from('profiles').select('role').eq('id', user.id).single();
+      isAdmin = Boolean(profile && profile.role === 'admin');
+    }
+  } catch (error) { isAdmin = false; }
+  if (!isAdmin) {
+    showToast('Sign in with an admin account, then reopen this page with ?edit=1 to edit the site.', 'info');
+    return;
+  }
+  cmsInjectStyles();
+  document.body.classList.add('cms-editing');
+  cmsSnapshotOriginals();
+  cmsBuildToolbar();
+  document.addEventListener('click', event => {
+    if (event.target.closest('.ce-panel, .ce-toolbar, .ce-media-modal')) return;
+    const target = event.target.closest('[data-ce]');
+    if (!target) return;
+    event.preventDefault();
+    cmsOpenPanel(target);
+  }, true);
+  showToast('Edit mode: click any outlined block to edit it. Save changes when done.', 'info');
+}
