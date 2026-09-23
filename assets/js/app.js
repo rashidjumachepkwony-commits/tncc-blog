@@ -1043,8 +1043,10 @@ async function initTesoNorthCrossCountryForm() {
     if (confirmationSection) confirmationSection.hidden = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     const printBtn = document.getElementById('printConfirmationBtn');
-    if (printBtn) {
-      printBtn.addEventListener('click', () => {
+    const downloadPdfBtn = document.getElementById('downloadConfirmationBtn');
+    const printAndDownload = (btn, action) => {
+      if (!btn) return;
+      btn.addEventListener('click', () => {
         const confSection = document.getElementById('eventConfirmation');
         const originalContent = document.body.innerHTML;
         const printContent = confSection ? confSection.innerHTML : '';
@@ -1060,11 +1062,19 @@ async function initTesoNorthCrossCountryForm() {
           </style>
           </head><body><div class="card">${printContent}</div></body></html>
         `;
-        window.print();
-        document.body.innerHTML = originalContent;
-        window.location.reload();
+        if (action === 'print') {
+          window.print();
+          document.body.innerHTML = originalContent;
+          window.location.reload();
+        } else {
+          window.print();
+          document.body.innerHTML = originalContent;
+          window.location.reload();
+        }
       });
-    }
+    };
+    printAndDownload(printBtn, 'print');
+    printAndDownload(downloadPdfBtn, 'download');
   });
 }
 

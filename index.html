@@ -28,38 +28,125 @@
   <script src="assets/js/components.js" defer></script>
   <script src="assets/js/app.js" defer></script>
 </head>
-<body>
-  <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
-  <div data-site-header></div>
+  <style>
+    .hero-cta-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
 
-  <main id="main-content">
-    <section class="hero">
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <span class="hero-badge">Teso North, Busia County, Kenya</span>
-          <h1 data-ce="home:hero-title">Run. Unite. Transform.</h1>
-          <p data-ce="home:hero-text">A community movement using cross-country running, participation and collective action to promote healthy communities, equality, resilience and positive social change.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="teso-north-cross-country.html">Register for The Teso North Cross Country</a>
-            <a class="btn btn-ghost" href="register.html">General registration</a>
+    .hero-cta-card .btn-hero-primary {
+      background: linear-gradient(135deg, #073b2b, #0f4d3d);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 14px 32px;
+      border-radius: 999px;
+      box-shadow: 0 20px 40px rgba(7, 59, 43, 0.35);
+      transition: all 220ms ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .hero-cta-card .btn-hero-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 48px rgba(7, 59, 43, 0.45);
+    }
+
+    .hero-cta-card .btn-hero-secondary {
+      background: transparent;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 12px 28px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.4);
+      transition: all 220ms ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .hero-cta-card .btn-hero-secondary:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    .hero-ke-flag-accent {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .hero-ke-flag-accent::before {
+      content: '';
+      display: inline-block;
+      width: 22px;
+      height: 14px;
+      background: linear-gradient(135deg, #073b2b, #0f4d3d, #073b2b);
+      border: 1px solid rgba(155,207,32,0.4);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .hero-ke-flag-accent::before::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      width: 6px;
+      height: 10px;
+      background: #9bcf20;
+    }
+  </style>
+  </head>
+  <body>
+    <script>try{if(localStorage.getItem('tncc-theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
+    <div data-site-header></div>
+
+    <main id="main-content">
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <span class="hero-badge hero-ke-flag-accent">Teso North, Busia County, Kenya</span>
+            <h1 data-ce="home:hero-title">Run. Unite. Transform.</h1>
+            <p data-ce="home:hero-text">A community movement using cross-country running, participation and collective action to promote healthy communities, equality, resilience and positive social change.</p>
+            <div class="hero-cta-card" style="padding: 28px; border-radius: 28px; margin: 32px 0;">
+              <h2 style="margin: 0 0 16px; font-size: 1.5rem; color: var(--white);">Join the next community run</h2>
+              <div class="hero-actions">
+                <a class="btn-hero-primary" href="teso-north-cross-country.html"><span>Register for The Teso North Cross Country</span></a>
+                <a class="btn-hero-secondary" href="register.html">General registration</a>
+              </div>
+              <p style="margin: 12px 0 0; color: rgba(255,255,255,0.75); font-size: 0.85rem;"><strong>Free entry</strong> for ages 5–Elite · Deadline: 15 November 2026</p>
+            </div>
+            <ul class="hero-points" data-ce="home:hero-points" data-ce-kind="html">
+              <li>Open to every age and ability</li>
+              <li>Free community participation</li>
+              <li>Standing together to end gender-based violence</li>
+            </ul>
           </div>
-          <ul class="hero-points" data-ce="home:hero-points" data-ce-kind="html">
-            <li>Open to every age and ability</li>
-            <li>Free community participation</li>
-            <li>Standing together to end gender-based violence</li>
-          </ul>
-        </div>
         <aside class="hero-card" aria-label="Quick impact summary">
           <div class="hero-event-card">
             <span class="hero-event-kicker">Next community event</span>
             <h3 data-ce="home:event-card-title">The Teso North Cross Country</h3>
-            <ul class="hero-event-details" data-ce="home:event-card-details" data-ce-kind="html">
+             <ul class="hero-event-details" data-ce="home:event-card-details" data-ce-kind="html">
               <li><span>Date</span><strong>21 November 2026</strong></li>
               <li><span>Location</span><strong>Chelelemuk, Kenya</strong></li>
               <li><span>Deadline</span><strong>15 November 2026</strong></li>
               <li><span>Entry</span><strong>Free &middot; ages 5 to elite</strong></li>
             </ul>
-            <a class="btn btn-primary btn-small" href="teso-north-cross-country.html">Register now</a>
           </div>
           <h2 data-ce="home:community-title">Our community in motion</h2>
           <div class="hero-mini-grid" data-ce="home:hero-stats" data-ce-kind="html">
@@ -70,15 +157,6 @@
           </div>
           <a class="btn btn-secondary btn-small" href="impact.html">See our impact</a>
         </aside>
-      </div>
-    </section>
-
-    <section class="section-sm">
-      <div class="container grid-4">
-        <div class="metric-card reveal"><strong data-counter="1200" data-suffix="+">0</strong><span>People reached</span></div>
-        <div class="metric-card reveal"><strong data-counter="25" data-suffix="+">0</strong><span>Local engagements</span></div>
-        <div class="metric-card reveal"><strong data-counter="18">0</strong><span>Community events</span></div>
-        <div class="metric-card reveal"><strong data-counter="30" data-suffix="+">0</strong><span>Partners &amp; supporters</span></div>
       </div>
     </section>
 

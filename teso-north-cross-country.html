@@ -84,9 +84,10 @@
         <div class="container">
           <div class="grid-2">
             <div class="card reveal" style="padding: 22px;">
-              <div class="section-heading" style="margin-bottom: 20px;">
-                <span class="eyebrow">Event details</span>
-                <h2 data-ce="event:section-title">Teso North Cross Country Run</h2>
+              <div class="section-heading" style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div><span class="eyebrow">Event details</span><h2 data-ce="event:section-title">Teso North Cross Country Run</h2></div>
+                <a class="btn btn-ghost btn-small" href="registration-form.html" target="_blank" rel="noopener" style="margin-top: 0;">📄 Printable form</a>
+              </div>
                 <p style="max-width: 600px;">Organised by Teso North Cross Country CBO (TNCC). All categories are free. Registration closes on 15 November 2026 at 23:59 Kenya time.</p>
               </div>
 
@@ -329,7 +330,8 @@
 
           <div class="button-row" style="margin-top: 24px;">
             <button class="btn btn-ghost" type="button" id="printConfirmationBtn" data-print-confirmation><span aria-hidden="true">&#x1F5A8;</span> Print registration</button>
-            <a class="btn btn-primary" href="teso-north-cross-country.html">Register another participant</a>
+            <button class="btn btn-primary" type="button" id="downloadConfirmationBtn" data-download-confirmation><span aria-hidden="true">&#x2193;</span> Download PDF</button>
+            <a class="btn btn-ghost" href="teso-north-cross-country.html">Register another participant</a>
             <a class="btn btn-ghost" href="index.html">Back to home</a>
           </div>
         </div>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TNCC Registration Form | Teso North Cross Country CBO</title>
+  <meta name="description" content="Downloadable registration form for The Teso North Cross Country. Fill in manually or upload digitally." />
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#073b2b" />
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { margin: 0; }
+      .form-container { box-shadow: none; margin: 0; }
+    }
+    @media screen {
+      body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #f5f7f4 0%, #e8ebe5 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 40px 20px;
+        color: #1a1a1a;
+      }
+      .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+      }
+    }
+    .form-header {
+      background: linear-gradient(135deg, #073b2b 0%, #0f4d3d 100%);
+      color: #fff;
+      padding: 32px;
+      text-align: center;
+    }
+    .form-header h1 {
+      font-size: 24px;
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+    .form-header p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin: 0;
+    }
+    .ke-flag-mini {
+      display: inline-block;
+      width: 24px;
+      height: 16px;
+      background: linear-gradient(135deg, #073b2b, #0f4d3d, #073b2b);
+      border: 1px solid rgba(155,207,32,0.6);
+      border-radius: 2px;
+      position: relative;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .ke-flag-mini::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      width: 6px;
+      height: 10px;
+      background: #9bcf20;
+    }
+    .form-body {
+      padding: 32px;
+    }
+    .form-section {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #eee;
+    }
+    .form-section:last-child {
+      border-bottom: none;
+    }
+    .form-section h2 {
+      font-size: 16px;
+      color: #073b2b;
+      margin: 0 0 16px;
+      font-weight: 600;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid.full {
+      grid-template-columns: 1fr;
+    }
+    .form-group {
+      margin-bottom: 0;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .form-group textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-note {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .form-actions-bar {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      background: #f8f9fa;
+      border-top: 1px solid #eee;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 200ms ease;
+    }
+    .btn-print {
+      background: linear-gradient(135deg, #073b2b, #0f4d3d);
+      color: #fff;
+    }
+    .btn-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(7, 59, 43, 0.3);
+    }
+    .btn-download {
+      background: transparent;
+      color: #073b2b;
+      border: 2px solid #073b2b;
+    }
+    .btn-download:hover {
+      background: #073b2b;
+      color: #fff;
+    }
+    .race-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .race-cat {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .checkbox-grid label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .checkbox-grid input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+    .signature-line {
+      border-bottom: 1px dotted #999;
+      padding-bottom: 4px;
+      margin-top: 4px;
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .logo-row img {
+      height: 50px;
+      width: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <div class="logo-row">
+        <span class="ke-flag-mini"></span>
+        <img src="logo.jpeg" alt="TNCC Logo" />
+      </div>
+      <h1>Teso North Cross Country Registration Form</h1>
+      <p>Official registration for the Teso North Cross Country Run · 21 November 2026 · Chelelemuk Grounds</p>
+    </div>
+
+    <div class="form-body">
+      <div class="form-section">
+        <h2>Participant Information</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Full name *</label>
+            <input type="text" id="name" placeholder="As appears on ID" />
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of birth *</label>
+            <input type="date" id="dob" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone number *</label>
+            <input type="tel" id="phone" placeholder="e.g. 0712 345 678" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" />
+          </div>
+          <div class="form-group">
+            <label for="id-number">ID/Passport number *</label>
+            <input type="text" id="id-number" />
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender *</label>
+            <select id="gender">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="county">County *</label>
+            <select id="county">
+              <option selected disabled>Select county</option>
+              <option>Teso North</option>
+              <option>Busia</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sub-county">Sub-county</label>
+            <input type="text" id="sub-county" />
+          </div>
+          <div class="form-group">
+            <label for="ward">Ward</label>
+            <input type="text" id="ward" />
+          </div>
+          <div class="form-group">
+            <label for="village">Village/Location</label>
+            <input type="text" id="village" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Race Category Selection *</h2>
+        <div class="form-group">
+          <label style="display: block; margin-bottom: 8px;">Select your race(s) — check all that apply</label>
+          <div class="checkbox-grid">
+            <label><input type="checkbox" /> <span>&#127942;</span> Elite Race (8km)</label>
+            <label><input type="checkbox" /> <span>&#127939;</span> Open Race (6km)</label>
+            <label><input type="checkbox" /> <span>&#127891;</span> Schools Category (4km)</label>
+            <label><input type="checkbox" /> <span>&#9889;</span> Youth Category (4km)</label>
+            <label><input type="checkbox" /> <span>&#127942;</span> Veterans Category (6km)</label>
+            <label><input type="checkbox" /> <span>&#127881;</span> Fun Run (2km)</label>
+            <label><input type="checkbox" /> <span>&#9855;</span> PWD Category (2km)</label>
+            <label><input type="checkbox" /> <span>&#11088;</span> VIP Challenge Race (1km)</label>
+          </div>
+          <p class="form-note">Ages 5 to Elite. Free entry for all categories.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="guardian">Guardian name (for participants under 18) *</label>
+          <input type="text" id="guardian" />
+          <p class="form-note">Full name of parent or legal guardian</p>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="emergency-contact">Emergency contact name</label>
+            <input type="text" id="emergency-contact" />
+          </div>
+          <div class="form-group">
+            <label for="emergency-phone">Emergency contact phone *</label>
+            <input type="tel" id="emergency-phone" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="medical">Medical conditions / allergies</label>
+          <textarea id="medical" placeholder="e.g. asthma, diabetes, allergies to..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Declaration</h2>
+        <div class="form-group">
+          <div class="checkbox-grid">
+            <label><input type="checkbox" /> I confirm I am fit to participate in this event</label>
+            <label><input type="checkbox" /> I accept the terms and conditions of the event</label>
+            <label><input type="checkbox" /> I consent to my personal data being used for event administration</label>
+            <label><input type="checkbox" /> I authorize emergency medical treatment if required</label>
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top: 24px;">
+          <div class="form-group">
+            <label for="signature">Participant signature</label>
+            <div class="signature-line" id="signature"></div>
+          </div>
+          <div class="form-group">
+            <label for="signature-date">Date</label>
+            <input type="date" id="signature-date" />
+          </div>
+        </div>
+        <div class="form-group full-width" style="margin-top: 16px;">
+          <label for="guardian-signature">Guardian signature (if under 18)</label>
+          <div class="signature-line" id="guardian-signature"></div>
+        </div>
+      </div>
+
+      <div class="form-section" style="border: 2px dashed #073b2b; padding: 16px; background: #f8f9fa;">
+        <h2 style="color: #0f4d3d; margin-top: 0;">Submission Instructions</h2>
+        <p style="margin: 0 0 12px; font-size: 13px;"><strong>Online (recommended):</strong> Go to <a href="teso-north-cross-country.html" style="color: #073b2b;">teso-north-cross-country.html</a> and fill the digital form.</p>
+        <p style="margin: 0 0 12px; font-size: 13px;"><strong>Email:</strong> Send a photo or scan to <a href="mailto:info@tesonorthcrosscountry.org" style="color: #073b2b;">info@tesonorthcrosscountry.org</a></p>
+        <p style="margin: 0; font-size: 13px;"><strong>In person:</strong> Drop off at the TNCC office, Chelelemuk. Deadline is <strong>15 November 2026</strong>.</p>
+      </div>
+    </div>
+
+    <div class="form-actions-bar no-print">
+      <button class="btn btn-print" onclick="window.print()">&#x1F5A8; Print this form</button>
+      <a href="registration-form.pdf" download class="btn btn-download" id="downloadPdfBtn">↓ Download as PDF</a>
+    </div>
+  </div>
+</body>
+</html>
