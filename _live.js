@@ -967,6 +967,29 @@ async function initTesoNorthCrossCountryForm() {
 
     if (confirmationSection) confirmationSection.hidden = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    const printBtn = document.getElementById('printConfirmationBtn');
+    if (printBtn) {
+      printBtn.addEventListener('click', () => {
+        const confSection = document.getElementById('eventConfirmation');
+        const originalContent = document.body.innerHTML;
+        const printContent = confSection ? confSection.innerHTML : '';
+        document.body.innerHTML = `
+          <!DOCTYPE html><html><head><meta charset="utf-8"><title>TNCC Registration Confirmation</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .card { max-width: 640px; margin: 0 auto; }
+            .event-confirm-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+            .event-confirm-row span { color: #666; }
+            .event-confirm-row strong { font-weight: bold; }
+            .qr-placeholder canvas { border: 2px solid #073b2b; padding: 10px; background: #fff; }
+          </style>
+          </head><body><div class="card">${printContent}</div></body></html>
+        `;
+        window.print();
+        document.body.innerHTML = originalContent;
+        window.location.reload();
+      });
+    }
   });
 }
 

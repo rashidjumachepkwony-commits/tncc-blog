@@ -85,7 +85,7 @@
 
           <section class="admin-section" id="submissions"><div class="admin-section-heading"><div><span class="admin-kicker">Community intake</span><h2>Submissions</h2><p>Review registrations and keep their status up to date.</p></div><label class="admin-search"><span aria-hidden="true">⌕</span><input type="search" data-table-search="submissions" placeholder="Search submissions" aria-label="Search submissions" /></label></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Applicant</th><th>Contact</th><th>Interest</th><th>Status</th><th>Received</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="submissionsTable"></tbody></table></div></div></section>
 
-          <section class="admin-section" id="event-registrations"><div class="admin-section-heading"><div><span class="admin-kicker">The Teso North Cross Country</span><h2>Event registrations</h2><p>Participants registered for The Teso North Cross Country. Filter by race category, payment status, or search by name.</p></div><div class="admin-heading-actions"><label class="admin-search"><span aria-hidden="true">⌕</span><input type="search" data-table-search="event-registrations" placeholder="Search registrations" aria-label="Search event registrations" /></label><select class="admin-filter-select" data-event-filter="category" aria-label="Filter by race category"><option value="">All categories</option></select><select class="admin-filter-select" data-event-filter="payment" aria-label="Filter by payment status"><option value="">All payments</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="completed">Completed</option></select><button class="admin-btn admin-btn-secondary" type="button" id="exportCsvBtn" data-export-csv="event"><span aria-hidden="true">↓</span> Export CSV</button><button class="admin-btn admin-btn-secondary" type="button" id="assignBibBtn" data-assign-bib><span aria-hidden="true">#</span> Assign bib numbers</button></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Participant</th><th>Contact</th><th>Race</th><th>Payment</th><th>Status</th><th>Received</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="eventRegistrationsTable"></tbody></table></div></div></section>
+          <section class="admin-section" id="event-registrations"><div class="admin-section-heading"><div><span class="admin-kicker">The Teso North Cross Country</span><h2>Event registrations</h2><p>Participants registered for The Teso North Cross Country. Filter by race category, payment status, or search by name.</p></div><div class="admin-heading-actions"><label class="admin-search"><span aria-hidden="true">⌕</span><input type="search" data-table-search="event-registrations" placeholder="Search registrations" aria-label="Search event registrations" /></label><select class="admin-filter-select" data-event-filter="category" aria-label="Filter by race category"><option value="">All categories</option></select><select class="admin-filter-select" data-event-filter="payment" aria-label="Filter by payment status"><option value="">All payments</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="completed">Completed</option></select><button class="admin-btn admin-btn-secondary" type="button" id="exportPdfBtn" data-export-pdf="event"><span aria-hidden="true">📄</span> Export PDF</button><button class="admin-btn admin-btn-secondary" type="button" id="exportCsvBtn" data-export-csv="event"><span aria-hidden="true">↓</span> Export CSV</button><button class="admin-btn admin-btn-secondary" type="button" id="printRegistrationsBtn" data-print-registrations><span aria-hidden="true">🖨</span> Print</button><button class="admin-btn admin-btn-secondary" type="button" id="assignBibBtn" data-assign-bib><span aria-hidden="true">#</span> Assign bib numbers</button></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Participant</th><th>Contact</th><th>Race</th><th>Payment</th><th>Status</th><th>Received</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="eventRegistrationsTable"></tbody></table></div></div></section>
 
           <section class="admin-section admin-two-column" id="volunteers"><div><div class="admin-section-heading"><div><span class="admin-kicker">People power</span><h2>Volunteers</h2><p>Applications from people who want to contribute.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Role</th><th>Contact</th><th>Received</th></tr></thead><tbody id="volunteersTable"></tbody></table></div></div></div><div id="donations"><div class="admin-section-heading"><div><span class="admin-kicker">Support</span><h2>Donations</h2><p>Recent contribution records.</p></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Donor</th><th>Amount</th><th>Status</th><th>Received</th></tr></thead><tbody id="donationsTable"></tbody></table></div></div></div></section>
 
@@ -135,40 +135,69 @@
           select.innerHTML = '<option value="">All categories</option>' + categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
         }
        function filterEventRegistrations(query) { document.querySelectorAll('#eventRegistrationsTable tr[data-searchable]').forEach(row => { row.hidden = query && !row.dataset.searchable.toLowerCase().includes(query.toLowerCase()); }); }
-       function exportEventRegistrationsCsv() {
-         const headers = ['Participant Name','Age','Gender','County','Sub-county','Ward','Guardian','Guardian Phone','Race Category','Distance','Fee','Payment Status','M-Pesa Reference','Registration Status','Registration Date'];
-         const searchQuery = document.querySelector('[data-table-search="event-registrations"]')?.value.toLowerCase() || '';
-         const visibleItems = adminState.eventRegistrations.filter(item => {
-           if (!searchQuery) return true;
-           const searchable = `${item.name || ''} ${item.email || ''} ${item.selected_category || ''} ${item.gender || ''}`.toLowerCase();
-           return searchable.includes(searchQuery);
-         });
-         const rows = visibleItems.map(item => [
-           item.name || '',
-           item.age || '',
-           item.gender || '',
-           item.county || '',
-           item.sub_county || '',
-           item.ward || '',
-           item.guardian || '',
-           item.guardian_phone || '',
-           item.selected_category || '',
-           item.race_distance || '',
-           item.registration_fee || 0,
-           item.payment_status || '',
-           item.mpesa_reference || '',
-           item.status || '',
-           item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB') : ''
-         ].map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','));
-         const csvContent = [headers.join(','), ...rows].join('\n');
-         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-         const url = URL.createObjectURL(blob);
-         const a = document.createElement('a');
-         a.href = url;
-         a.download = `tncc-teso-north-cross-country-registrations-${new Date().toISOString().slice(0,10)}.csv`;
-         a.click();
-         URL.revokeObjectURL(url);
-       }
+        function exportEventRegistrationsCsv() {
+          const headers = ['Participant Name','Age','Gender','County','Sub-county','Ward','Guardian','Guardian Phone','Race Category','Distance','Fee','Payment Status','M-Pesa Reference','Registration Status','Registration Date'];
+          const searchQuery = document.querySelector('[data-table-search="event-registrations"]')?.value.toLowerCase() || '';
+          const visibleItems = adminState.eventRegistrations.filter(item => {
+            if (!searchQuery) return true;
+            const searchable = `${item.name || ''} ${item.email || ''} ${item.selected_category || ''} ${item.gender || ''}`.toLowerCase();
+            return searchable.includes(searchQuery);
+          });
+          const rows = visibleItems.map(item => [
+            item.name || '',
+            item.age || '',
+            item.gender || '',
+            item.county || '',
+            item.sub_county || '',
+            item.ward || '',
+            item.guardian || '',
+            item.guardian_phone || '',
+            item.selected_category || '',
+            item.race_distance || '',
+            item.registration_fee || 0,
+            item.payment_status || '',
+            item.mpesa_reference || '',
+            item.status || '',
+            item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB') : ''
+          ].map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','));
+          const csvContent = [headers.join(','), ...rows].join('\n');
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `tncc-teso-north-cross-country-registrations-${new Date().toISOString().slice(0,10)}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+        function exportEventRegistrationsPdf() {
+          const searchQuery = document.querySelector('[data-table-search="event-registrations"]')?.value.toLowerCase() || '';
+          const categoryFilter = document.querySelector('[data-event-filter="category"]')?.value || '';
+          const paymentFilter = document.querySelector('[data-event-filter="payment"]')?.value || '';
+          const visibleItems = adminState.eventRegistrations.filter(item => {
+            if (searchQuery) {
+              const searchable = `${item.name || ''} ${item.email || ''} ${item.selected_category || ''} ${item.gender || ''}`.toLowerCase();
+              if (!searchable.includes(searchQuery)) return false;
+            }
+            if (categoryFilter && (item.selected_category || '') !== categoryFilter) return false;
+            if (paymentFilter && (item.payment_status || '') !== paymentFilter) return false;
+            return true;
+          });
+          if (!visibleItems.length) { showToast('No registrations to export for the current filters.', 'error'); return; }
+          const windowName = window.open('', '_blank');
+          const rows = visibleItems.map(item => `<tr><td>${escapeHtml(item.name || '')}</td><td>${escapeHtml(item.age || '')}</td><td>${escapeHtml(item.gender || '')}</td><td>${escapeHtml(item.county || '')}</td><td>${escapeHtml(item.selected_category || '')}</td><td>${escapeHtml(item.race_distance || '')}</td><td>${escapeHtml(item.payment_status || '')}</td><td>${escapeHtml(item.mpesa_reference || '')}</td><td>${escapeHtml(item.status || '')}</td><td>${escapeHtml(item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB') : '')}</td></tr>`).join('');
+          windowName.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>TNCC Event Registrations</title><style>body{font-family:Arial,sans-serif;margin:20px;}h1{font-size:18px;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ddd;padding:6px;text-align:left;font-size:11px;}th{background:#f4f4f4;}@media print{body{margin:0;}}</style></head><body><h1>Teso North Cross Country - Registrations</h1><p>Exported on ${new Date().toLocaleString()}</p><p>Total: ${visibleItems.length} registrations</p><table><thead><tr><th>Participant</th><th>Age</th><th>Gender</th><th>County</th><th>Category</th><th>Distance</th><th>Payment</th><th>M-Pesa Ref</th><th>Status</th><th>Date</th></tr></thead><tbody>${rows}</tbody></table></body></html>`);
+          windowName.document.close();
+          windowName.focus();
+          windowName.print();
+        }
+        function printEventRegistrationsTable() {
+          const printContents = document.getElementById('event-registrations').innerHTML;
+          const popupWin = window.open('', '_blank');
+          popupWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>TNCC Registrations</title><style>body{font-family:Arial,sans-serif;margin:20px;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ddd;padding:6px;font-size:11px;}</style></head><body>${printContents}</body></html>`);
+          popupWin.document.close();
+          popupWin.focus();
+          popupWin.print();
+        }
       function renderVolunteers() { document.getElementById('volunteersTable').innerHTML = adminState.volunteers.map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.role)}</td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>${escapeHtml(item.phone || 'No phone number')}</small></td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No volunteer applications yet', 4); }
       function renderDonations() { document.getElementById('donationsTable').innerHTML = adminState.donations.map(item => `<tr><td><strong>${escapeHtml(item.donor_name || 'Anonymous donor')}</strong><small>${escapeHtml(item.email || 'No email')}</small></td><td class="admin-amount">KES ${Number(item.amount_kes || 0).toLocaleString()}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No donations recorded yet', 4); }
       function renderMessages() { document.getElementById('messagesTable').innerHTML = adminState.messages.map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.email)}</td><td class="admin-message-cell">${escapeHtml(item.message)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No contact messages yet', 4); }
@@ -318,7 +347,9 @@
          document.querySelector('[data-table-search="event-registrations"]')?.addEventListener('input', applyEventFilters);
          document.querySelector('[data-event-filter="category"]')?.addEventListener('change', applyEventFilters);
          document.querySelector('[data-event-filter="payment"]')?.addEventListener('change', applyEventFilters);
-         document.getElementById('exportCsvBtn')?.addEventListener('click', exportEventRegistrationsCsv);
+          document.getElementById('exportPdfBtn')?.addEventListener('click', exportEventRegistrationsPdf);
+          document.getElementById('exportCsvBtn')?.addEventListener('click', exportEventRegistrationsCsv);
+          document.getElementById('printRegistrationsBtn')?.addEventListener('click', printEventRegistrationsTable);
          document.getElementById('assignBibBtn')?.addEventListener('click', async () => {
            const btn = document.getElementById('assignBibBtn'); btn.disabled = true; btn.textContent = 'Assigning…';
            try {
