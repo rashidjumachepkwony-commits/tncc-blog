@@ -88,7 +88,7 @@ const TNCC_STORIES = [
     id: 3,
     tag: 'Sport',
     title: 'Every step counts',
-    image: 'runners.jpg.jpeg',
+    image: 'images2.jpg.jpeg',
     date: '2026-03-19',
     author: 'TNCC Team',
     excerpt: 'Participation is not only about event-day energy; it is about building healthy routines and community confidence.',
