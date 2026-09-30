@@ -86,20 +86,6 @@ const TNCC_STORIES = [
   },
   {
     id: 3,
-    tag: 'Sport',
-    title: 'Every step counts',
-    image: 'images2.jpg.jpeg',
-    date: '2026-03-19',
-    author: 'TNCC Team',
-    excerpt: 'Participation is not only about event-day energy; it is about building healthy routines and community confidence.',
-    body: [
-      'On course, people discover more than physical endurance. They build consistency, confidence, and a stronger sense of belonging. Community events give people an opportunity to work together toward something positive.',
-      'Every step counts because participation matters. It creates momentum, motivates others, and reminds the community that progress is possible when people are supported and encouraged.',
-      'That is why TNCC continues to center sport as a practical pathway for wellness, unity, and local transformation.'
-    ]
-  },
-  {
-    id: 4,
     tag: 'Youth',
     title: 'Making room for the next generation',
     image: 'community.jpg.jpeg',
@@ -113,7 +99,7 @@ const TNCC_STORIES = [
     ]
   },
   {
-    id: 5,
+    id: 4,
     tag: 'Partnerships',
     title: 'When local partners move together',
     image: 'partners2.jpg.jpeg',
@@ -136,7 +122,7 @@ const TNCC_GALLERY = [
   { image: 'runners (2).jpeg', caption: 'Running together', category: 'Events' },
   { image: 'runners (3).jpeg', caption: 'Community in motion', category: 'Community' },
   { image: 'runners (4).jpeg', caption: 'Race day energy', category: 'Events' },
-  { image: 'runners (5).jpeg', caption: 'Every step counts', category: 'Events' },
+  { image: 'runners (5).jpeg', caption: 'Momentum building', category: 'Events' },
   { image: 'runners (6).jpeg', caption: 'Strength in participation', category: 'Events' },
   { image: 'runners (7).jpeg', caption: 'Young runners leading the way', category: 'Youth' },
   { image: 'runners (8).jpeg', caption: 'Together on the course', category: 'Events' },
