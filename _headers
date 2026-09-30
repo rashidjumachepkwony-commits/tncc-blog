@@ -1,0 +1,30 @@
+# Cloudflare Pages Headers Configuration
+
+# Security headers applied to all pages
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://eadrlxpgxcgdhftkqwqa.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'
+
+# Service worker needs to control the entire site
+/sw.js
+  Service-Worker-Allowed: /
+
+# PWA manifest
+/manifest.json
+  Content-Type: application/manifest+json
+
+# Cache immutable assets
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
