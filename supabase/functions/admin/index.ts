@@ -463,20 +463,50 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (action === "deleteMedia") {
-      const path = String(body.path || "").trim();
-      if (!path) {
-        return new Response(JSON.stringify({ error: "Missing path" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-      const { error } = await adminClient.storage.from("media").remove([path]);
-      if (error) throw error;
-      return new Response(JSON.stringify({ data: { path } }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
+     if (action === "deleteMedia") {
+       const path = String(body.path || "").trim();
+       if (!path) {
+         return new Response(JSON.stringify({ error: "Missing path" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const { error } = await adminClient.storage.from("media").remove([path]);
+       if (error) throw error;
+       return new Response(JSON.stringify({ data: { path } }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "deleteDonation") {
+       const { id } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const { error } = await adminClient.from("donations").delete().eq("id", id);
+       if (error) throw error;
+       return new Response(JSON.stringify({ data: { id } }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "deleteSubmission") {
+       const { id } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const { error } = await adminClient.from("submissions").delete().eq("id", id);
+       if (error) throw error;
+       return new Response(JSON.stringify({ data: { id } }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
 
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400,

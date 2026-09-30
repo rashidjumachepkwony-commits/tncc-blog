@@ -107,11 +107,11 @@
       function statusBadge(status) { const normalized = String(status || 'pending').toLowerCase(); return `<span class="admin-badge admin-badge-${escapeHtml(normalized)}">${escapeHtml(normalized)}</span>`; }
       function emptyRow(message, columns) { return `<tr><td colspan="${columns}"><div class="admin-table-empty"><span class="admin-empty-icon">⌁</span><strong>${escapeHtml(message)}</strong><span>New activity will appear here.</span></div></td></tr>`; }
       function renderStats() { document.getElementById('statSubmissions').textContent = adminState.submissions.length; document.getElementById('statVolunteers').textContent = adminState.volunteers.length; document.getElementById('statDonations').textContent = adminState.donations.length; document.getElementById('statMessages').textContent = adminState.messages.length; }
-       function renderSubmissions() {
-         const rows = adminState.submissions.map(item => `<tr data-searchable="${escapeHtml(`${item.name} ${item.email} ${item.interest}`)}"><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.county || 'TNCC community')}</small></td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>${escapeHtml(item.phone || 'No phone number')}</small></td><td>${escapeHtml(item.interest || 'Community participation')}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td><td><select class="admin-status-select" data-submission-status="${escapeHtml(item.id)}" aria-label="Update status for ${escapeHtml(item.name)}"><option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${item.status === 'rejected' ? 'selected' : ''}>Rejected</option></select></td></tr>`).join('');
-         document.getElementById('submissionsTable').innerHTML = rows || emptyRow('No submissions yet', 6);
-         document.getElementById('recentSubmissions').innerHTML = adminState.submissions.slice(0, 5).map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.email)}</small></td><td>${escapeHtml(item.interest || 'Community participation')}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No recent submissions', 4);
-       }
+        function renderSubmissions() {
+          const rows = adminState.submissions.map(item => `<tr data-searchable="${escapeHtml(`${item.name} ${item.email} ${item.interest}`)}"><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.county || 'TNCC community')}</small></td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>${escapeHtml(item.phone || 'No phone')}</small></td><td>${escapeHtml(item.interest || 'Community participation')}</td><td><select class="admin-status-select" data-submission-status="${escapeHtml(item.id)}" aria-label="Update status for ${escapeHtml(item.name)}"><option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${item.status === 'rejected' ? 'selected' : ''}>Rejected</option></select></td><td>${formatDate(item.created_at)}</td><td><button class="admin-icon-button" type="button" data-submission-delete="${escapeHtml(item.id)}" title="Delete submission"><span aria-hidden="true">🗑</span></button></td></tr>`).join('');
+          document.getElementById('submissionsTable').innerHTML = rows || emptyRow('No submissions yet', 6);
+          document.getElementById('recentSubmissions').innerHTML = adminState.submissions.slice(0, 5).map(item => `<tr><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.email)}</small></td><td>${escapeHtml(item.interest || 'Community participation')}</td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td></tr>`).join('') || emptyRow('No recent submissions', 4);
+        }
         function renderEventRegistrations() {
           const rows = adminState.eventRegistrations.map(item => `<tr data-searchable="${escapeHtml(`${item.name} ${item.email} ${item.selected_category || ''} ${item.gender || ''} ${item.bib_number || ''}`)}" data-payment="${escapeHtml(item.payment_status || '')}" data-category="${escapeHtml(item.selected_category || '')}"><td><strong>${escapeHtml(item.name || 'Unnamed participant')}</strong><small>Bib #${escapeHtml(item.bib_number || '—')}</small></td><td><span class="admin-table-primary">${escapeHtml(item.email)}</span><small>Age ${escapeHtml(item.age || '—')} · ${escapeHtml(item.phone || 'No phone')}${item.gender ? ' · ' + escapeHtml(item.gender) : ''}</small></td><td>${escapeHtml(item.selected_category || '—')}<small>${escapeHtml(item.race_distance || '')}</small></td><td><span class="admin-badge ${item.payment_status === 'paid' ? 'admin-badge-paid' : item.payment_status === 'completed' ? 'admin-badge-approved' : 'admin-badge-pending'}">${escapeHtml(item.payment_status || 'pending')}</span><small>M-Pesa ref: ${escapeHtml(item.mpesa_reference || '—')}</small></td><td>${statusBadge(item.status)}</td><td>${formatDate(item.created_at)}</td><td><select class="admin-status-select" data-event-status="${escapeHtml(item.id)}" aria-label="Update status for ${escapeHtml(item.name || 'participant')}" style="min-width:120px"><option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option><option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Approved</option><option value="rejected" ${item.status === 'rejected' ? 'selected' : ''}>Rejected</option></select></td></tr>`).join('');
           document.getElementById('eventRegistrationsTable').innerHTML = rows || emptyRow('No event registrations yet', 7);
@@ -216,6 +216,23 @@
             showToast('Message deleted.', 'success');
           } catch (error) { showToast(error.message, 'error'); }
         }
+        async function deleteDonation(id) {
+          if (!confirm('Delete this donation record? This cannot be undone.')) return;
+          try {
+            await callAdminEdge('deleteDonation', { id });
+            adminState.donations = adminState.donations.filter(item => String(item.id) !== String(id));
+            renderDonations();
+            showToast('Donation record deleted.', 'success');
+          } catch (error) { showToast(error.message, 'error'); }
+        }
+        async function deleteSubmission(id) {
+          if (!confirm('Delete this submission? This cannot be undone.')) return;
+          try {
+            await callAdminEdge('deleteSubmission', { id });
+            adminState.submissions = adminState.submissions.filter(item => String(item.id) !== String(id));
+            renderSubmissions(); showToast('Submission deleted.', 'success');
+          } catch (error) { showToast(error.message, 'error'); }
+        }
         function exportVolunteersPdf() {
           const windowName = window.open('', '_blank');
           const rows = adminState.volunteers.map(item => `<tr><td>${escapeHtml(item.name || '')}</td><td>${escapeHtml(item.role || '')}</td><td>${escapeHtml(item.email || '')}</td><td>${escapeHtml(item.phone || '')}</td><td>${formatDate(item.created_at)}</td></tr>`).join('');
@@ -281,7 +298,7 @@
              adminState.submissions = submissions.data || []; adminState.eventRegistrations = eventRegistrations.data || []; adminState.volunteers = volunteers.data || []; adminState.messages = messages.data || []; adminState.donations = donations.data || []; adminState.users = users.data || [];
              const { data: content } = await client.from('content_items').select('*').order('updated_at', { ascending: false }); adminState.content = content || [];
              renderStats(); renderSubmissions(); renderEventRegistrations(); populateCategoryFilter(); renderVolunteers(); renderDonations(); renderMessages(); renderUsers(); renderContent(); document.getElementById('lastUpdated').textContent = `Synced ${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
-           } catch (error) { console.error(error); showToast(error.message || 'Could not load admin data.', 'error'); [{'id':'submissionsTable','cols':6},{'id':'eventRegistrationsTable','cols':7},{'id':'volunteersTable','cols':4},{'id':'donationsTable','cols':4},{'id':'messagesTable','cols':4},{'id':'usersTable','cols':4}].forEach(({id,cols}) => { document.getElementById(id).innerHTML = emptyRow('Could not load this data', cols); }); }
+            } catch (error) { console.error(error); showToast(error.message || 'Could not load admin data.', 'error'); [{'id':'submissionsTable','cols':6},{'id':'eventRegistrationsTable','cols':7},{'id':'volunteersTable','cols':5},{'id':'donationsTable','cols':5},{'id':'messagesTable','cols':5},{'id':'usersTable','cols':4}].forEach(({id,cols}) => { document.getElementById(id).innerHTML = emptyRow('Could not load this data', cols); }); }
          }
 
         function openContentForm(item = null) {
@@ -428,10 +445,14 @@
            if (event.target.matches('[data-donation-status]')) { const select = event.target; select.disabled = true; try { await callAdminEdge('updateDonation', { id: select.dataset.donationStatus, status: select.value }); const item = adminState.donations.find(entry => String(entry.id) === String(select.dataset.donationStatus)); if (item) item.status = select.value; renderDonations(); showToast('Donation status updated.', 'success'); } catch (error) { showToast(error.message, 'error'); renderDonations(); } finally { select.disabled = false; } }
          });
          document.addEventListener('click', async event => {
-           const volunteerDelete = event.target.closest('[data-volunteer-delete]');
-           if (volunteerDelete) { await deleteVolunteer(volunteerDelete.dataset.volunteerDelete); return; }
-           const messageDelete = event.target.closest('[data-message-delete]');
-           if (messageDelete) { await deleteMessage(messageDelete.dataset.messageDelete); return; }
+            const volunteerDelete = event.target.closest('[data-volunteer-delete]');
+            if (volunteerDelete) { await deleteVolunteer(volunteerDelete.dataset.volunteerDelete); return; }
+            const messageDelete = event.target.closest('[data-message-delete]');
+            if (messageDelete) { await deleteMessage(messageDelete.dataset.messageDelete); return; }
+            const donationDelete = event.target.closest('[data-donation-delete]');
+            if (donationDelete) { await deleteDonation(donationDelete.dataset.donationDelete); return; }
+            const submissionDelete = event.target.closest('[data-submission-delete]');
+            if (submissionDelete) { await deleteSubmission(submissionDelete.dataset.submissionDelete); return; }
          });
         document.querySelectorAll('[data-admin-nav]').forEach(link => link.addEventListener('click', () => document.body.classList.remove('admin-menu-open'))); document.querySelector('[data-admin-menu-open]').addEventListener('click', () => document.body.classList.add('admin-menu-open')); document.querySelectorAll('[data-admin-menu-close]').forEach(button => button.addEventListener('click', () => document.body.classList.remove('admin-menu-open')));
       });
