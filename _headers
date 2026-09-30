@@ -1,12 +1,16 @@
 # Cloudflare Pages Headers Configuration
 
 # Security headers applied to all pages
+# script-src has no 'unsafe-inline': all JavaScript is served from external
+# files under /assets/js (see assets/js/login.js, admin.js, theme-init.js).
+# static.cloudflareinsights.com is required by the Cloudflare Web Analytics
+# beacon that Cloudflare injects into every page.
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://eadrlxpgxcgdhftkqwqa.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://eadrlxpgxcgdhftkqwqa.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://cloudflareinsights.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'
 
 # Service worker needs to control the entire site
 /sw.js
