@@ -1031,19 +1031,84 @@ html.js .reveal.visible {
   background: var(--white);
 }
 .gallery-item img { width: 100%; aspect-ratio: 4 / 3; }
+
+/* Gallery items that are video or audio rather than a photo. */
+.gallery-item video {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  background: #071a13;
+}
+.gallery-item audio {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 54px;
+  width: auto;
+  height: 34px;
+  z-index: 2;
+}
+.gallery-audio-icon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 260px;
+  font-size: 3rem;
+  color: var(--primary);
+  background: linear-gradient(135deg, rgba(15, 77, 61, .10), rgba(155, 207, 32, .22));
+}
+.gallery-type-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(4, 25, 18, .78);
+  color: var(--white);
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.gallery-empty {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 6px;
+  place-items: center;
+  padding: 48px 20px;
+  border: 1px dashed var(--border);
+  border-radius: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+.gallery-stage { display: grid; }
+.gallery-stage video { width: 100%; max-height: 72vh; background: #071a13; }
+.gallery-stage audio { width: min(100%, 560px); margin: 0 auto; }
 .home-gallery-strip {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
 }
-.home-gallery-strip img {
+.home-gallery-strip img,
+.home-gallery-strip video {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 14px;
   transition: var(--transition);
 }
-.home-gallery-strip a:hover img { transform: scale(1.05); }
+.home-gallery-strip .gallery-audio-icon {
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: 14px;
+  font-size: 1.8rem;
+}
+.home-gallery-strip .gallery-type-badge { top: 6px; left: 6px; font-size: .58rem; padding: 2px 7px; }
+.home-gallery-strip audio { display: none; }
+.home-gallery-strip a:hover img,
+.home-gallery-strip a:hover video { transform: scale(1.05); }
 @media (max-width: 980px) {
   .story-featured, .home-gallery-strip { grid-template-columns: 1fr 1fr; }
   .related-grid { grid-template-columns: 1fr 1fr; }

@@ -508,6 +508,185 @@ Deno.serve(async (req) => {
        });
      }
 
+     /* ---------- Gallery CMS (images, video, audio) ---------- */
+
+     if (action === "getGalleryItems") {
+       const { data, error } = await adminClient
+         .from("gallery_items")
+         .select("*")
+         .order("sort_order", { ascending: true })
+         .order("created_at", { ascending: true });
+       if (error) throw error;
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "createGalleryItem") {
+       const { media_url, media_type, caption, alt_text, category, sort_order, published } = body;
+       if (!media_url || typeof media_url !== "string" || !media_url.trim()) {
+         return new Response(JSON.stringify({ error: "Media URL or file is required" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const type = ["image", "video", "audio"].includes(media_type) ? media_type : "image";
+       const { data, error } = await adminClient
+         .from("gallery_items")
+         .insert({
+           media_url: media_url.trim(),
+           media_type: type,
+           caption: (caption || "").trim(),
+           alt_text: (alt_text || caption || "").trim(),
+           category: (category || "Community").trim(),
+           sort_order: Number.isFinite(sort_order) ? Number(sort_order) : 0,
+           published: published === undefined ? true : Boolean(published)
+         })
+         .select()
+         .single();
+       if (error) throw error;
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "updateGalleryItem") {
+       const { id, media_url, media_type, caption, alt_text, category, sort_order, published } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing gallery id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const fields: Record<string, unknown> = { updated_at: new Date().toISOString() };
+       if (typeof media_url === "string" && media_url.trim()) fields.media_url = media_url.trim();
+       if (["image", "video", "audio"].includes(media_type)) fields.media_type = media_type;
+       if (typeof caption === "string") fields.caption = caption.trim();
+       if (typeof alt_text === "string") fields.alt_text = alt_text.trim();
+       if (typeof category === "string") fields.category = category.trim() || "Community";
+       if (Number.isFinite(sort_order)) fields.sort_order = Number(sort_order);
+       if (typeof published === "boolean") fields.published = published;
+
+       const { data, error } = await adminClient
+         .from("gallery_items")
+         .update(fields)
+         .eq("id", id)
+         .select()
+         .single();
+       if (error) throw error;
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "deleteGalleryItem") {
+       const { id } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing gallery id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const { error } = await adminClient.from("gallery_items").delete().eq("id", id);
+       if (error) throw error;
+       return new Response(JSON.stringify({ data: { id } }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     /* ---------- Full record editing ---------- */
+
+     if (action === "updateSubmission") {
+       const { id, ...rest } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const textFields = [
+         "name", "email", "phone", "age", "gender", "county", "sub_county", "ward",
+         "guardian", "guardian_phone", "education", "interest", "message", "status",
+         "event_id", "event_name", "event_date", "selected_category", "race_distance",
+         "registration_fee", "payment_method", "payment_status", "mpesa_reference", "bib_number"
+       ];
+       const fields: Record<string, unknown> = {};
+       for (const key of textFields) {
+         const value = rest[key];
+         if (value === undefined) continue;
+         if (value === "") { fields[key] = null; continue; }
+         if (key === "age" || key === "registration_fee") {
+           const num = Number(value);
+           if (Number.isFinite(num)) fields[key] = num;
+           continue;
+         }
+         fields[key] = String(value);
+       }
+       const { data, error } = await adminClient
+         .from("submissions")
+         .update(fields)
+         .eq("id", id)
+         .select()
+         .single();
+       if (error) throw error;
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "updateVolunteer") {
+       const { id, name, email, phone, role, message, status } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const fields: Record<string, unknown> = {};
+       if (typeof name === "string" && name.trim()) fields.name = name.trim();
+       if (typeof email === "string") fields.email = email.trim();
+       if (typeof phone === "string") fields.phone = phone.trim() || null;
+       if (typeof role === "string" && role.trim()) fields.role = role.trim();
+       if (typeof message === "string") fields.message = message.trim() || null;
+       if (typeof status === "string") fields.status = status;
+
+       const { data, error } = await adminClient
+         .from("volunteers")
+         .update(fields)
+         .eq("id", id)
+         .select()
+         .single();
+       if (error) throw error;
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "updateContactMessage") {
+       const { id, name, email, message } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+       const fields: Record<string, unknown> = {};
+       if (typeof name === "string" && name.trim()) fields.name = name.trim();
+       if (typeof email === "string" && email.trim()) fields.email = email.trim();
+       if (typeof message === "string") fields.message = message.trim();
+
+       const { data, error } = await adminClient
+         .from("contact_messages")
+         .update(fields)
+         .eq("id", id)
+         .select()
+         .single();
+       if (error) throw error;
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" }

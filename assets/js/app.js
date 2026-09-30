@@ -184,6 +184,62 @@ function loadContentStories() {
   return contentStoriesPromise;
 }
 
+let galleryItemsPromise = null;
+
+/* Gallery is managed from the admin workspace (public.gallery_items).
+   Falls back to the built-in seed list so the page still works if the
+   table has not been created yet or Supabase is unreachable. */
+function loadGalleryItems() {
+  if (galleryItemsPromise) return galleryItemsPromise;
+  galleryItemsPromise = (async () => {
+    const seed = TNCC_GALLERY.map((item, index) => ({
+      id: 'seed-' + index,
+      image: item.image,
+      mediaType: 'image',
+      caption: item.caption,
+      category: item.category
+    }));
+    const client = getSupabaseClient();
+    if (!client) return seed;
+    try {
+      const { data, error } = await client
+        .from('gallery_items')
+        .select('id, media_url, media_type, caption, alt_text, category, sort_order, published')
+        .eq('published', true)
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true })
+        .limit(200);
+      if (error) { console.warn('Gallery loading failed, using seed content.', error.message); return seed; }
+      if (!Array.isArray(data) || !data.length) return seed;
+      return data.map(row => ({
+        id: row.id,
+        image: row.media_url,
+        mediaType: row.media_type || 'image',
+        caption: row.caption || '',
+        category: row.category || 'Community'
+      }));
+    } catch (error) {
+      console.warn('Gallery loading failed, using seed content.', error);
+      return seed;
+    }
+  })();
+  return galleryItemsPromise;
+}
+
+function galleryThumbMarkup(item) {
+  const caption = escapeHtml(item.caption || 'Gallery media');
+  if (item.mediaType === 'video') {
+    return `<video src="${escapeHtml(item.image)}" muted playsinline preload="metadata" aria-label="${caption}"></video>
+      <span class="gallery-type-badge" aria-hidden="true">Video</span>`;
+  }
+  if (item.mediaType === 'audio') {
+    return `<span class="gallery-audio-icon" aria-hidden="true">&#9834;</span>
+      <audio src="${escapeHtml(item.image)}" controls preload="none" aria-label="${caption}"></audio>
+      <span class="gallery-type-badge" aria-hidden="true">Audio</span>`;
+  }
+  return `<img src="${escapeHtml(item.image)}" alt="${caption}" loading="lazy" width="400" height="300" />`;
+}
+
 function storyHref(story) {
   return 'story.html?id=' + encodeURIComponent(story.id);
 }
@@ -455,37 +511,51 @@ async function initStoryComments(story) {
 
 /* ---------- 6. Gallery page ---------- */
 
-function initGalleryPage() {
+async function initGalleryPage() {
   const grid = document.querySelector('[data-gallery-grid]');
   if (!grid) return;
   const filtersWrap = document.querySelector('[data-gallery-filters]');
   const modal = document.querySelector('[data-gallery-modal]');
+  const modalStage = modal?.querySelector('[data-gallery-stage]');
   const modalImage = modal?.querySelector('img');
+  const modalVideo = modal?.querySelector('video');
+  const modalAudio = modal?.querySelector('audio');
   const modalCaption = modal?.querySelector('[data-gallery-caption]');
   const closeButton = modal?.querySelector('[data-gallery-close]');
   const prevButton = modal?.querySelector('[data-gallery-prev]');
   const nextButton = modal?.querySelector('[data-gallery-next]');
-  let activeItems = TNCC_GALLERY.slice();
+  const allItems = await loadGalleryItems();
+  let activeItems = allItems.slice();
   let currentIndex = 0;
   let lastFocused = null;
 
+  grid.innerHTML = '<div class="admin-loading"><span></span>Loading gallery</div>';
+
   function renderGrid() {
+    if (!activeItems.length) {
+      grid.innerHTML = '<div class="gallery-empty"><strong>No media in this category yet.</strong><span>Check back soon.</span></div>';
+      return;
+    }
     grid.innerHTML = activeItems.map((item, index) => `
-      <button class="gallery-item" type="button" data-index="${index}" aria-label="Open photo: ${escapeHtml(item.caption)}">
-        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.caption)}" loading="lazy" width="400" height="300" />
-        <div class="gallery-caption">${escapeHtml(item.caption)}</div>
+      <button class="gallery-item" type="button" data-index="${index}" aria-label="Open: ${escapeHtml(item.caption || 'gallery media')}">
+        ${galleryThumbMarkup(item)}
+        <div class="gallery-caption">${escapeHtml(item.caption || '')}</div>
       </button>`).join('');
+  }
+
+  function showStage(kind, item) {
+    if (modalImage) { modalImage.hidden = kind !== 'image'; modalImage.src = kind === 'image' ? item.image : ''; modalImage.alt = item.caption || ''; }
+    if (modalVideo) { modalVideo.hidden = kind !== 'video'; modalVideo.src = kind === 'video' ? item.image : ''; }
+    if (modalAudio) { modalAudio.hidden = kind !== 'audio'; modalAudio.src = kind === 'audio' ? item.image : ''; }
   }
 
   function openModal(index) {
     if (!modal || !activeItems.length) return;
     currentIndex = (index + activeItems.length) % activeItems.length;
     const item = activeItems[currentIndex];
-    if (modalImage) {
-      modalImage.src = item.image;
-      modalImage.alt = item.caption;
-    }
-    if (modalCaption) modalCaption.textContent = item.caption;
+    showStage(item.mediaType || 'image', item);
+    if (modalStage) modalStage.dataset.type = item.mediaType || 'image';
+    if (modalCaption) modalCaption.textContent = item.caption || '';
     lastFocused = document.activeElement;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
@@ -498,6 +568,7 @@ function initGalleryPage() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    [modalVideo, modalAudio].forEach(node => { if (node) { try { node.pause(); } catch (error) { /* ignore */ } } });
     lastFocused?.focus?.();
   }
 
@@ -517,7 +588,7 @@ function initGalleryPage() {
     filtersWrap.querySelectorAll('.chip').forEach(node => node.classList.remove('active'));
     chip.classList.add('active');
     const category = chip.dataset.category;
-    activeItems = category === 'all' ? TNCC_GALLERY.slice() : TNCC_GALLERY.filter(item => item.category === category);
+    activeItems = category === 'all' ? allItems.slice() : allItems.filter(item => item.category === category);
     renderGrid();
   });
 
@@ -533,10 +604,11 @@ function initGalleryPage() {
   });
 
   if (filtersWrap) {
-    const categories = ['all', ...new Set(TNCC_GALLERY.map(item => item.category))];
+    const categories = ['all', ...new Set(allItems.map(item => item.category).filter(Boolean))];
+    const label = allItems.some(item => item.mediaType && item.mediaType !== 'image') ? 'All media' : 'All photos';
     filtersWrap.innerHTML = categories.map((category, index) => `
       <button class="chip${index === 0 ? ' active' : ''}" type="button" data-category="${escapeHtml(category)}">
-        ${category === 'all' ? 'All photos' : escapeHtml(category)}
+        ${category === 'all' ? label : escapeHtml(category)}
       </button>`).join('');
   }
 
@@ -554,9 +626,10 @@ async function initHomePreviews() {
 
   const galleryStrip = document.querySelector('[data-home-gallery]');
   if (galleryStrip) {
-    galleryStrip.innerHTML = TNCC_GALLERY.slice(0, 6).map(item => `
-      <a href="gallery.html" aria-label="View gallery photo: ${escapeHtml(item.caption)}">
-        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.caption)}" loading="lazy" width="300" height="300" />
+    const galleryItems = await loadGalleryItems();
+    galleryStrip.innerHTML = galleryItems.slice(0, 6).map(item => `
+      <a href="gallery.html" aria-label="View gallery media: ${escapeHtml(item.caption || '')}">
+        ${galleryThumbMarkup(item)}
       </a>`).join('');
   }
 }

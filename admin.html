@@ -34,6 +34,28 @@
       .admin-page-links { display: flex; flex-wrap: wrap; gap: 8px; }
       .admin-page-link { padding: 8px 12px; border: 1px solid #dbe4d8; border-radius: 10px; background: #fff; color: #2c5c46; font-size: .74rem; font-weight: 800; text-decoration: none; }
       .admin-page-link:hover { background: #eaf4dc; }
+      .admin-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+      .admin-gallery-card { position: relative; border: 1px solid #dbe4d8; border-radius: 12px; background: #fbfdfb; overflow: hidden; }
+      .admin-gallery-card.is-draft { opacity: .62; }
+      .admin-gallery-thumb { position: relative; display: grid; place-items: center; height: 130px; background: #eef3ec; overflow: hidden; }
+      .admin-gallery-thumb img, .admin-gallery-thumb video { width: 100%; height: 100%; object-fit: cover; }
+      .admin-gallery-thumb .admin-gallery-audio { display: grid; place-items: center; gap: 4px; font-size: 1.6rem; color: #2c5c46; }
+      .admin-gallery-thumb audio { width: 88%; }
+      .admin-gallery-badge { position: absolute; top: 7px; left: 7px; padding: 2px 8px; border-radius: 999px; background: rgba(4,25,18,.8); color: #fff; font-size: .6rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+      .admin-gallery-body { padding: 9px 10px 10px; }
+      .admin-gallery-body strong { display: block; font-size: .78rem; line-height: 1.35; color: #14221b; }
+      .admin-gallery-body small { display: block; margin-top: 2px; font-size: .66rem; color: #6b7f74; word-break: break-all; }
+      .admin-gallery-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+      .admin-gallery-actions .admin-icon-button { width: 28px; height: 28px; font-size: .74rem; }
+      .admin-modal textarea { min-height: 76px; }
+      .admin-modal .admin-hint { margin: 6px 0 0; font-size: .7rem; color: #6b7f74; }
+      .admin-modal .admin-preview { display: grid; place-items: center; height: 130px; margin-top: 8px; border: 1px dashed #dbe4d8; border-radius: 10px; background: #f4f8f2; overflow: hidden; }
+      .admin-modal .admin-preview img, .admin-modal .admin-preview video { max-width: 100%; max-height: 130px; object-fit: contain; }
+      .admin-modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+      .admin-modal-backdrop .admin-modal { width: min(100%, 660px); }
+      .admin-row-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+      .admin-row-actions .admin-icon-button { width: 30px; height: 30px; flex: 0 0 auto; }
+      @media (max-width: 640px) { .admin-modal-row { grid-template-columns: 1fr; } }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
@@ -52,6 +74,7 @@
         <nav class="admin-nav" aria-label="Workspace sections">
           <a class="active" href="#overview" data-admin-nav="overview"><span class="admin-nav-icon">⌂</span>Overview</a>
           <a href="#content" data-admin-nav="content"><span class="admin-nav-icon">▣</span>Content</a>
+          <a href="#gallery" data-admin-nav="gallery"><span class="admin-nav-icon">▦</span>Gallery</a>
           <a href="#submissions" data-admin-nav="submissions"><span class="admin-nav-icon">♙</span>Submissions</a>
           <a href="#event-registrations" data-admin-nav="event-registrations"><span class="admin-nav-icon">🏃</span>Event registrations</a>
           <a href="#volunteers" data-admin-nav="volunteers"><span class="admin-nav-icon">✦</span>Volunteers</a>
@@ -83,6 +106,8 @@
           <section class="admin-panel admin-overview-panel"><div class="admin-panel-heading"><div><span class="admin-kicker">Recent activity</span><h2>Latest submissions</h2></div><a class="admin-text-link" href="#submissions">View all <span aria-hidden="true">→</span></a></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Applicant</th><th>Interest</th><th>Status</th><th>Received</th></tr></thead><tbody id="recentSubmissions"><tr><td colspan="4"><div class="admin-loading"><span></span>Loading activity</div></td></tr></tbody></table></div></section>
 
           <section class="admin-section" id="content"><div class="admin-section-heading"><div><span class="admin-kicker">Publishing</span><h2>Content library</h2><p>Create and publish stories without touching the site's HTML.</p></div><button class="admin-add-button" type="button" id="contentAddBtn">＋ New story</button></div><div class="admin-content-grid" id="contentList"><div class="admin-empty admin-panel"><span class="admin-empty-icon">▣</span><h3>Loading content</h3><p>Fetching the current publishing library.</p></div></div></section>
+
+          <section class="admin-section" id="gallery"><div class="admin-section-heading"><div><span class="admin-kicker">Media</span><h2>Gallery</h2><p>Add, reorder, edit and publish the photos, videos and audio shown on the public gallery page and the homepage strip.</p></div><div class="admin-heading-actions"><input type="file" id="galleryFileInput" accept="image/*,video/*,audio/*" multiple hidden /><button class="admin-btn admin-btn-secondary" type="button" id="galleryUploadBtn"><span aria-hidden="true">⬆</span> Upload media</button><button class="admin-add-button" type="button" id="galleryAddBtn">＋ Add media</button></div></div><div class="admin-panel"><div class="admin-gallery-grid" id="galleryList"><div class="admin-loading"><span></span>Loading gallery</div></div></div></section>
 
           <section class="admin-section" id="submissions"><div class="admin-section-heading"><div><span class="admin-kicker">Community intake</span><h2>Submissions</h2><p>Review registrations and keep their status up to date.</p></div><div class="admin-heading-actions"><label class="admin-search"><span aria-hidden="true">⌕</span><input type="search" data-table-search="submissions" placeholder="Search submissions" aria-label="Search submissions" /></label><button class="admin-btn admin-btn-secondary" type="button" id="exportSubmissionsPdfBtn"><span aria-hidden="true">📄</span> Export PDF</button></div></div><div class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Applicant</th><th>Contact</th><th>Interest</th><th>Status</th><th>Received</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="submissionsTable"></tbody></table></div></div></section>
 
@@ -130,6 +155,77 @@
         <div class="admin-modal-foot">
           <button class="admin-ghost-button" type="button" data-content-cancel>Cancel</button>
           <button class="admin-primary-button" type="button" id="contentSaveBtn">Save story</button>
+        </div>
+      </div>
+    </div>
+
+  <div class="admin-modal-backdrop" id="galleryModal" hidden>
+      <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="galleryModalTitle">
+        <div class="admin-modal-head">
+          <h3 id="galleryModalTitle">Add gallery media</h3>
+          <button class="admin-icon-button" type="button" data-gallery-close aria-label="Close">&times;</button>
+        </div>
+        <div class="admin-modal-body">
+          <label for="galleryMediaUrl">Media file or URL *</label>
+          <input id="galleryMediaUrl" type="text" placeholder="Upload a file, pick from the media library, or paste a URL" />
+          <div class="button-row" style="margin-top:8px;">
+            <button class="admin-ghost-button" type="button" id="galleryPickFromLibrary">Pick from media library</button>
+            <button class="admin-ghost-button" type="button" id="galleryChooseFile">Choose file…</button>
+          </div>
+          <p class="admin-hint">Existing site files work too, e.g. <code>runners (1).jpeg</code>.</p>
+          <div class="admin-preview" id="galleryPreview"><span class="admin-hint">Preview appears here</span></div>
+
+          <div class="admin-modal-row">
+            <div>
+              <label for="galleryMediaType">Media type</label>
+              <select id="galleryMediaType">
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+                <option value="audio">Audio</option>
+              </select>
+            </div>
+            <div>
+              <label for="galleryCategoryField">Category</label>
+              <input id="galleryCategoryField" type="text" list="galleryCategoryOptions" placeholder="Community" />
+              <datalist id="galleryCategoryOptions">
+                <option value="Community"></option>
+                <option value="Events"></option>
+                <option value="Youth"></option>
+                <option value="Partnerships"></option>
+                <option value="Sport"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <label for="galleryCaption">Caption</label>
+          <input id="galleryCaption" type="text" placeholder="Shown under the item on the gallery page" />
+
+          <label for="galleryAlt">Alt text (accessibility)</label>
+          <input id="galleryAlt" type="text" placeholder="Describe the media for screen readers" />
+
+          <label for="gallerySort">Sort order</label>
+          <input id="gallerySort" type="number" value="0" step="1" />
+          <p class="admin-hint">Lower numbers appear first.</p>
+
+          <label class="admin-switch" style="margin-top: 16px;"><input type="checkbox" id="galleryPublished" checked /><span></span><b>Published (visible on the site)</b></label>
+        </div>
+        <div class="admin-modal-foot">
+          <button class="admin-ghost-button" type="button" data-gallery-cancel>Cancel</button>
+          <button class="admin-primary-button" type="button" id="gallerySaveBtn">Save media</button>
+        </div>
+      </div>
+    </div>
+
+  <div class="admin-modal-backdrop" id="recordModal" hidden>
+      <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="recordModalTitle">
+        <div class="admin-modal-head">
+          <h3 id="recordModalTitle">Edit record</h3>
+          <button class="admin-icon-button" type="button" data-record-close aria-label="Close">&times;</button>
+        </div>
+        <div class="admin-modal-body" id="recordModalBody"></div>
+        <div class="admin-modal-foot">
+          <button class="admin-ghost-button" type="button" data-record-cancel>Cancel</button>
+          <button class="admin-primary-button" type="button" id="recordSaveBtn">Save changes</button>
         </div>
       </div>
     </div>
