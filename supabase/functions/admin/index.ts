@@ -140,31 +140,91 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (action === "getContactMessages") {
-      const { data, error } = await adminClient
-        .from("contact_messages")
-        .select("*")
-        .order("created_at", { ascending: false });
+     if (action === "getContactMessages") {
+       const { data, error } = await adminClient
+         .from("contact_messages")
+         .select("*")
+         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+       if (error) throw error;
 
-      return new Response(JSON.stringify({ data }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
 
-    if (action === "getDonations") {
-      const { data, error } = await adminClient
-        .from("donations")
-        .select("*")
-        .order("created_at", { ascending: false });
+     if (action === "deleteVolunteer") {
+       const { id } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
 
-      if (error) throw error;
+       const { error } = await adminClient.from("volunteers").delete().eq("id", id);
+       if (error) throw error;
 
-      return new Response(JSON.stringify({ data }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
+       return new Response(JSON.stringify({ data: { id } }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "deleteContactMessage") {
+       const { id } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+
+       const { error } = await adminClient.from("contact_messages").delete().eq("id", id);
+       if (error) throw error;
+
+       return new Response(JSON.stringify({ data: { id } }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "getDonations") {
+       const { data, error } = await adminClient
+         .from("donations")
+         .select("*")
+         .order("created_at", { ascending: false });
+
+       if (error) throw error;
+
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
+
+     if (action === "updateDonation") {
+       const { id, status, stripe_session_id } = body;
+       if (!id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), {
+           status: 400,
+           headers: { ...corsHeaders, "Content-Type": "application/json" }
+         });
+       }
+
+       const updateFields: Record<string, unknown> = {};
+       if (typeof status === "string") updateFields.status = status;
+       if (typeof stripe_session_id === "string") updateFields.stripe_session_id = stripe_session_id;
+
+       const { data, error } = await adminClient
+         .from("donations")
+         .update(updateFields)
+         .eq("id", id)
+         .select()
+         .single();
+       if (error) throw error;
+
+       return new Response(JSON.stringify({ data }), {
+         headers: { ...corsHeaders, "Content-Type": "application/json" }
+       });
+     }
 
     if (action === "getEventRegistrations") {
       const { data, error } = await adminClient
